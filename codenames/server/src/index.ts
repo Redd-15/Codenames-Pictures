@@ -10,6 +10,10 @@ async function main() {
     app.use(express.json());
     app.use(cors());
 
+    app.get('/', (req, res) => {
+    res.send('Hello World!')
+    });
+
     //Add socket handling
     const httpServer = createServer(app);
     const handler = new SocketHandler(httpServer);
