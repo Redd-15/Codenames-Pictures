@@ -1,9 +1,16 @@
 /** Enum for message types FROM SERVER */
 export enum ServerMessageType {
-  TestMessage = 'serverTest'
+  TestMessage = 'serverTest',
+  RoomCreated = 'roomCreated',
+  JoinFailed = 'joinFailed',
+  PlayerJoined = 'playerJoined',
+  PlayerLeft = 'playerLeft',
 }
 
 /** Enum for message types FROM CLIENT */
 export enum ClientMessageType {
-  TestMessage = 'clientTest'
+  TestMessage = 'clientTest',
+  CreateRoom = 'createRoom',
+  JoinRoom = 'joinRoom',
+  LeaveRoom = 'leaveRoom',
 }
