@@ -15,6 +15,11 @@ export class CardComponent {
   card !: Card;
   @Input({ required: true })
   index !: number;
+  @Input()
+  isSpymasterMode = false;
+  @Input({ required: true })
+  team !: string;
+
 
   isFlipped: boolean = false;
 

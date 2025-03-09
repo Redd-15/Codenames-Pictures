@@ -10,7 +10,7 @@ html, body {
 
   --beige: #D48F89;
   --plum: #711249;
-  --red: #B63047;
+  --cherry: #B63047;
   --mauve: #AD2952;
   --brown: #3E281F;
   --black: #0D0114;
@@ -18,6 +18,10 @@ html, body {
   --vibrant-orange: #F38726;
   --muted-orange: #D96742;
   --yellow: #FDB513;
+
+  --blue: #82ace6;
+  --red: #ca5e43;
+  --grey: #ccb589;
   * {
     background-color: transparent;
   }

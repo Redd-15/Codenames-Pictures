@@ -3,7 +3,7 @@
 </div>-->
 <div class="image-container" (click)="flipImage()" [class]="isFlipped ? 'flipped' : ''">
   <div class="image-flip">
-    <div class="front">
+    <div class="front" [class]="isSpymasterMode? 'spymaster '+card.colour : 'non-spymaster '+team">
       <img [src]="card.getFilePath()" alt="Front Image" />
     </div>
     <div class="back">

@@ -12,6 +12,8 @@ import { CardColour, MAX_CARD_NO } from '../../../model';
   styleUrl: './game.component.css'
 })
 export class GameComponent {
+  isSpymaster = true;
+  team = 'red';
   cards: Card[] = this.generateRandomDeck();
 
   private generateRandomDeck(): Card[] {
