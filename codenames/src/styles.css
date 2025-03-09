@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-size: 1.17vw;
+  font-size: clamp(16px, 1.17vw, 20px);
+  min-height: 100%;
+  height: fit-content;
+  box-sizing: border-box;
+  background-color: var(--plum);
+
+  --beige: #D48F89;
+  --plum: #711249;
+  --red: #B63047;
+  --mauve: #AD2952;
+  --brown: #3E281F;
+  --black: #0D0114;
+  --white: #FFFAF7;
+  --vibrant-orange: #F38726;
+  --muted-orange: #D96742;
+  --yellow: #FDB513;
+  * {
+    background-color: transparent;
+  }
+}
+
+.inserted-component {
+  display: contents;
+}

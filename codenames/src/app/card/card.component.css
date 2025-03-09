@@ -1,0 +1,51 @@
+.image-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.image-flip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(0, 0, 0.58, 1);
+}
+
+.image-flip img {
+  /* Clip borders */
+  width: calc(100% + 5px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  clip-path: view-box;
+}
+
+.image-flip .back, .image-flip .front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.9rem;
+  -webkit-border-radius: 0.9rem;
+  -moz-border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.image-flip .front {
+  filter: grayscale(100%);
+}
+
+.image-flip .back {
+  transform: rotateY(180deg);
+}
+
+.image-container.flipped .image-flip {
+  transform: rotateY(180deg);
+}

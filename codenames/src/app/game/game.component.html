@@ -1,0 +1,7 @@
+<div class="page-container">
+  <div class="card-area">
+    <div *ngFor="let card of cards; let i = index" class="card-container">
+      <app-card [card]="card" [index]="i" class="inserted-component"></app-card>
+    </div>
+  </div>
+</div>

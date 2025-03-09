@@ -1,0 +1,14 @@
+<!--<div class="image-container">
+  <img [src]="card.getFilePath()" alt="Card Image" [class]="card.isSecret ? 'bw' : '' " />
+</div>-->
+<div class="image-container" (click)="flipImage()" [class]="isFlipped ? 'flipped' : ''">
+  <div class="image-flip">
+    <div class="front">
+      <img [src]="card.getFilePath()" alt="Front Image" />
+    </div>
+    <div class="back">
+      <img [src]="card.getBackFilePath()" alt="Back Image" />
+    </div>
+  </div>
+</div>
+
