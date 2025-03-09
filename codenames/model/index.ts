@@ -20,6 +20,7 @@ export enum CardColour {
   Unknown = 'unknown'
 }
 
+/** How many different agent cards per colour we have (numbered from 1 to n) */
 export const AGENT_CARD_NO = {
   'red': 2,
   'blue': 2,

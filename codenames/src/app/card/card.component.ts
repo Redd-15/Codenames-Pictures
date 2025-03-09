@@ -24,5 +24,6 @@ export class CardComponent {
 
   flipImage() {
     this.isFlipped = true;
+    this.card.revealColour();
   }
 }
