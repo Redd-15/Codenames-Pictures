@@ -16,6 +16,9 @@ export class SocketHandler {
   private setUp() {
     //Configure listener for socket connection
     this.io.on("connection", (socket) => {
+      const cookies = socket.handshake.headers.cookie;
+      const parsedCookies = this.parseCookies(cookies);
+      console.log("Parsed Cookies:", parsedCookies);
       //TODO create room if creation, put user in room if join request, send error message back if room does not exist
       //Send message back to client by socket id
       this.io.to(socket.id).emit(ServerMessageType.TestMessage, 'You are connected');
@@ -29,5 +32,10 @@ export class SocketHandler {
         console.log('A client disconnected:', socket.id);
       });
     });
+  }
+
+  /** Parse cookies string into an object with name:value pairs. Returns empty object if cookies is undefined. */
+  private parseCookies(cookies: string | undefined){
+    return Object.fromEntries(cookies?.split("; ").map((c) => c.split("=")) || []);
   }
 }

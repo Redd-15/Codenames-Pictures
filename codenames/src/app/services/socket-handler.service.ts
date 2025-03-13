@@ -1,16 +1,20 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
 import { ServerMessageType, ClientMessageType } from '../../../model';
+import { CookieHandlerService } from './cookie-handler.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketHandlerService {
   private socket?: Socket;
+  private cookieHandlerService = inject(CookieHandlerService);
 
   /** Establish socket connection with server, optional groupId parameter for joining existing group */
   connect(groupId: number | null = null){
     this.disconnect();
+    this.cookieHandlerService.removeCookie('playerId', '/socket.io');
+    this.cookieHandlerService.setCookie('playerId', '123', '/socket.io');
     this.socket = io({query: {
       groupId: groupId
     }});

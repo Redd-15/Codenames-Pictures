@@ -23,10 +23,10 @@ export class GameComponent {
     this.shuffle(ids);
 
     const cardDistribution = [
-      { colour: CardColour.Red, count: 9 },
-      { colour: CardColour.Blue, count: 8 },
+      { colour: CardColour.Red, count: 8 },
+      { colour: CardColour.Blue, count: 7 },
       { colour: CardColour.Black, count: 1 },
-      { colour: CardColour.Grey, count: 7 }
+      { colour: CardColour.Grey, count: 4 }
     ];
 
     let index = 0;
