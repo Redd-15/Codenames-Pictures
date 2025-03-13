@@ -28,6 +28,7 @@ export class CardComponent {
   }
 
   flipImage() {
+    if(this.isSpymasterMode) return;
     this.isFlipped = true;
     this.card.revealColour();
   }

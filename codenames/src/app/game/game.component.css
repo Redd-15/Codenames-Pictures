@@ -8,8 +8,9 @@
 
 .card-area {
   background-color: var(--plum);
-  height: 100%;
-  aspect-ratio: 1;
+  max-width: 100%;
+  height: min(100%, 100vw * 4 / 5);
+  aspect-ratio: 5 / 4;
   margin: 1rem;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
