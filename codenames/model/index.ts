@@ -3,12 +3,32 @@ export const MAX_CARD_NO = 279
 
 /** Enum for message types FROM SERVER */
 export enum ServerMessageType {
-  TestMessage = 'serverTest'
+  TestMessage = 'serverTest',
+  ReceiveId = 'receiveId',
+  ReceiveRoom = 'receiveRoom',
+  ReceiveHint = 'receiveHint',
+  ReceiveGuess = 'receiveGuess',
+  GameOver = 'gameOver',
+  Error = 'error',
+  ReceiveTeamMessage = 'receiveTeamMessage',
+  ReceiveGlobalMessage = 'receiveGlobalMessage'
 }
 
 /** Enum for message types FROM CLIENT */
 export enum ClientMessageType {
-  TestMessage = 'clientTest'
+  TestMessage = 'clientTest',
+  CreateRoom = 'createRoom',
+  JoinRoom = 'joinRoom',
+  LeaveRoom = 'leaveRoom',
+  GetId = 'getId',
+  PickTeam = 'pickTeam',
+  PickSpymaster = 'pickSpymaster',
+  StartGame = 'startGame',
+  GiveHint = 'giveHint',
+  MakeGuess = 'makeGuess',
+  EndGuessing = 'endGuessing',
+  SendTeamMessage = 'sendTeamMessage',
+  SendGlobalMessage = 'sendGlobalMessage'
 }
 
 /** Enum for the hidden card colours */
