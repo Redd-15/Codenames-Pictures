@@ -31,15 +31,6 @@ export enum ClientMessageType {
   SendGlobalMessage = 'sendGlobalMessage'
 }
 
-/** Enum for the hidden card colours */
-export enum CardColour {
-  Red = 'red',
-  Blue = 'blue',
-  Grey = 'grey',
-  Black = 'black',
-  Unknown = 'unknown'
-}
-
 /** How many different agent cards per colour we have (numbered from 1 to n) */
 export const AGENT_CARD_NO = {
   'red': 2,
