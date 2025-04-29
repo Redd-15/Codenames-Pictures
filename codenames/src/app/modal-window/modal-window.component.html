@@ -1,0 +1,14 @@
+<div class="modal-header pt-4">
+  <div class="w-100 text-center">
+    <h4 class="modal-title skyfall-font">{{ title }}</h4>
+  </div>
+  <div class="float-left pe-2">
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+</div>
+<div class="modal-body">
+  <ng-template #contentHost></ng-template>
+</div>
+<div class="modal-footer" *ngIf="buttonText !== undefined">
+  <button type="button" class="btn btn-plum">{{buttonText}}</button>
+</div>
