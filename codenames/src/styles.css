@@ -25,6 +25,7 @@ html, body {
   --blue: #82ace6;
   --red: #ca5e43;
   --grey: #ccb589;
+
   * {
     background-color: transparent;
   }
@@ -32,6 +33,12 @@ html, body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Manrope', 'Arial', sans-serif;
+}
+
+.error-message {
+  font-size: 11pt;
+  font-family: 'Arial', sans-serif;
+  color: var(--cherry);
 }
 
 .form-control:focus, .btn-close:focus {

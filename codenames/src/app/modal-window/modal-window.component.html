@@ -7,8 +7,10 @@
   </div>
 </div>
 <div class="modal-body">
-  <ng-template #contentHost></ng-template>
+  <div class="container" style="max-width: 500px;">
+    <ng-template #contentHost></ng-template>
+  </div>
 </div>
 <div class="modal-footer" *ngIf="buttonText !== undefined">
-  <button type="button" class="btn btn-plum">{{buttonText}}</button>
+  <button type="button" class="btn btn-plum" (click)="onAction()">{{buttonText}}</button>
 </div>

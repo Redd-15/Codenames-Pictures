@@ -1,1 +1,19 @@
-<p>join-room-form works!</p>
+<form [formGroup]="form">
+  <div class="mb-3">
+    <label for="roomId" class="form-label">Room ID</label>
+    <input id="roomId" formControlName="roomId" class="form-control" />
+    <div *ngIf="roomId?.invalid && (roomId?.dirty || roomId?.touched)" class="text-danger error-message ps-1">
+      <small *ngIf="roomId?.errors?.['required']">Room ID is required.</small>
+      <small *ngIf="roomId?.errors?.['pattern']">Numeric characters only.</small>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input id="username" formControlName="username" class="form-control" />
+    <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="text-danger error-message ps-1">
+      <small *ngIf="username?.errors?.['required']">Username is required. </small>
+      <small *ngIf="username?.errors?.['minlength']">Minimum 3 characters. </small>
+      <small *ngIf="username?.errors?.['pattern']">Alphanumeric characters only.</small>
+    </div>
+  </div>
+</form>
