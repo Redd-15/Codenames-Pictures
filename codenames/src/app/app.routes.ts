@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { TestComponent } from './test/test.component';
 import { GameComponent } from './game/game.component';
-import { MenuComponent } from './menu/menu.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 export const routes: Routes = [
   {
@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: MenuComponent,
+    component: MainPageComponent,
   },
   {
     path: 'game',

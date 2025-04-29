@@ -7,7 +7,7 @@
 }
 
 .card-area {
-  background-color: var(--plum);
+  background-color: transparent;
   max-width: 100%;
   height: min(100%, 100vw * 4 / 5);
   aspect-ratio: 5 / 4;
