@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { Card } from '../model/card';
 import { CommonModule } from '@angular/common';
-import { CardColour, MAX_CARD_NO } from '../../../model';
+import { MAX_CARD_NO } from '../../../model/';
+import { CardColour } from '../../../model/message-interfaces';
 
 @Component({
   selector: 'app-game',
