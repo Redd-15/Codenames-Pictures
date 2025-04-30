@@ -27,7 +27,9 @@ export class ModalWindowComponent implements AfterViewInit {
   onAction() {
     if (this.embeddedComponentRef?.instance?.submit) {
       let success = this.embeddedComponentRef.instance.submit();
-      if(success) this.activeModal.close();
+      if(success) {
+         this.activeModal.close();
+      }
     }
   }
 }

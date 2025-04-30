@@ -1,13 +1,10 @@
 html, body {
-  height: 100%;
   margin: 0;
   font-size: 1.17vw;
   font-size: clamp(16px, 1.17vw, 20px);
   min-height: 100%;
   height: fit-content;
   box-sizing: border-box;
-  background-color: var(--plum);
-  background: radial-gradient(var(--vibrant-orange), var(--plum));
   font-family: 'Verdana', 'Arial', sans-serif;
 
   --beige: #D48F89;
@@ -25,7 +22,15 @@ html, body {
   --blue: #82ace6;
   --red: #ca5e43;
   --grey: #ccb589;
+}
 
+html {
+  background-color: var(--plum);
+  background: radial-gradient(var(--vibrant-orange), var(--plum));
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: fit-content;
   * {
     background-color: transparent;
   }
@@ -105,5 +110,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 1pt;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.toast-custom {
+  border: none !important;
+  box-shadow: none !important;
+}

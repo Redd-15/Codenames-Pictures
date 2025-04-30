@@ -1,8 +1,8 @@
-<div class="card text-center mt-3 bg-white">
+<div class="card text-center bg-white card-container">
   <div class="card-body">
     <h3 class="card-title pt-2 skyfall-font">Room details</h3>
     <hr />
-    <div class="card-text" *ngIf="loaded && room">
+    <div class="card-text" *ngIf="isLoaded && room">
       <h5 class="mb-3">Room ID: <small class="text-muted">{{room.roomId}}</small></h5>
       <div class="d-flex align-items-stretch justify-content-stretch teams">
         <div class="w-50 d-flex align-items-stretch justify-content-stretch">
@@ -15,7 +15,7 @@
               </div>
               <div class="drop-container"  cdkDropList cdkDropListOrientation="mixed" #redSpymasterList="cdkDropList" [cdkDropListData]="redSpymasters" [cdkDropListConnectedTo]="[redList, blueSpymasterList, blueList]" (cdkDropListDropped)="drop($event)">
                 @for(player of redSpymasters; track $index){
-                  <div class="player" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
               <div class="d-flex justify-content-stretch align-items-center m-1 mt-2">
@@ -24,7 +24,7 @@
               </div>
               <div class="drop-container" cdkDropList cdkDropListOrientation="mixed" #redList="cdkDropList" [cdkDropListData]="redTeam" [cdkDropListConnectedTo]="[redSpymasterList, blueSpymasterList, blueList]" (cdkDropListDropped)="drop($event)">
                 @for(player of redTeam; track $index){
-                  <div class="player" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
             </div>
@@ -41,7 +41,7 @@
 
               <div class="drop-container"  cdkDropList cdkDropListOrientation="mixed" #blueSpymasterList="cdkDropList" [cdkDropListData]="blueSpymasters" [cdkDropListConnectedTo]="[blueList, redSpymasterList, redList]" (cdkDropListDropped)="drop($event)">
                 @for(player of blueSpymasters; track $index){
-                  <div class="player" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
               <div class="d-flex justify-content-stretch align-items-center m-1 mt-2">
@@ -50,7 +50,7 @@
               </div>
               <div class="drop-container" cdkDropList cdkDropListOrientation="mixed" #blueList="cdkDropList" [cdkDropListData]="blueTeam" [cdkDropListConnectedTo]="[blueSpymasterList, redSpymasterList, redList]" (cdkDropListDropped)="drop($event)">
                 @for(player of blueTeam; track $index){
-                  <div class="player" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
             </div>
@@ -58,12 +58,12 @@
         </div>
       </div>
     </div>
-    <div class="card-text" *ngIf="loaded && !room">
+    <div class="card-text" *ngIf="isLoaded && !room">
       <p><i>Room with given ID does not exist. Make sure you specify a valid room ID.</i></p>
       <a href="" class="btn btn-plum">Go back</a>
     </div>
-    <div class="card-text" *ngIf="!loaded">
-      <h5 class="mb-3">Room ID: <small class="text-muted">{{roomId}}</small></h5>
+    <div class="card-text" *ngIf="!isLoaded">
+      <h5 class="mb-3">Room ID: <small class="text-muted">{{roomIdText}}</small></h5>
       <p>Loading room details...</p>
       <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only"></span>
@@ -71,8 +71,8 @@
       <div><a href="" class="btn btn-plum mt-4">Go back</a></div>
     </div>
   </div>
-  <div class="card-footer d-flex justify-content-center"  *ngIf="loaded && room">
-    <button type="button" class="btn btn-custom m-1">Leave room</button>
-    <button type="button" class="btn btn-plum m-1">Start game</button>
+  <div class="card-footer d-flex justify-content-center"  *ngIf="isLoaded && room">
+    <button type="button" class="btn btn-custom m-1" (click)="clickLeave()">Leave room</button>
+    <button type="button" class="btn btn-plum m-1" (click)="clickStart()">Start game</button>
   </div>
 </div>

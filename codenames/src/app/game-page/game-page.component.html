@@ -1,0 +1,7 @@
+<app-game class="inserted-component"></app-game>
+<div class="overlay" [class.hidden]="!isRoomWindowVisible">
+  <div class="shader"></div>
+  <div class="centred">
+    <app-room-menu class="inserted-component" (startGame)="startGame()" (leaveGame)="leaveGame()"></app-room-menu>
+  </div>
+</div>

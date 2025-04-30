@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
 import { TestComponent } from './test/test.component';
-import { GameComponent } from './game/game.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { ModalWindowComponent } from './modal-window/modal-window.component';
 import { RoomMenuComponent } from './room-menu/room-menu.component';
+import { GamePageComponent } from './game-page/game-page.component';
 
 export const routes: Routes = [
   {
@@ -16,7 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'game',
-    component: GameComponent,
+    component: GamePageComponent,
   },
   {
     path: 'room',
