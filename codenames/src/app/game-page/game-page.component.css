@@ -6,7 +6,14 @@
   height: 100%;
   background-color: rgba(0,0,0,0.45);
   display: block;
-  transition: all 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: opacity 0.5s ease;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none; /*click through*/
 }
 
 .centred {
@@ -16,10 +23,6 @@
   overflow: hidden;
   transform: translate(-50%, -50%);
   padding: 0 10%;
-}
-
-.overlay.hidden {
-  display: none;
 }
 
 @media (max-width: 800px) {
