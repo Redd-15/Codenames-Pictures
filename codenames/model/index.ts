@@ -1,6 +1,9 @@
 /** Constant for the number of picture cards */
 export const MAX_CARD_NO = 279
 
+/**Constant for the maximum message lenght in chars */
+export const MAX_MESSAGE_LENGTH = 255
+
 /** Enum for message types FROM SERVER */
 export enum ServerMessageType {
   TestMessage = 'serverTest',

@@ -1,0 +1,8 @@
+<div class="message-list" #scrollPanel>
+  @for(message of messages; track $index) {
+    <div class="message" [class.by-me]="message.senderId == myId">
+      <div class="sender text-muted" *ngIf="message.senderId != myId">player{{message.senderId}}</div>
+      <div class="content">{{message.message}}</div>
+    </div>
+  }
+</div>

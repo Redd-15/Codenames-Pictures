@@ -1,0 +1,23 @@
+.chat-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  box-shadow: -1px 0 8px rgba(0,0,0,0.3);
+  padding: 0.5rem;
+}
+
+.message-field {
+  padding-right: 0.5rem;
+  flex: 1 1 auto;
+}
+
+.send-button {
+  flex: 0 0 auto;
+  .btn {
+    line-height: 1rem;
+  }
+}
+.contents {
+  display: contents;
+}

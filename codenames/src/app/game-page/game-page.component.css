@@ -25,6 +25,45 @@
   padding: 0 10%;
 }
 
+.chat-container {
+  position: fixed;
+  top: 0;
+  left: 100%;
+  transform: translateX(-2.9rem);
+  height: 100%;
+  width: min(500px, calc(100% - 2.9rem));
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  transition: all 1s ease;
+  pointer-events: none;
+  * {
+    pointer-events: auto;
+  }
+  &.open {
+    transform: translateX(calc(-2.9rem - 100%));
+    z-index: 2;
+  }
+  .chat-handle, .team-chat-handle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    .btn {
+      line-height: 1rem;
+      border-radius: 1rem 0 0 1rem;
+    }
+  }
+  .chat-handle {
+    margin-bottom: 0.5rem;
+  }
+  .team-chat-handle {
+    margin-bottom: 3.25rem;
+  }
+
+}
+
 @media (max-width: 800px) {
   .centred {
     padding: 0 1%;

@@ -1,0 +1,22 @@
+.chat-background {
+  background-color: var(--white);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  &:nth-child(2){
+    flex: 1 1 auto;
+  }
+  &:nth-child(3), &:first-child {
+    flex: 0 0 auto;
+  }
+}
+
+.chat-name {
+  background-color: var(--plum);
+  color: var(--white);
+  text-align: center;
+  font-size: 1.2rem;
+  box-shadow: 1px 0 8px rgba(0,0,0,0.9);
+  z-index: 1;
+}

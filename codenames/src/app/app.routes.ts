@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { TestComponent } from './test/test.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { RoomMenuComponent } from './room-menu/room-menu.component';
 import { GamePageComponent } from './game-page/game-page.component';
+import { ChatComponent } from './chat/chat.component';
 
 export const routes: Routes = [
   {
@@ -16,9 +16,5 @@ export const routes: Routes = [
   {
     path: 'game',
     component: GamePageComponent,
-  },
-  {
-    path: 'room',
-    component: RoomMenuComponent,
   }
 ];

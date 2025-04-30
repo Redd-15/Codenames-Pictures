@@ -1,0 +1,20 @@
+<div class="chat-message">
+  <form class="contents" [formGroup]="formGroup">
+    <div class="message-field">
+      <textarea
+        class="form-control w-100"
+        rows="1"
+        placeholder="Type your message here..."
+        formControlName = "message"
+        name = "message"
+        id = "message"
+        (input)="autoResize($event)"
+      ></textarea>
+    </div>
+    <div class="send-button">
+      <button class="btn btn-plum" (click)="sendMessage()" [disabled]="!formGroup.valid">
+        <span class="material-icons">send</span>
+      </button>
+    </div>
+  </form>
+</div>
