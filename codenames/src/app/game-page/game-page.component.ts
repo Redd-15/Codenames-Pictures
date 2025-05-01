@@ -13,7 +13,8 @@ import { ChatComponent } from '../chat/chat.component';
 })
 export class GamePageComponent {
   private router = inject(Router);
-  isRoomWindowVisible = true;
+  // TODO: set to true
+  isRoomWindowVisible = false;
   isGlobalChatOpen = false;
   isTeamChatOpen = false;
 

@@ -1,6 +1,6 @@
 .card-container {
   max-height: calc( 100vh - 2rem );
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 

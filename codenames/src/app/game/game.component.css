@@ -23,3 +23,71 @@
   align-items: center;
   background-color: transparent;
 }
+
+.game-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.game-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 15%;
+  .bar-group {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .profile-button {
+    pointer-events: none;
+    &.red {
+      background-color: var(--lighter-red) !important;
+    }
+    &.blue {
+      background-color: var(--blue) !important;
+    }
+  }
+}
+
+@media(max-width: 800px){
+  .game-bar {
+    padding: 0 1rem;
+  }
+}
+
+.cap::first-letter {
+  text-transform: uppercase;
+}
+
+.game-prompt {
+  padding: 0.5rem 1rem;
+  text-align: center;
+  width: fit-content;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+  font-size: 1.1rem;
+  &.blue {
+    background-color: var(--blue);
+  }
+  &.red {
+    background-color: var(--red);
+    color: var(--white);
+  }
+}
+
+.badge-button {
+  border-radius: 1rem;
+  padding: 0.2rem 0.6rem;
+  font-size: max(0.8rem, 10pt);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

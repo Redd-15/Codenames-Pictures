@@ -17,6 +17,12 @@ export class GameComponent {
   team = 'blue';
   cards: Card[] = this.generateRandomDeck();
 
+  currentTeam = 'blue';
+  currentPhase: 'clue' | 'guess' = 'clue';
+  //TODO: query it from service
+  username = 'player1';
+  playerNum = 3;
+
   private generateRandomDeck(): Card[] {
     //Array with all ids
     const ids = Array.from({ length: MAX_CARD_NO + 1 }, (_, i) => i);
