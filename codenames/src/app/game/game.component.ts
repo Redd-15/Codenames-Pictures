@@ -3,13 +3,13 @@ import { CardComponent } from '../card/card.component';
 import { Card } from '../model/card';
 import { CommonModule } from '@angular/common';
 import { MAX_CARD_NO } from '../../../model/';
-import { CardColour, TeamType } from '../../../model/message-interfaces';
+import { CardColour, Hint, TeamType } from '../../../model/message-interfaces';
 import { Store } from '@ngrx/store';
-import { selectCards, selectPlayerById, selectPlayerCount, selectRoom, selectTurn } from '../state/selector/room.selector';
+import { selectCards, selectPlayerById, selectPlayerCount, selectRoom } from '../state/selector/room.selector';
 import { BaseComponent } from '../base.component';
 import { take, takeUntil } from 'rxjs';
-import { selectPlayerId, selectUsername } from '../state/selector/ids.selector';
-import { Player } from '../../../model/player';
+import { selectPlayerId } from '../state/selector/ids.selector';
+import { HintHistoryEntry } from '../model/hint-history-entry';
 
 @Component({
   selector: 'app-game',
@@ -30,6 +30,132 @@ export class GameComponent extends BaseComponent {
   team = TeamType.Red;
 
   playerNum = 0;
+
+  currentHint: Hint = {
+    word: 'kiskutya',
+    number: 4
+  }
+  hintHistory: HintHistoryEntry[] = [
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'alma',
+        number: 2
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'almafa',
+        number: 2
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'megszentségteleníthetetlenségeskedéseitekért',
+        number: -1
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'havas',
+        number: 8
+      }
+    }
+  ]
 
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {

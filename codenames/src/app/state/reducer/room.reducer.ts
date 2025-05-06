@@ -130,7 +130,10 @@ export const initialRoomState = {
     isStarted: false,
     turn: TeamType.Red,
     remainingGuesses: 0,
-    currentHint: null
+    currentHint: {
+      word: 'alma',
+      number: -1
+    }
   } as Room | null
 }
 

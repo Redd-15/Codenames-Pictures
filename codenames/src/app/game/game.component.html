@@ -1,4 +1,4 @@
-<div class="page-container">
+<div class="page-container" [class]="currentTeam+'-team'">
   <div class="game-header mt-2">
     <div class="game-bar">
       <div class="bar-group">
@@ -15,9 +15,27 @@
     </div>
     <div class="game-prompt cap {{currentTeam}}">{{currentTeam}} team's turn. {{currentPhase == 'clue' ? 'Spymaster, give a clue.': 'Operatives, make your guesses.'}}</div>
   </div>
-  <div class="card-area">
-    <div *ngFor="let card of cards; let i = index" class="card-container">
-      <app-card [card]="card" [index]="i" [team]="team" [turn]="currentTeam" [isSpymasterMode]="isSpymaster" class="inserted-component"></app-card>
+  <div class="game-content">
+    <div class="side-bar">
+      <div class="clue-container">
+        <div class="hint-word">{{ currentHint.word }}</div>
+        <div class="hint-number">{{ currentHint.number }}</div>
+      </div>
+      <div class="clue-history">
+        <div class="scrollable-panel">
+          @for(entry of hintHistory.slice().reverse(); track $index){
+            <div class="clue-entry {{entry.team}}-team">
+              <div class="clue-word">{{ entry.hint.word }}</div>
+              <div class="clue-number">{{ entry.hint.number }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="card-area">
+      <div *ngFor="let card of cards; let i = index" class="card-container">
+        <app-card [card]="card" [index]="i" [team]="team" [turn]="currentTeam" [phase]="currentPhase" [isSpymasterMode]="isSpymaster" class="inserted-component"></app-card>
+      </div>
     </div>
   </div>
 </div>

@@ -22,6 +22,9 @@ export class CardComponent implements OnInit {
   @Input({ required: true })
   turn !: TeamType;
 
+  @Input({ required: true })
+  phase !: 'guess' | 'clue';
+
 
   isFlipped: boolean = false;
 

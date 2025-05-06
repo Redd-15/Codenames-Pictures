@@ -7,7 +7,7 @@
       <img [src]="card.getBackFilePath()" alt="Back Image" />
     </div>
   </div>
-  <div class="flip-btn" (click)="flipCard()" *ngIf="turn == team && card.isSecret && card.isHighlighted && !isSpymasterMode">
+  <div class="flip-btn" (click)="flipCard()" *ngIf="turn == team && phase == 'guess' && card.isSecret && card.isHighlighted && !isSpymasterMode">
     <span class="material-icons">task_alt</span>
   </div>
 </div>

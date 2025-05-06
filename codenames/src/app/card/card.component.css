@@ -16,12 +16,13 @@
   font-size: 1rem;
   line-height: 1rem;
   padding: 2px;
-  top: 0.9rem;
-  right: 0.9rem;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: var(--beige);
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
+  border-radius: 50% 50% 0 0;
+  -webkit-border-radius: 50% 50% 0 0;
+  -moz-border-radius: 50% 50% 0 0;
   &:hover {
     background-color: var(--team-colour);
   }
@@ -67,7 +68,8 @@
     &.non-spymaster {
       background-color: var(--team-colour);
       &.highlighted {
-        border: solid 2px var(--beige);
+        border: solid 5px var(--beige);
+        outline: 1px solid var(--plum);
       }
       &:hover img {
         mix-blend-mode: multiply;
@@ -112,4 +114,8 @@
   .front.non-spymaster:hover img {
     mix-blend-mode: normal; /*do not activate hover effect during flipping*/
   }
+}
+
+.image-container:has(.flip-btn:hover) .front.non-spymaster.highlighted {
+  border-color: var(--team-colour);
 }
