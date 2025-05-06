@@ -2,6 +2,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1rem;
+  height: 100%;
 }
 .message {
   display: flex;

@@ -3,7 +3,7 @@
   <div class="chat-handle">
     <button class="btn btn-beige" (click)="toggleGlobalChat()"><span class="material-icons">public</span></button>
   </div>
-  <app-chat class="inserted-component" [name]="'Global Chat'"></app-chat>
+  <app-chat class="inserted-component" [name]="'Global Chat'" [type]="'global'"></app-chat>
 </div>
 <div class="chat-container" [class.open]="isTeamChatOpen">
   <div class="team-chat-handle">

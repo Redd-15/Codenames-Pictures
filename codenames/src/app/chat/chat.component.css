@@ -4,10 +4,10 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  &:nth-child(2){
+  .chat-part {
     flex: 1 1 auto;
   }
-  &:nth-child(3), &:first-child {
+  .form-part, .chat-name {
     flex: 0 0 auto;
   }
 }
@@ -17,6 +17,6 @@
   color: var(--white);
   text-align: center;
   font-size: 1.2rem;
-  box-shadow: 1px 0 8px rgba(0,0,0,0.9);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.2);
   z-index: 1;
 }

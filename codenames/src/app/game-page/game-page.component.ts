@@ -18,8 +18,8 @@ export class GamePageComponent {
   private router = inject(Router);
   private store = inject(Store);
   // TODO: set to true
-  isRoomWindowVisible = true;
-  isGlobalChatOpen = false;
+  isRoomWindowVisible = false;
+  isGlobalChatOpen = true;
   isTeamChatOpen = false;
 
   toggleGlobalChat() {
