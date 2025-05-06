@@ -1,14 +1,14 @@
-<!--<div class="image-container">
-  <img [src]="card.getFilePath()" alt="Card Image" [class]="card.isSecret ? 'bw' : '' " />
-</div>-->
-<div class="image-container" (click)="flipImage()" [class]="isFlipped ? 'flipped' : ''">
+<div class="image-container" (click)="highlightCard()" [class]="(isFlipped ? 'flipped' : '') + ' team-'+team">
   <div class="image-flip">
-    <div class="front" [class]="isSpymasterMode? 'spymaster '+card.colour : 'non-spymaster '+team">
+    <div class="front" [class]="cardClass">
       <img [src]="card.getFilePath()" alt="Front Image" />
     </div>
     <div class="back">
       <img [src]="card.getBackFilePath()" alt="Back Image" />
     </div>
+  </div>
+  <div class="flip-btn" (click)="flipCard()" *ngIf="turn == team && card.isSecret && card.isHighlighted && !isSpymasterMode">
+    <span class="material-icons">task_alt</span>
   </div>
 </div>
 

@@ -9,6 +9,8 @@ export class Card {
   colour: CardColour
   /** Has this card been revealed to the players */
   isSecret: boolean
+  /** Is this card highlighted by the current player? */
+  isHighlighted: boolean
 
   cardPath : string
   agentCardPath ?: string
@@ -18,6 +20,7 @@ export class Card {
       this.id = id
       this.colour = colour
       this.isSecret = true
+      this.isHighlighted = false;
 
       //Determine the corresponding card and agent card paths
       //Take a random given coloured agent number, if the colour is unknown, let it be null
@@ -37,6 +40,10 @@ export class Card {
   public getBackFilePath() {
     if(this.colour==CardColour.Unknown) return `/agents/grey-1.jpg`
     return this.agentCardPath
+  }
+
+  public toggleHighlight() {
+    this.isHighlighted = !this.isHighlighted;
   }
 
   /** Reveal card colour to players */

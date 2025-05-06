@@ -10,7 +10,7 @@ export interface IdsState {
 
 export const initialIdsState = {
   username: '',
-  playerId: 1, //TODO: change to -1
+  playerId: 3, //TODO: change to -1
   roomId: -1
 }
 
@@ -27,7 +27,7 @@ export const IdsReducer = createReducer(
   }),
   immerOn(resetIds, (state)=> {
     state.username = '',
-    state.playerId = 1, //TODO: -1
+    state.playerId = 3, //TODO: -1
     state.roomId = -1
   })
 )

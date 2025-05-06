@@ -16,6 +16,16 @@ export const selectPlayers = createSelector(
   (state) => (state ? state.players : []) as Player[]
 )
 
+export const selectPlayerById = (playerId: number) =>
+  createSelector(selectPlayers, (players) =>
+    players.find((player) => player.id === playerId) ?? null
+)
+
+export const selectPlayerCount = createSelector(
+  selectRoom,
+  (state) => (state ? state.players.length : 0)
+)
+
 export const selectRedSpymasters = createSelector(
   selectRoom,
   (state) => state ? state.players.filter(

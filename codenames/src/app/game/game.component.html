@@ -17,7 +17,7 @@
   </div>
   <div class="card-area">
     <div *ngFor="let card of cards; let i = index" class="card-container">
-      <app-card [card]="card" [index]="i" [team]="team" [isSpymasterMode]="isSpymaster" class="inserted-component"></app-card>
+      <app-card [card]="card" [index]="i" [team]="team" [turn]="currentTeam" [isSpymasterMode]="isSpymaster" class="inserted-component"></app-card>
     </div>
   </div>
 </div>

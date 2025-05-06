@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Card } from '../model/card';
 import { CommonModule } from '@angular/common';
+import { TeamType } from '../../../model/message-interfaces';
 
 @Component({
   selector: 'app-card',
@@ -17,16 +18,27 @@ export class CardComponent implements OnInit {
   @Input()
   isSpymasterMode = false;
   @Input({ required: true })
-  team !: string;
+  team !: TeamType;
+  @Input({ required: true })
+  turn !: TeamType;
 
 
   isFlipped: boolean = false;
+
+  get cardClass() {
+    return (this.isSpymasterMode ? 'spymaster '+this.card.colour : 'non-spymaster ') + ' ' + (this.card.isHighlighted ? 'highlighted' : '');
+  }
 
   ngOnInit() {
     this.isFlipped = !this.card.isSecret;
   }
 
-  flipImage() {
+  highlightCard() {
+    this.card.toggleHighlight();
+  }
+
+  flipCard() {
+    if(this.turn != this.team) return;
     if(this.isSpymasterMode) return;
     this.isFlipped = true;
     this.card.revealColour();

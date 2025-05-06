@@ -3,6 +3,28 @@
   aspect-ratio: 1 / 1;
   perspective: 1000px;
   cursor: pointer;
+  &.team-blue {
+    --team-colour: var(--blue);
+  }
+  &.team-red {
+    --team-colour: var(--lighter-red);
+  }
+}
+
+.flip-btn {
+  position: absolute;
+  font-size: 1rem;
+  line-height: 1rem;
+  padding: 2px;
+  top: 0.9rem;
+  right: 0.9rem;
+  background-color: var(--beige);
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  &:hover {
+    background-color: var(--team-colour);
+  }
 }
 
 .image-flip {
@@ -43,11 +65,9 @@
       filter: grayscale(100%);
     }
     &.non-spymaster {
-      &.blue {
-        background-color: var(--blue);
-      }
-      &.red {
-        background-color: var(--red);
+      background-color: var(--team-colour);
+      &.highlighted {
+        border: solid 2px var(--beige);
       }
       &:hover img {
         mix-blend-mode: multiply;
@@ -89,4 +109,7 @@
 
 .image-container.flipped .image-flip {
   transform: rotateY(180deg);
+  .front.non-spymaster:hover img {
+    mix-blend-mode: normal; /*do not activate hover effect during flipping*/
+  }
 }

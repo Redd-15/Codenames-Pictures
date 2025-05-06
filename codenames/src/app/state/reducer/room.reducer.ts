@@ -2,7 +2,7 @@ import { createReducer } from "@ngrx/store";
 import { immerOn } from 'ngrx-immer/store';
 import { Room } from "../../../../model/room";
 import { loadHint, loadRoom, resetRoom } from "../action/room.action";
-import { TeamType } from "../../../../model/message-interfaces";
+import { CardColour, TeamType } from "../../../../model/message-interfaces";
 
 export interface RoomState {
   room: Room | null;
@@ -102,10 +102,33 @@ export const initialRoomState = {
       }
     ],
     cards: [
-      {}
+      { id: 1, colour: CardColour.Blue, isSecret: true },
+
+      { id: 2, colour: CardColour.Red, isSecret: true },
+      { id: 3, colour: CardColour.Red, isSecret: true },
+      { id: 4, colour: CardColour.Red, isSecret: true },
+      { id: 5, colour: CardColour.Red, isSecret: true },
+      { id: 6, colour: CardColour.Red, isSecret: true },
+      { id: 7, colour: CardColour.Red, isSecret: true },
+      { id: 8, colour: CardColour.Red, isSecret: true },
+      { id: 9, colour: CardColour.Red, isSecret: true },
+
+      { id: 10, colour: CardColour.Blue, isSecret: true },
+      { id: 11, colour: CardColour.Blue, isSecret: true },
+      { id: 12, colour: CardColour.Blue, isSecret: true },
+      { id: 13, colour: CardColour.Blue, isSecret: true },
+      { id: 14, colour: CardColour.Blue, isSecret: true },
+      { id: 15, colour: CardColour.Blue, isSecret: true },
+
+      { id: 16, colour: CardColour.Black, isSecret: true },
+
+      { id: 17, colour: CardColour.Grey, isSecret: true },
+      { id: 18, colour: CardColour.Grey, isSecret: true },
+      { id: 19, colour: CardColour.Grey, isSecret: true },
+      { id: 20, colour: CardColour.Grey, isSecret: true },
     ],
     isStarted: false,
-    turn: TeamType.Blue,
+    turn: TeamType.Red,
     remainingGuesses: 0,
     currentHint: null
   } as Room | null
@@ -113,14 +136,14 @@ export const initialRoomState = {
 
 export const RoomReducer = createReducer(
   initialRoomState,
-  immerOn(loadRoom, (state, action)=> {
+  immerOn(loadRoom, (state, action) => {
     state.room = action.room;
   }),
-  immerOn(loadHint, (state, action)=> {
-    if(state.room)
+  immerOn(loadHint, (state, action) => {
+    if (state.room)
       state.room.currentHint = action.hint;
   }),
-  immerOn(resetRoom, (state)=> {
+  immerOn(resetRoom, (state) => {
     state.room = null;
   })
 )
