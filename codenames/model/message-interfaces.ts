@@ -1,6 +1,7 @@
 /** Types of errors forwarded via socket */
 export enum ErrorType {
   Other = 'other',
+  RoomNotFound = 'room-not-found',
 }
 
 /** Types of teams in a game */

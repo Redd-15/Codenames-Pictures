@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { SocketHandler } from './socket';
+import { CodenamesDatabase } from './database';
 
 async function main() {
   try {
@@ -12,7 +13,8 @@ async function main() {
 
     //Add socket handling
     const httpServer = createServer(app);
-    const handler = new SocketHandler(httpServer);
+    const database = new CodenamesDatabase(); // Create a new instance of the database
+    const handler = new SocketHandler(httpServer, database);
 
     httpServer.listen(3000, () => {
       console.log(`Listening on port 3000...`);
