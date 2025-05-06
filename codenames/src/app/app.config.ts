@@ -8,6 +8,7 @@ import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideState, provideStore } from '@ngrx/store';
 import { RoomReducer } from './state/reducer/room.reducer';
+import { IdsReducer } from './state/reducer/ids.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(), provideAnimationsAsync(), provideToastr(), provideAnimations(),
     provideStore(),
-    provideState({name: 'room', reducer: RoomReducer})
+    provideState({name: 'room', reducer: RoomReducer}),
+    provideState({name: 'ids', reducer: IdsReducer})
   ]
 };

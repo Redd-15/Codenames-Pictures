@@ -1,11 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { Room } from '../../../model/room';
 import { CommonModule } from '@angular/common';
 import { CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { TeamType } from '../../../model/message-interfaces';
 import { Player } from '../../../model/player';
-import { StorageService } from '../services/storage.service';
 import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { selectPlayerId, selectRoomId } from '../state/selector/ids.selector';
+import { takeUntil } from 'rxjs';
+import { BaseComponent } from '../base.component';
+import { selectBlueOperatives, selectBlueSpymasters, selectRedOperatives, selectRedSpymasters, selectRoom } from '../state/selector/room.selector';
 
 @Component({
   selector: 'app-room-menu',
@@ -14,129 +17,65 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './room-menu.component.html',
   styleUrl: './room-menu.component.css'
 })
-export class RoomMenuComponent implements OnInit {
-  private storageService = inject(StorageService);
+export class RoomMenuComponent extends BaseComponent implements OnInit {
+  private store = inject(Store);
   private toastr = inject(ToastrService);
 
   @Output() startGame = new EventEmitter<void>();
   @Output() leaveGame = new EventEmitter<void>();
 
   roomId = -1;
-  myId = 1;
-  room: Room | undefined = {
-    roomId: 1234,
-    isStarted: false,
-    turn: TeamType.Red,
-    remainingGuesses: 0,
-    currentHint: null,
-    players: [],
-    cards: []
-  };
-  isLoaded = true;
+  myId = -1;
+  room: Room | undefined;
+  isLoaded = false;
 
   get roomIdText() {
     return this.roomId == -1 ? '?' : this.roomId;
   }
 
-  redSpymasters: Player[] = [{
-    id: 1,
-    socketId: "1",
-    name: "player1",
-    team: TeamType.Red,
-    isSpymaster: true,
-    isInactive: false,
-  }]
+  redSpymasters: Player[] = [];
 
-  blueSpymasters: Player[] = [{
-    id: 2,
-    socketId: "2",
-    name: "player2",
-    team: TeamType.Blue,
-    isSpymaster: true,
-    isInactive: false,
-  }]
+  blueSpymasters: Player[] = [];
 
-  redTeam: Player[] = [
-    {
-      id: 3,
-      socketId: "3",
-      name: "player3",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 4,
-      socketId: "4",
-      name: "player4",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 3,
-      socketId: "3",
-      name: "player3",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 4,
-      socketId: "4",
-      name: "player4",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 3,
-      socketId: "3",
-      name: "player3",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 4,
-      socketId: "4",
-      name: "player4",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 3,
-      socketId: "3",
-      name: "player3",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    },
-    {
-      id: 4,
-      socketId: "4",
-      name: "player4",
-      team: TeamType.Red,
-      isSpymaster: false,
-      isInactive: false,
-    }
-  ]
+  redTeam: Player[] = [];
 
-  blueTeam: Player[] = [
-    {
-      id: 5,
-      socketId: "5",
-      name: "player5",
-      team: TeamType.Blue,
-      isSpymaster: false,
-      isInactive: false,
-    }
-  ]
+  blueTeam: Player[] = [];
 
   ngOnInit() {
-    if (this.storageService.roomId) this.roomId = this.storageService.roomId;
-    else this.roomId = -1;
+    this.store.select(selectRoomId).pipe(takeUntil(this.destroy$)).subscribe((roomId) => {
+      this.roomId = roomId;
+    });
+
+    this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
+      this.myId = playerId;
+    });
+
+    this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
+      if(room) {
+        this.room = room;
+        this.isLoaded = true;
+        console.log("Loaded");
+      } else {
+        console.log("No room loaded.");
+      }
+    });
+
+    this.loadPlayers();
+  }
+
+  loadPlayers() {
+    this.store.select(selectRedOperatives).pipe(takeUntil(this.destroy$)).subscribe((players) => {
+      this.redTeam = players;
+    });
+    this.store.select(selectBlueOperatives).pipe(takeUntil(this.destroy$)).subscribe((players) => {
+      this.blueTeam = players;
+    });
+    this.store.select(selectRedSpymasters).pipe(takeUntil(this.destroy$)).subscribe((players) => {
+      this.redSpymasters = players;
+    });
+    this.store.select(selectBlueSpymasters).pipe(takeUntil(this.destroy$)).subscribe((players) => {
+      this.blueSpymasters = players;
+    });
   }
 
   clickStart() {

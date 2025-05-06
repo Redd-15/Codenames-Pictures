@@ -4,7 +4,9 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { StorageService } from '../services/storage.service';
+import { Store } from '@ngrx/store';
+import { loadUsername, resetIds } from '../state/action/ids.action';
+import { resetRoom } from '../state/action/room.action';
 
 @Component({
   selector: 'app-create-room-form',
@@ -16,7 +18,7 @@ import { StorageService } from '../services/storage.service';
 export class CreateRoomFormComponent implements ModalContent {
   private toastr = inject(ToastrService);
   private router = inject(Router);
-  private storageService = inject(StorageService);
+  private store = inject(Store);
   private formBuilder = inject(FormBuilder);
   form = this.formBuilder.group({
     username: [
@@ -36,7 +38,11 @@ export class CreateRoomFormComponent implements ModalContent {
   submit = () => {
     if (this.form.valid) {
       console.log('Form data:', this.form.value);
-      if(this.form.value.username) this.storageService.username = this.form.value.username;
+      if(this.form.value.username){
+        this.store.dispatch(resetIds());
+        // TODO: this.store.dispatch(resetRoom());
+        this.store.dispatch(loadUsername({username: this.form.value.username}))
+      }
       this.router.navigateByUrl('/game');
       return true;
     } else {

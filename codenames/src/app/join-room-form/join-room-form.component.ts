@@ -4,7 +4,9 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { StorageService } from '../services/storage.service';
+import { Store } from '@ngrx/store';
+import { loadRoomId, loadUsername, resetIds } from '../state/action/ids.action';
+import { resetRoom } from '../state/action/room.action';
 
 @Component({
   selector: 'app-join-room-form',
@@ -15,7 +17,7 @@ import { StorageService } from '../services/storage.service';
 })
 export class JoinRoomFormComponent implements ModalContent {
   private toastr = inject(ToastrService);
-  private storageService = inject(StorageService);
+  private store = inject(Store);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   form = this.formBuilder.group({
@@ -45,8 +47,12 @@ export class JoinRoomFormComponent implements ModalContent {
   submit = () => {
     if (this.form.valid) {
       console.log('Form data:', this.form.value);
-      if(this.form.value.roomId) this.storageService.roomId = parseInt(this.form.value.roomId);
-      if(this.form.value.username) this.storageService.username = this.form.value.username;
+      if(this.form.value.roomId && this.form.value.username){
+        this.store.dispatch(resetIds());
+        //TODO: this.store.dispatch(resetRoom());
+        this.store.dispatch(loadUsername({username: this.form.value.username}));
+        this.store.dispatch(loadRoomId({roomId: parseInt(this.form.value.roomId)}));
+      }
       this.router.navigateByUrl('/game');
       return true;
     } else {
