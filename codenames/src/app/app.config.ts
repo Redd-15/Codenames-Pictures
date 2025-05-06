@@ -6,11 +6,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideState, provideStore } from '@ngrx/store';
+import { RoomReducer } from './state/reducer/room.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(), provideAnimationsAsync(), provideToastr(), provideAnimations()
+    provideHttpClient(), provideAnimationsAsync(), provideToastr(), provideAnimations(),
+    provideStore(),
+    provideState({name: 'room', reducer: RoomReducer})
   ]
 };
