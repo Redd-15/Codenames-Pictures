@@ -39,7 +39,7 @@ export class SocketHandler {
         const join : JoinMessage = JSON.parse(json); // Destructure the JSON object to get JoinMessage
         this.handlers?.joinRoomHandler(join.username, join.roomId)
       });
-
+      socket.on(ClientMessageType.LeaveRoom, (content) => this.handlers?.leaveRoomHandler());
 
       socket.on('disconnect', () => {
         console.log('A client disconnected:', socket.id);

@@ -30,7 +30,7 @@ export class CodenamesDatabase {
     const roomId = this.getUniqueRoomId(); // Generate a unique room ID
     const newRoom: Room = {
       roomId: roomId, // Random room ID for now
-      players: [this.createPlayer(username, roomId*10 + 0, socketId)],
+      players: [this.createPlayer(username, roomId*100 + 0, socketId)],
       cards: [], // Initialize with an empty array of cards
       isStarted: false,
       turn: (Math.random() > 0.5 ? TeamType.Red : TeamType.Blue), // Default starting team
@@ -48,14 +48,28 @@ export class CodenamesDatabase {
         return null; // Return null if the room does not exist
     }
     else {
-        const player = this.createPlayer(username, room.roomId * 10 + room.players.length, socketId); // Create a new player 
+        const player = this.createPlayer(username, room.roomId * 100 + room.players.length, socketId); // Create a new player 
         room.players.push(player); // Add the player to the room
         return room; // Return the updated room
         }
   }
 
+  public leaveRoom(socketId: string): Room | null {
+    // Find the room by socket ID
+    const room = this.roomdb.find(room => room.players.some(player => player.socketId === socketId));
+    if (room) { 
+      // Remove the player from the room
+      room.players = room.players.filter(player => player.socketId !== socketId);
+      if (room.players.length === 0) {
+        // If no players left, remove the room from the database
+        this.roomdb = this.roomdb.filter(r => r.roomId !== room.roomId);
+      }
+      return room; // Return the updated room
+    } else {
+      return null; // Return null if the room does not exist
 
-
+    }
+  }
 
   private getUniqueRoomId(): number {
     // Generate a unique room ID

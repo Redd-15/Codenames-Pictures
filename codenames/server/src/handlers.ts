@@ -60,14 +60,31 @@ public joinRoomHandler(username: string, roomId: number) {
     }
 }
 
-public joinActiveRoomHandler(){
-    //TODO: Implement this function to join a room where player was already in
+public leaveRoomHandler(){
+    console.log(`Client ${this.socket.id} requested to leave their room`);
+
+    const room = this.database.leaveRoom(this.socket.id)
+
+    if (room){ // Leave the room in the database
+
+        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client ${this.socket.id} left their room`);
+
+    } else {
+
+        const error : ErrorMessage = {
+            errorType: ErrorType.RoomNotFound, // Error type for other errors
+            message: `Room with player (${this.socket.id}) does not exist.` // Error message for room not found
+        };
+        
+        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+    }
 }
 
 
 }
 /* 
-{"roomid":0000, "username":"asd2"}
+{"roomId":0000, "username":"asd2"}
 
 TestMessage = 'clientTest',
 CreateRoom = 'createRoom',
