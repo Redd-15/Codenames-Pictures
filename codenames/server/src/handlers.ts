@@ -25,6 +25,11 @@ public clientTestMessageHandler(content: any) {
 }
 
 public createRoomHandler(username: string) {
+    
+    if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
+        this.leaveRoomHandler(); // Leave the room if the player ID exists
+    } 
+
     const room = this.database.createRoom(username, this.socket.id); // Create a new room in the database
     const idmessage: IdMessage = {
         playerId: room.players[0].id, // Player ID from room ids
@@ -37,6 +42,11 @@ public createRoomHandler(username: string) {
 }
 
 public joinRoomHandler(username: string, roomId: number) {
+    
+    if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
+        this.leaveRoomHandler(); // Leave the room if the player ID exists
+    } 
+
     console.log(`Player ${username} requested to join room with ID: ${roomId}`);
     const room = this.database.joinRoom(username, this.socket.id, roomId); // Join the room in the database
 
@@ -76,9 +86,19 @@ public leaveRoomHandler(){
             errorType: ErrorType.RoomNotFound, // Error type for other errors
             message: `Room with player (${this.socket.id}) does not exist.` // Error message for room not found
         };
-        
+
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
     }
+}
+
+public getIdHandler() {
+    console.log(`Client ${this.socket.id} requested their ID`);
+    const idmessage: IdMessage = {
+        playerId: this.database.getPlayerId(this.socket.id), // Player ID from room ids
+        roomId: this.database.getRoomId(this.socket.id), // Room ID from the created room
+    };
+    this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
+    console.log(`Client ${this.socket.id} received their ID`);
 }
 
 
@@ -86,11 +106,11 @@ public leaveRoomHandler(){
 /* 
 {"roomId":0000, "username":"asd2"}
 
-TestMessage = 'clientTest',
-CreateRoom = 'createRoom',
-JoinRoom = 'joinRoom',
-LeaveRoom = 'leaveRoom',
-GetId = 'getId',
+TestMessage = 'clientTest', ++
+CreateRoom = 'createRoom',  ++
+JoinRoom = 'joinRoom',      ++
+LeaveRoom = 'leaveRoom',    ++
+GetId = 'getId',            ++
 PickTeam = 'pickTeam',
 PickSpymaster = 'pickSpymaster',
 StartGame = 'startGame',

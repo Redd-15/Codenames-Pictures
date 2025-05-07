@@ -33,8 +33,8 @@ export interface TeamPickerMessage {
 
 /** Message type for the forwarding of player and room ids */
 export interface IdMessage {
-  playerId: number,
-  roomId: number
+  playerId: number | null,
+  roomId: number | null
 }
 
 /** Error message type */

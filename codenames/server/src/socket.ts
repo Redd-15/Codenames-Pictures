@@ -40,6 +40,8 @@ export class SocketHandler {
         this.handlers?.joinRoomHandler(join.username, join.roomId)
       });
       socket.on(ClientMessageType.LeaveRoom, (content) => this.handlers?.leaveRoomHandler());
+      socket.on(ClientMessageType.GetId, (content) => this.handlers?.getIdHandler());
+      
 
       socket.on('disconnect', () => {
         console.log('A client disconnected:', socket.id);

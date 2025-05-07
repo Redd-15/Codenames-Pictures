@@ -56,7 +56,7 @@ export class CodenamesDatabase {
 
   public leaveRoom(socketId: string): Room | null {
     // Find the room by socket ID
-    const room = this.roomdb.find(room => room.players.some(player => player.socketId === socketId));
+    const room = this.roomdb.find(room => room.roomId === this.getRoomId(socketId)); // Get the room ID from the socket ID
     if (room) { 
       // Remove the player from the room
       room.players = room.players.filter(player => player.socketId !== socketId);
@@ -69,6 +69,28 @@ export class CodenamesDatabase {
       return null; // Return null if the room does not exist
 
     }
+  }
+
+  public getRoomId(socketId: string): number | null {
+    // Find the room by socket ID
+    const playerId = this.getPlayerId(socketId); // Call getPlayerId to ensure the player exists
+    if (playerId === null) {
+      return null; // Return null if the player does not exist
+    }else{
+      return Math.floor(playerId / 100)
+    }
+  }
+
+  public getPlayerId(socketId: string): number | null {
+    // Find the room by socket ID
+    const room = this.roomdb.find(room => room.players.some(player => player.socketId === socketId));
+    if (room) {
+      const player = room.players.find(player => player.socketId === socketId);
+      if (player) {
+        return player.id; // Return the player ID if found
+      }
+    }
+    return null; // Return null if the player does not exist
   }
 
   private getUniqueRoomId(): number {
