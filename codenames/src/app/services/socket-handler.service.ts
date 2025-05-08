@@ -135,7 +135,7 @@ export class SocketHandlerService {
     let content : PositionPickerMessage = {
       playerId: playerId,
       team: team,
-      isSpymaster: isSpymaster
+      spymaster: isSpymaster
     };
     this.socket?.emit(ClientMessageType.PickPosition, content);
   }
