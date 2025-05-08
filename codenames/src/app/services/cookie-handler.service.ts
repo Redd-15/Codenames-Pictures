@@ -8,7 +8,7 @@ export class CookieHandlerService {
   /** Set a cookie with given name, value and path */
   setCookie(name: string, value: string, path: string){
     console.log('SetCookie', name, value, path);
-    document.cookie = `${name}=${value}; path=${path}; Secure; SameSite=Strict;  max-age=14400;`;
+    document.cookie = `${name}=${value}; path=${path}; SameSite=Strict;  max-age=14400;`;
   }
 
   /** Set a cookie of given name and path. The path should be same as on setting! */

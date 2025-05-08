@@ -2,6 +2,8 @@
 export enum ErrorType {
   Other = 'other',
   RoomNotFound = 'room-not-found',
+  SettingUnavailable = 'setting-unavailable',
+  WelcomeBack = 'welcome-back', //TODO: ez csak poén, de valahogy majd a user felé jelezni kéne úgyis
 }
 
 /** Types of teams in a game */

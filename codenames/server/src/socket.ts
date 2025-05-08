@@ -46,7 +46,7 @@ export class SocketHandler {
 
 
       socket.on('disconnect', () => {
-        console.log('A client disconnected:', socket.id);
+        this.handlers?.disconnectHandler(); // Call leaveRoomHandler on disconnect
       });
     });
   }

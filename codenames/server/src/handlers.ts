@@ -25,15 +25,32 @@ public clientTestMessageHandler(content: any) {
 }
 
 public cookieHandler(cookie: any) {
+
+    if (cookie == undefined) { // If no cookie is found, return
+        return;
+    }
     // Handle cookies here if needed
     console.log(`Client ${this.socket.id} has joined with existing player ID: ${cookie.playerId}`);
-    const room = this.database.getPlayerRoomById(Number.parseInt(cookie.playerId), this.socket.id); // Find the player by ID in the database
+    let room = this.database.getPlayerRoomById(Number.parseInt(cookie.playerId), this.socket.id); // Find the player by ID in the database
      // Get the player ID from the database
     
     if (room) { // If the player is found in a room, join the room
         console.log(`Found room for client (${this.socket.id}): ${room.roomId}`);
         const currentPlayerId = this.database.getPlayerId(this.socket.id);
+        room = this.database.setPlayerActive(this.socket.id); // Set the player as active in the database
         
+        if (!room) { // If player cannot be set active
+            console.log(`Client ${this.socket.id} cannot be set Active`);
+
+            const error : ErrorMessage = {
+            errorType: ErrorType.SettingUnavailable, // Error type for other errors
+            message: `Player with ID (${cookie.playerId}) cannot be set Active.` // Error message for room not found
+            };
+
+            this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+            return;
+        }
+
         const idmessage: IdMessage = {
             playerId: currentPlayerId, // Player ID from room ids
             roomId: room.roomId, // Room ID from the created room
@@ -42,18 +59,23 @@ public cookieHandler(cookie: any) {
         this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
         this.socket.join(room.roomId.toString()); // Join the room in the socket
         this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+
+        const error : ErrorMessage = {  //TODO: ez csak poén, de valahogy majd a user felé jelezni kéne úgyis
+            errorType: ErrorType.WelcomeBack, // Error type for other errors
+            message: `Connected to existing room by default, username may have changed!` // Error message for room not found
+        };
+        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        
         console.log(`Client ${this.socket.id} joined back to room (${room.roomId})`);
     }else{
         console.log(`Client ${this.socket.id} does not have an existing room`);
         const error : ErrorMessage = {
             errorType: ErrorType.RoomNotFound, // Error type for other errors
-            message: `Room with playerID (${cookie.playerId}) does not exist.` // Error message for room not found
+            message: `Room with playerID (${cookie.playerId}) no longer not exist.` // Error message for room not found
         };
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
         return;
     }
-
-    
 }
 
 public createRoomHandler(username: string) {
@@ -134,7 +156,15 @@ public leaveRoomHandler(){
         };
 
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+    }
+}
 
+public disconnectHandler() {
+    console.log(`Client ${this.socket.id} disconnected, setting status to inactive`);
+    const room = this.database.setPlayerInactive(this.socket.id); // Leave the room in the database
+    
+    if (room) { // If the room exists, send a message back to the client
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
     }
 }
 
@@ -158,7 +188,7 @@ CreateRoom = 'createRoom',  ++
 JoinRoom = 'joinRoom',      ++
 LeaveRoom = 'leaveRoom',    ++
 GetId = 'getId',            ++
-PickTeam = 'pickTeam',
+PickTeam = 'pickTeam',      
 PickSpymaster = 'pickSpymaster',
 StartGame = 'startGame',
 GiveHint = 'giveHint',
