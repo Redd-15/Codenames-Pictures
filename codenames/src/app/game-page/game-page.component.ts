@@ -6,6 +6,7 @@ import { ChatComponent } from '../chat/chat.component';
 import { Store } from '@ngrx/store';
 import { resetRoom } from '../state/action/room.action';
 import { resetIds } from '../state/action/ids.action';
+import { SocketHandlerService } from '../services/socket-handler.service';
 
 @Component({
   selector: 'app-game-page',
@@ -17,10 +18,15 @@ import { resetIds } from '../state/action/ids.action';
 export class GamePageComponent {
   private router = inject(Router);
   private store = inject(Store);
+  private socketHandlerService = inject(SocketHandlerService)
   // TODO: set to true
-  isRoomWindowVisible = false;
+  isRoomWindowVisible = true;
   isGlobalChatOpen = false;
   isTeamChatOpen = false;
+
+  ngOnInit() {
+    this.socketHandlerService.connect();
+  }
 
   toggleGlobalChat() {
     this.isGlobalChatOpen = !this.isGlobalChatOpen;

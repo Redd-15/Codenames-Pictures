@@ -18,7 +18,7 @@ export class SocketHandler {
     this.database = database
     this.handlers = null; // Initialize handlers with null socket instance
     this.setUp();
-    
+
   }
 
   private setUp() {
@@ -29,19 +29,19 @@ export class SocketHandler {
       console.log("Parsed Cookies:", parsedCookies);
       //TODO create room if creation, put user in room if join request, send error message back if room does not exist
       //Send message back to client by socket id
-      this.io.to(socket.id).emit(ServerMessageType.TestMessage, 'You are connected');
+      this.io.to(socket.id).emit(ServerMessageType.ConnectAck);
       this.handlers = new ServerHandlers(this.io, socket, this.database); // Initialize handlers with the current socket instance
-      
+
       //Configure listeners for different message types and disconnection on socket
       socket.on(ClientMessageType.TestMessage, (content) => this.handlers?.clientTestMessageHandler(content));
       socket.on(ClientMessageType.CreateRoom, (username) => this.handlers?.createRoomHandler(username));
-      socket.on(ClientMessageType.JoinRoom, (json) => {
-        const join : JoinMessage = JSON.parse(json); // Destructure the JSON object to get JoinMessage
+      socket.on(ClientMessageType.JoinRoom, (join) => {
+        //const join : JoinMessage = JSON.parse(json); // Destructure the JSON object to get JoinMessage
         this.handlers?.joinRoomHandler(join.username, join.roomId)
       });
       socket.on(ClientMessageType.LeaveRoom, (content) => this.handlers?.leaveRoomHandler());
       socket.on(ClientMessageType.GetId, (content) => this.handlers?.getIdHandler());
-      
+
 
       socket.on('disconnect', () => {
         console.log('A client disconnected:', socket.id);

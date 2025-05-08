@@ -7,6 +7,7 @@ export const MAX_MESSAGE_LENGTH = 255
 /** Enum for message types FROM SERVER */
 export enum ServerMessageType {
   TestMessage = 'serverTest',
+  ConnectAck = 'connectAck',
   ReceiveId = 'receiveId',
   ReceiveRoom = 'receiveRoom',
   ReceiveHint = 'receiveHint',
