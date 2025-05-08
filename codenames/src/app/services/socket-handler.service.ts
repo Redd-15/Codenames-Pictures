@@ -121,6 +121,7 @@ export class SocketHandlerService {
   /** Leave current game room */
   leaveRoom() {
     this.socket?.emit(ClientMessageType.LeaveRoom);
+    this.disconnect();
     this.cookieHandlerService.removeCookie('playerId', '/socket.io');
   }
 

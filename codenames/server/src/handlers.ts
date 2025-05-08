@@ -57,7 +57,7 @@ public cookieHandler(cookie: any) {
 }
 
 public createRoomHandler(username: string) {
-    
+
     if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
         const room = this.database.getRoomBySocketId(this.socket.id); // Get the room ID from the socket ID
         if (room){
@@ -78,7 +78,7 @@ public createRoomHandler(username: string) {
 }
 
 public joinRoomHandler(username: string, roomId: number) {
-    
+
 
     if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
         const room = this.database.getRoomBySocketId(this.socket.id); // Get the room ID from the socket ID
@@ -103,7 +103,7 @@ public joinRoomHandler(username: string, roomId: number) {
         console.log(`Client ${this.socket.id} joined room with username: ${username}`);
 
     }else {
-        
+
         const error : ErrorMessage = {
             errorType: ErrorType.RoomNotFound, // Error type for other errors
             message: `Room with ID ${roomId} does not exist.` // Error message for room not found
@@ -134,7 +134,7 @@ public leaveRoomHandler(){
         };
 
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
-        
+
     }
 }
 
@@ -150,7 +150,7 @@ public getIdHandler() {
 
 
 }
-/* 
+/*
 {"roomId":0000, "username":"asd2"}
 
 TestMessage = 'clientTest', ++

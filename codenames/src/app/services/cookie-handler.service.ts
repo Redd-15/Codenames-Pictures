@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Socket, io } from 'socket.io-client';
-import { ServerMessageType, ClientMessageType } from '../../../model';
 
 @Injectable({
   providedIn: 'root'
