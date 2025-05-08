@@ -34,7 +34,6 @@ export class SocketHandlerService {
   connect(){
     this.disconnect();
     this.isOwnIdKnown = false;
-    this.cookieHandlerService.removeCookie('playerId', '/socket.io');
     this.socket = io();
 
     // Listeners for incoming socket messages
@@ -57,6 +56,7 @@ export class SocketHandlerService {
       this.isOwnIdKnown = false;
       this.store.dispatch(loadPlayerId({playerId: ids.playerId as number}));
       this.store.dispatch(loadRoomId({roomId: ids.roomId as number}));
+      this.cookieHandlerService.removeCookie('playerId', '/socket.io');
       this.cookieHandlerService.setCookie('playerId', (ids.playerId as number) + '', '/socket.io');
 
     });
@@ -121,6 +121,7 @@ export class SocketHandlerService {
   /** Leave current game room */
   leaveRoom() {
     this.socket?.emit(ClientMessageType.LeaveRoom);
+    this.cookieHandlerService.removeCookie('playerId', '/socket.io');
   }
 
   /** Query own room and player ids */
