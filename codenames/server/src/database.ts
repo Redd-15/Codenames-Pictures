@@ -56,14 +56,17 @@ export class CodenamesDatabase {
 
   public leaveRoom(socketId: string): Room | null {
     // Find the room by socket ID
-    const room = this.roomdb.find(room => room.roomId === this.getRoomId(socketId)); // Get the room ID from the socket ID
+    let room = this.roomdb.find(room => room.roomId === this.getRoomId(socketId)); // Get the room ID from the socket ID
     if (room) { 
+      
       // Remove the player from the room
       room.players = room.players.filter(player => player.socketId !== socketId);
+      
       if (room.players.length === 0) {
         // If no players left, remove the room from the database
         this.roomdb = this.roomdb.filter(r => r.roomId !== room.roomId);
       }
+
       return room; // Return the updated room
     } else {
       return null; // Return null if the room does not exist

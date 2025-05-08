@@ -39,10 +39,12 @@ public createRoomHandler(username: string) {
     this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
     this.io.to(this.socket.id).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
     console.log(`Client (SID: ${this.socket.id}) created room (ID: ${room.roomId}) with username: ${username}`);
+    this.socket.join(room.roomId.toString()); // Join the room in the socket
 }
 
 public joinRoomHandler(username: string, roomId: number) {
     
+
     if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
         this.leaveRoomHandler(); // Leave the room if the player ID exists
     } 
@@ -50,8 +52,19 @@ public joinRoomHandler(username: string, roomId: number) {
     console.log(`Player ${username} requested to join room with ID: ${roomId}`);
     const room = this.database.joinRoom(username, this.socket.id, roomId); // Join the room in the database
 
-    if (!room) {
+    if (room) {
 
+        const idmessage: IdMessage = {
+            playerId: room.players[0].id, // Player ID from room ids
+            roomId: room.roomId, // Room ID from the created room
+        };
+        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
+        this.socket.join(room.roomId.toString()); // Join the room in the socket
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client ${this.socket.id} joined room with username: ${username}`);
+
+    }else {
+        
         const error : ErrorMessage = {
             errorType: ErrorType.RoomNotFound, // Error type for other errors
             message: `Room with ID ${roomId} does not exist.` // Error message for room not found
@@ -59,14 +72,6 @@ public joinRoomHandler(username: string, roomId: number) {
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
         return;
 
-    }else {
-        const idmessage: IdMessage = {
-            playerId: room.players[0].id, // Player ID from room ids
-            roomId: room.roomId, // Room ID from the created room
-        };
-        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
-        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
-        console.log(`Client ${this.socket.id} joined room with username: ${username}`);
     }
 }
 
@@ -77,8 +82,11 @@ public leaveRoomHandler(){
 
     if (room){ // Leave the room in the database
 
-        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        this.socket.leave(room.roomId.toString()); // Leave the socket room
         console.log(`Client ${this.socket.id} left their room`);
+        this.socket.disconnect(); // Disconnect the socket
+        this.io.close(); // Close the socket connection
 
     } else {
 
@@ -88,6 +96,7 @@ public leaveRoomHandler(){
         };
 
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        
     }
 }
 
