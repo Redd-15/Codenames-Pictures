@@ -25,10 +25,10 @@ public clientTestMessageHandler(content: any) {
 }
 
 public createRoomHandler(username: string) {
-    
+
     if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
         this.leaveRoomHandler(); // Leave the room if the player ID exists
-    } 
+    }
 
     const room = this.database.createRoom(username, this.socket.id); // Create a new room in the database
     const idmessage: IdMessage = {
@@ -43,11 +43,11 @@ public createRoomHandler(username: string) {
 }
 
 public joinRoomHandler(username: string, roomId: number) {
-    
+
 
     if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
         this.leaveRoomHandler(); // Leave the room if the player ID exists
-    } 
+    }
 
     console.log(`Player ${username} requested to join room with ID: ${roomId}`);
     const room = this.database.joinRoom(username, this.socket.id, roomId); // Join the room in the database
@@ -64,7 +64,7 @@ public joinRoomHandler(username: string, roomId: number) {
         console.log(`Client ${this.socket.id} joined room with username: ${username}`);
 
     }else {
-        
+
         const error : ErrorMessage = {
             errorType: ErrorType.RoomNotFound, // Error type for other errors
             message: `Room with ID ${roomId} does not exist.` // Error message for room not found
@@ -86,7 +86,6 @@ public leaveRoomHandler(){
         this.socket.leave(room.roomId.toString()); // Leave the socket room
         console.log(`Client ${this.socket.id} left their room`);
         this.socket.disconnect(); // Disconnect the socket
-        this.io.close(); // Close the socket connection
 
     } else {
 
@@ -96,7 +95,7 @@ public leaveRoomHandler(){
         };
 
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
-        
+
     }
 }
 
@@ -112,7 +111,7 @@ public getIdHandler() {
 
 
 }
-/* 
+/*
 {"roomId":0000, "username":"asd2"}
 
 TestMessage = 'clientTest', ++
