@@ -27,10 +27,12 @@ export class SocketHandler {
       const cookies = socket.handshake.headers.cookie;
       const parsedCookies = this.parseCookies(cookies);
       console.log("Parsed Cookies:", parsedCookies);
-      //TODO create room if creation, put user in room if join request, send error message back if room does not exist
+
       //Send message back to client by socket id
       this.io.to(socket.id).emit(ServerMessageType.ConnectAck);
       this.handlers = new ServerHandlers(this.io, socket, this.database); // Initialize handlers with the current socket instance
+      
+      this.handlers?.cookieHandler(parsedCookies); // Call the cookie handler to check if player was in room already
 
       //Configure listeners for different message types and disconnection on socket
       socket.on(ClientMessageType.TestMessage, (content) => this.handlers?.clientTestMessageHandler(content));
