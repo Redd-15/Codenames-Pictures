@@ -44,6 +44,7 @@ export class GamePageComponent {
   leaveGame(){
     //TODO this.store.dispatch(resetRoom());
     this.store.dispatch(resetIds());
+    this.socketHandlerService.leaveRoom();
     this.router.navigateByUrl("")
     //TODO: socket communication
   }
