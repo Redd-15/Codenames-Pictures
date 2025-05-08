@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadUsername, resetIds } from '../state/action/ids.action';
 import { resetRoom } from '../state/action/room.action';
+import { SocketHandlerService } from '../services/socket-handler.service';
 
 @Component({
   selector: 'app-create-room-form',
@@ -20,6 +21,7 @@ export class CreateRoomFormComponent implements ModalContent {
   private router = inject(Router);
   private store = inject(Store);
   private formBuilder = inject(FormBuilder);
+  private socketHandlerService = inject(SocketHandlerService);
   form = this.formBuilder.group({
     username: [
       '',
@@ -40,9 +42,11 @@ export class CreateRoomFormComponent implements ModalContent {
       console.log('Form data:', this.form.value);
       if(this.form.value.username){
         this.store.dispatch(resetIds());
-        // TODO: this.store.dispatch(resetRoom());
-        this.store.dispatch(loadUsername({username: this.form.value.username}))
+        this.store.dispatch(resetRoom());
+        this.store.dispatch(loadUsername({username: this.form.value.username}));
       }
+      //Leave current room to be able to rejoin new room
+      this.socketHandlerService.leaveRoom();
       this.router.navigateByUrl('/game');
       return true;
     } else {

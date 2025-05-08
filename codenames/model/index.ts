@@ -27,6 +27,7 @@ export enum ClientMessageType {
   GetId = 'getId',
   PickTeam = 'pickTeam',
   PickSpymaster = 'pickSpymaster',
+  PickPosition = 'pickPosition',
   StartGame = 'startGame',
   GiveHint = 'giveHint',
   MakeGuess = 'makeGuess',

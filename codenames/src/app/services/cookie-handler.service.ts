@@ -9,11 +9,13 @@ export class CookieHandlerService {
   setCookie(name: string, value: string, path: string){
     console.log('SetCookie', name, value, path);
     document.cookie = `${name}=${value}; path=${path}; SameSite=Strict;  max-age=14400;`;
+    localStorage.setItem(name, 'exists');
   }
 
   /** Set a cookie of given name and path. The path should be same as on setting! */
   removeCookie(name: string, path:string) {
     console.log('RemoveCookie', name, path);
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+    localStorage.removeItem(name);
   }
 }

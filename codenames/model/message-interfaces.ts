@@ -33,6 +33,13 @@ export interface TeamPickerMessage {
   team: TeamType
 }
 
+/** Message type for picking a position */
+export interface PositionPickerMessage {
+  playerId: number,
+  team: TeamType,
+  isSpymaster: boolean
+}
+
 /** Message type for the forwarding of player and room ids */
 export interface IdMessage {
   playerId: number | null,

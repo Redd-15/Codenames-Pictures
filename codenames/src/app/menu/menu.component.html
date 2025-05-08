@@ -11,5 +11,8 @@
     <div class="mb-2">
       <button (click)="openJoinModal()" class="btn btn-custom w-100">Join room</button>
     </div>
+    <div class="mb-2">
+      <button (click)="rejoinPrevious()" *ngIf="isRejoinAvailable" class="btn btn-beige w-100">Rejoin previous room</button>
+    </div>
   </div>
 </div>

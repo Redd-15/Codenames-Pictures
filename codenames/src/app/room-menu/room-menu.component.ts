@@ -9,6 +9,8 @@ import { selectPlayerId, selectRoomId } from '../state/selector/ids.selector';
 import { takeUntil } from 'rxjs';
 import { BaseComponent } from '../base.component';
 import { selectBlueOperatives, selectBlueSpymasters, selectRedOperatives, selectRedSpymasters, selectRoom } from '../state/selector/room.selector';
+import { SocketHandlerService } from '../services/socket-handler.service';
+import { TeamType } from '../../../model/message-interfaces';
 
 @Component({
   selector: 'app-room-menu',
@@ -20,6 +22,7 @@ import { selectBlueOperatives, selectBlueSpymasters, selectRedOperatives, select
 export class RoomMenuComponent extends BaseComponent implements OnInit {
   private store = inject(Store);
   private toastr = inject(ToastrService);
+  private socketHandlerService = inject(SocketHandlerService);
 
   @Output() startGame = new EventEmitter<void>();
   @Output() leaveGame = new EventEmitter<void>();
@@ -93,6 +96,21 @@ export class RoomMenuComponent extends BaseComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       //TODO: send move player socket message
+      let movedPlayer: Player = event.previousContainer.data[event.previousIndex];
+       // Determine target container ID
+      const containerId = event.container.id;
+
+      // Determine team
+      const team = (containerId === 'redTeam' || containerId === 'redSpymasters')
+        ? TeamType.Red
+        : TeamType.Blue;
+
+      // Determine role
+      const isSpymaster = (containerId === 'redSpymasters' || containerId === 'blueSpymasters');
+
+      // Send the move to server
+      console.log(containerId, movedPlayer.id, team, isSpymaster);
+      this.socketHandlerService.pickPosition(movedPlayer.id, team, isSpymaster);
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,

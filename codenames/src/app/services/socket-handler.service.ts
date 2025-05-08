@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
 import { ServerMessageType, ClientMessageType } from '../../../model';
 import { CookieHandlerService } from './cookie-handler.service';
-import { ChatMessage, ErrorMessage, ErrorType, Hint, IdMessage, JoinMessage, TeamPickerMessage, TeamType } from '../../../model/message-interfaces';
+import { ChatMessage, ErrorMessage, ErrorType, Hint, IdMessage, JoinMessage, PositionPickerMessage, TeamPickerMessage, TeamType } from '../../../model/message-interfaces';
 import { Room } from '../../../model/room';
 import { Store } from '@ngrx/store';
 import { selectRoomId, selectUsername } from '../state/selector/ids.selector';
@@ -53,7 +53,7 @@ export class SocketHandlerService {
     });
     this.socket.on(ServerMessageType.ReceiveId, (ids: IdMessage) =>{
       console.log("Received ids", ids.playerId, ids.roomId);
-      this.isOwnIdKnown = false;
+      this.isOwnIdKnown = true;
       this.store.dispatch(loadPlayerId({playerId: ids.playerId as number}));
       this.store.dispatch(loadRoomId({roomId: ids.roomId as number}));
       this.cookieHandlerService.removeCookie('playerId', '/socket.io');
@@ -130,6 +130,15 @@ export class SocketHandlerService {
     this.socket?.emit(ClientMessageType.GetId);
   }
 
+  /** Pick a team and role for player with given id */
+  pickPosition(playerId: number, team: TeamType, isSpymaster: boolean) {
+    let content : PositionPickerMessage = {
+      playerId: playerId,
+      team: team,
+      isSpymaster: isSpymaster
+    };
+    this.socket?.emit(ClientMessageType.PickPosition, content);
+  }
    /** Pick a team for player with given id */
    pickTeam(playerId: number, team: TeamType) {
     let content : TeamPickerMessage = {
