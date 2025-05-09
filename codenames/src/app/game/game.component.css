@@ -34,9 +34,20 @@
   max-width: fit-content;
   overflow: hidden;
   position: relative;
-  .clue-container, .clue-history {
+  .clue-container, .clue-history, .clue-form {
     border-radius: 1rem;
     overflow-x: auto;
+  }
+  .clue-form {
+    padding: 0.75rem 1rem;
+    background-color: var(--plum);
+    color: var(--white);
+  }
+  .blurred {
+    filter: blur(2px);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.6;
   }
   .clue-container {
     padding: 0.75rem 1rem;

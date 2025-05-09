@@ -16,11 +16,12 @@ import { SocketHandlerService } from '../services/socket-handler.service';
 import { Router } from '@angular/router';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { Player } from '../../../model/player';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, NgbTooltipModule, CardComponent],
+  imports: [CommonModule, NgbTooltipModule, FormsModule, ReactiveFormsModule, CardComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
@@ -176,6 +177,21 @@ export class GameComponent extends BaseComponent {
     }
   ]
 
+  private formBuilder = inject(FormBuilder);
+  clueForm =  this.formBuilder.group({
+      clue: ['', [Validators.required]],
+      number: [1]
+    });
+  numbers: number[] = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  submitClue() {
+    if(this.clueForm.valid && this.clueForm.value.clue && this.clueForm.value.number) {
+      this.socketHandlerService.giveHint(this.clueForm.value.clue, this.clueForm.value.number);
+      this.clueForm.reset();
+    }
+    console.log(this.clueForm.value);
+  }
+
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
       this.playerId = playerId;
@@ -184,6 +200,7 @@ export class GameComponent extends BaseComponent {
       if (room) {
         this.currentTeam = room.turn;
         this.currentPhase = room.currentHint ? 'guess' : 'clue';
+        this.currentHint = room.currentHint ?? {word: 'clue', number: 9};
         this.players = room.players;
         //Get player data
         let player = room.players.find((player) => player.id === this.playerId);
