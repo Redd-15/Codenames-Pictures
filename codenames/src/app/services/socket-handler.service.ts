@@ -10,6 +10,7 @@ import { forkJoin, take } from 'rxjs';
 import { loadPlayerId, loadRoomId, loadUsername } from '../state/action/ids.action';
 import { loadHint, loadRoom } from '../state/action/room.action';
 import { loadGlobalMessages, loadTeamMessages } from '../state/action/chat.action';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class SocketHandlerService {
   private socket?: Socket;
   private cookieHandlerService = inject(CookieHandlerService);
   private store = inject(Store);
+  private toastr = inject(ToastrService);
 
   private isOwnIdKnown = false;
 
@@ -84,6 +86,11 @@ export class SocketHandlerService {
         console.log("No username set, redirecting to main page.");
         this.cookieHandlerService.removeCookie('playerId', '/socket.io');
         window.location.href = '/';
+      }
+      else if (error.errorType == ErrorType.RoomNotFound) {
+        console.log("No such room exists, redirecting to main page.");
+        this.toastr.error('Room with the given ID does not exist.', 'Error', { toastClass: 'ngx-toastr toast-custom' }); //TODO: If it redirects the error should appear on the main page
+        //window.location.href = '/';
       }
       //TODO: handle
     });

@@ -64,8 +64,8 @@ public cookieHandler(cookie: any) {
     }else{
         console.log(`Client ${this.socket.id} does not have an existing room`);
         const error : ErrorMessage = {
-            errorType: ErrorType.RoomNotFound, // Error type for other errors
-            message: `Room with playerID (${cookie.playerId}) no longer not exist.` // Error message for room not found
+            errorType: ErrorType.RoomNoLongerExists, // Error type for other errors
+            message: `Room with ID (${cookie.playerId}) no longer not exist.` // Error message for room not found
         };
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
         return;
