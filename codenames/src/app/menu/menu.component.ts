@@ -18,7 +18,9 @@ export class MenuComponent {
   private modalService = inject(ModalService);
   private router = inject(Router);
 
-  isRejoinAvailable = localStorage.getItem('playerId') !== null;
+  get isRejoinAvailable() {
+    return localStorage.getItem('playerId') !== null;
+  }
 
   openCreateModal(){
     this.modalService.open('Create room', CreateRoomFormComponent, 'Create');

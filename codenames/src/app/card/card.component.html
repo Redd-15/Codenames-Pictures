@@ -1,10 +1,10 @@
 <div class="image-container" (click)="highlightCard()" [class]="(isFlipped ? 'flipped' : '') + ' team-'+team">
   <div class="image-flip">
     <div class="front" [class]="cardClass">
-      <img [src]="card.getFilePath()" alt="Front Image" />
+      <img [src]="card.getFilePath()" alt="Front Image" draggable="false" />
     </div>
     <div class="back">
-      <img [src]="card.getBackFilePath()" alt="Back Image" />
+      <img [src]="card.isSecret ? '/agents/grey-1.jpg': card.getBackFilePath()" alt="Back Image" />
     </div>
   </div>
   <div class="flip-btn" (click)="flipCard()" *ngIf="turn == team && phase == 'guess' && card.isSecret && card.isHighlighted && !isSpymasterMode">

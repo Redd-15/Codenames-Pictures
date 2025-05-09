@@ -7,29 +7,48 @@ import { CardColour, Hint, TeamType } from '../../../model/message-interfaces';
 import { Store } from '@ngrx/store';
 import { selectCards, selectPlayerById, selectPlayerCount, selectRoom } from '../state/selector/room.selector';
 import { BaseComponent } from '../base.component';
-import { take, takeUntil } from 'rxjs';
-import { selectPlayerId } from '../state/selector/ids.selector';
+import { map, switchMap, take, takeUntil } from 'rxjs';
+import { selectPlayerId, selectUsername } from '../state/selector/ids.selector';
 import { HintHistoryEntry } from '../model/hint-history-entry';
+import { resetIds } from '../state/action/ids.action';
+import { resetRoom } from '../state/action/room.action';
+import { SocketHandlerService } from '../services/socket-handler.service';
+import { Router } from '@angular/router';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { Player } from '../../../model/player';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, CardComponent],
+  imports: [CommonModule, NgbTooltipModule, CardComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
 export class GameComponent extends BaseComponent {
   private store = inject(Store);
+  private socketHandlerService = inject(SocketHandlerService);
+  private router = inject(Router);
 
   cards: Card[] = [];
   currentTeam = TeamType.Red;
   currentPhase: 'clue' | 'guess' = 'clue';
 
   username = '';
+  playerId = -1;
   isSpymaster = false;
   team = TeamType.Red;
 
+  players: Player[] = [];
+
   playerNum = 0;
+
+  get playerNameList() {
+    let output = "";
+    for(let player of this.players) {
+      output += player.name+'<br>';
+    }
+    return output;
+  }
 
   currentHint: Hint = {
     word: 'kiskutya',
@@ -159,16 +178,20 @@ export class GameComponent extends BaseComponent {
 
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
-      this.store.select(selectPlayerById(playerId)).pipe(take(1)).subscribe((player) => {
-        this.username = player ? player.name : '';
-        this.isSpymaster = player ? player.isSpymaster : false;
-        this.team = player ? (player.team ?? TeamType.Red) : TeamType.Red;
-      });
+      this.playerId = playerId;
     });
     this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
-      if(room){
+      if (room) {
         this.currentTeam = room.turn;
         this.currentPhase = room.currentHint ? 'guess' : 'clue';
+        this.players = room.players;
+        //Get player data
+        let player = room.players.find((player) => player.id === this.playerId);
+        if (player) {
+          this.username = player.name;
+          this.isSpymaster = player.isSpymaster;
+          this.team = player.team ?? TeamType.Red;
+        }
       }
     });
     this.store.select(selectPlayerCount).pipe(takeUntil(this.destroy$)).subscribe((playerCount) => {
@@ -176,11 +199,19 @@ export class GameComponent extends BaseComponent {
     });
     this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((cards) => {
       const cardObjects: Card[] = [];
-      for(let card of cards){
+      for (let card of cards) {
         cardObjects.push(new Card(card.id, card.colour));
       }
       this.cards = cardObjects;
     });
+  }
+
+  leaveGame() {
+    this.store.dispatch(resetRoom());
+    this.store.dispatch(resetIds());
+    this.socketHandlerService.leaveRoom();
+    this.router.navigateByUrl("")
+    //TODO: socket communication
   }
 
   private generateRandomDeck(): Card[] {

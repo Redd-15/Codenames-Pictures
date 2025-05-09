@@ -119,3 +119,9 @@
 .image-container:has(.flip-btn:hover) .front.non-spymaster.highlighted {
   border-color: var(--team-colour);
 }
+
+.image-container, .image-flip, .front, .back, img {
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+}

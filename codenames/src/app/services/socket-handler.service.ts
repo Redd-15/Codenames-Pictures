@@ -11,6 +11,8 @@ import { loadPlayerId, loadRoomId, loadUsername } from '../state/action/ids.acti
 import { loadHint, loadRoom } from '../state/action/room.action';
 import { loadGlobalMessages, loadTeamMessages } from '../state/action/chat.action';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +20,8 @@ import { ToastrService } from 'ngx-toastr';
 export class SocketHandlerService {
   private socket?: Socket;
   private cookieHandlerService = inject(CookieHandlerService);
+  private errorHandlerService = inject(ErrorHandlerService);
   private store = inject(Store);
-  private toastr = inject(ToastrService);
 
   private isOwnIdKnown = false;
 
@@ -81,18 +83,8 @@ export class SocketHandlerService {
       //TODO: handle
     });
     this.socket.on(ServerMessageType.Error, (error: ErrorMessage) =>{
-      console.log("SOCKET ERROR: " + error.message);
-      if (error.errorType == ErrorType.NoUsername) {
-        console.log("No username set, redirecting to main page.");
-        this.cookieHandlerService.removeCookie('playerId', '/socket.io');
-        window.location.href = '/';
-      }
-      else if (error.errorType == ErrorType.RoomNotFound) {
-        console.log("No such room exists, redirecting to main page.");
-        this.toastr.error('Room with the given ID does not exist.', 'Error', { toastClass: 'ngx-toastr toast-custom' }); //TODO: If it redirects the error should appear on the main page
-        //window.location.href = '/';
-      }
-      //TODO: handle
+      console.log("SOCKET ERROR", error.errorType, error.message);
+      this.errorHandlerService.handle(error);
     });
 
     //Chat handling

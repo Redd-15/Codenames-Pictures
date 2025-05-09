@@ -17,8 +17,8 @@ export const selectPlayers = createSelector(
 )
 
 export const selectPlayerById = (playerId: number) =>
-  createSelector(selectPlayers, (players) =>
-    players.find((player) => player.id === playerId) ?? null
+  createSelector(selectRoom, (room) =>
+    room?.players.find((player) => player.id === playerId) ?? null
 )
 
 export const selectPlayerCount = createSelector(

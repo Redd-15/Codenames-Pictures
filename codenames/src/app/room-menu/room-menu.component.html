@@ -15,7 +15,7 @@
               </div>
               <div class="drop-container"  id="redSpymasters"  cdkDropList cdkDropListOrientation="mixed" #redSpymasterList="cdkDropList" [cdkDropListData]="redSpymasters" [cdkDropListConnectedTo]="[redList, blueSpymasterList, blueList]" (cdkDropListDropped)="drop($event)">
                 @for(player of redSpymasters; track $index){
-                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [class.inactive]="player.isInactive" [cdkDragDisabled]="player.id != myId" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
               <div class="d-flex justify-content-stretch align-items-center m-1 mt-2">
@@ -24,7 +24,7 @@
               </div>
               <div class="drop-container"  id="redTeam" cdkDropList cdkDropListOrientation="mixed" #redList="cdkDropList" [cdkDropListData]="redTeam" [cdkDropListConnectedTo]="[redSpymasterList, blueSpymasterList, blueList]" (cdkDropListDropped)="drop($event)">
                 @for(player of redTeam; track $index){
-                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [class.inactive]="player.isInactive" [cdkDragDisabled]="player.id != myId" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
             </div>
@@ -41,7 +41,7 @@
 
               <div class="drop-container"  id="blueSpymasters"  cdkDropList cdkDropListOrientation="mixed" #blueSpymasterList="cdkDropList" [cdkDropListData]="blueSpymasters" [cdkDropListConnectedTo]="[blueList, redSpymasterList, redList]" (cdkDropListDropped)="drop($event)">
                 @for(player of blueSpymasters; track $index){
-                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [class.inactive]="player.isInactive" [cdkDragDisabled]="player.id != myId" cdkDrag  cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
               <div class="d-flex justify-content-stretch align-items-center m-1 mt-2">
@@ -50,7 +50,7 @@
               </div>
               <div class="drop-container"  id="blueTeam" cdkDropList cdkDropListOrientation="mixed" #blueList="cdkDropList" [cdkDropListData]="blueTeam" [cdkDropListConnectedTo]="[blueSpymasterList, redSpymasterList, redList]" (cdkDropListDropped)="drop($event)">
                 @for(player of blueTeam; track $index){
-                  <div class="player" [class.me]="player.id == myId" [cdkDragDisabled]="player.id != myId" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
+                  <div class="player" [class.me]="player.id == myId" [class.inactive]="player.isInactive" [cdkDragDisabled]="player.id != myId" cdkDrag cdkDragBoundary=".teams">{{ player.name }}</div>
                 }
               </div>
             </div>

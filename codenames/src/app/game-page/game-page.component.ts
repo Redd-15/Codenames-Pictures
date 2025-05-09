@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import { resetRoom } from '../state/action/room.action';
 import { resetIds } from '../state/action/ids.action';
 import { SocketHandlerService } from '../services/socket-handler.service';
+import { selectIsStarted } from '../state/selector/room.selector';
+import { takeUntil } from 'rxjs';
+import { BaseComponent } from '../base.component';
 
 @Component({
   selector: 'app-game-page',
@@ -15,7 +18,7 @@ import { SocketHandlerService } from '../services/socket-handler.service';
   templateUrl: './game-page.component.html',
   styleUrl: './game-page.component.css'
 })
-export class GamePageComponent {
+export class GamePageComponent extends BaseComponent {
   private router = inject(Router);
   private store = inject(Store);
   private socketHandlerService = inject(SocketHandlerService)
@@ -26,6 +29,9 @@ export class GamePageComponent {
 
   ngOnInit() {
     this.socketHandlerService.connect();
+    this.store.select(selectIsStarted).pipe(takeUntil(this.destroy$)).subscribe((isGameStarted) => {
+      this.isRoomWindowVisible = !isGameStarted;
+    });
   }
 
   toggleGlobalChat() {

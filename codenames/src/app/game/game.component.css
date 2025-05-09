@@ -159,6 +159,17 @@
   }
 }
 
+.tooltip-box {
+  padding: 0.2rem 0.4rem;
+  background-color: var(--blue);
+  color: var(--black);
+  margin: 0.15rem 0rem;
+  border-radius: 0.5rem;
+  &.red-box {
+    background-color: var(--lighter-red);
+  }
+}
+
 .cap::first-letter {
   text-transform: uppercase;
 }
