@@ -38,6 +38,7 @@ export class GamePageComponent {
 
   startGame(){
     this.isRoomWindowVisible = false;
+    this.socketHandlerService.startGame();
     //TODO: socket communication
   }
 
