@@ -172,7 +172,7 @@ export class CodenamesDatabase {
     // Generate a unique room ID
     let roomId: number;
     do {
-      roomId = Math.floor(Math.random() * 10000); // Random room ID for now
+      roomId = Math.floor(Math.random() * 9000) + 999; // Random room ID for now
     } while (this.roomdb.some(room => room.roomId === roomId)); // Check if the room ID already exists
     return roomId;
   }
