@@ -195,50 +195,48 @@ export class CodenamesDatabase {
 
   }
 
-  private getRandomCardsArray(startTeam:TeamType): Card[] {
-    const MAX_CARD_NO: number = 279; // Maximum card number
-    const cardArray: Card[] = []; // Array to hold the cards
+  private getRandomCardsArray(startTeam: TeamType): Card[] {
+    const totalCards = 20;
+    const redCards = startTeam === TeamType.Red ? 8 : 7; // Starting team gets 1 extra card
+    const blueCards = startTeam === TeamType.Blue ? 8 : 7;
+    const blackCards = 1;
+    const greyCards = totalCards - redCards - blueCards - blackCards;
 
-    while (cardArray.length < 8) {
-      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
-      cardArray.push({
-        id: randomCard,
-        colour: (startTeam === TeamType.Blue ? CardColour.Blue: CardColour.Red), // Randomly assign red or blue
-        isSecret: true, // Set isSecret to true
-      });
-    }
-    while (cardArray.length < 15) {
-      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
-      cardArray.push({
-        id: randomCard,
-        colour: (startTeam === TeamType.Blue ? CardColour.Red: CardColour.Blue), // Randomly assign red or blue
-        isSecret: true, // Set isSecret to true
-      });
-    }
-    {
-      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
-      cardArray.push({
-        id: randomCard,
-        colour: CardColour.Black, // Assign white
-        isSecret: true, // Set isSecret to true
-      });
-    }
-    while (cardArray.length < 20) {
-      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
-      cardArray.push({
-        id: randomCard,
-        colour: CardColour.Grey, // Randomly assign red or blue
-        isSecret: true, // Set isSecret to true
-      });
-    }
-    
-    // Shuffle the cards
-    for (let i = cardArray.length - 1; i > 0; i--) {
+    const cards: Card[] = [];
+    const usedIds = new Set<number>(); // To ensure unique IDs
+
+    const generateUniqueId = (): number => {
+      let id;
+      do {
+        id = Math.floor(Math.random() * 279); // Generate a random ID
+      } while (usedIds.has(id));
+      usedIds.add(id);
+      return id;
+    };
+
+    // Helper function to create cards of a specific color
+    const createCards = (count: number, colour: CardColour) => {
+      for (let i = 0; i < count; i++) {
+        cards.push({
+          id: generateUniqueId(),
+          colour: colour,
+          isSecret: true, // All cards are secret initially
+        });
+      }
+    };
+
+    // Create cards for each color
+    createCards(redCards, CardColour.Red);
+    createCards(blueCards, CardColour.Blue);
+    createCards(blackCards, CardColour.Black);
+    createCards(greyCards, CardColour.Grey);
+
+    // Shuffle the cards to randomize their order
+    for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [cardArray[i], cardArray[j]] = [cardArray[j], cardArray[i]]; // Swap the elements
+      [cards[i], cards[j]] = [cards[j], cards[i]];
     }
 
-    return Array.from(cardArray);
-
+    return cards;
   }
 }
