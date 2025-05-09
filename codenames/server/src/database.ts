@@ -1,6 +1,7 @@
 import { Room } from "../../model/room"
 import { Player } from "../../model/player"
-import { TeamType } from "../../model/message-interfaces"
+import { CardColour, TeamType } from "../../model/message-interfaces"
+import { Card } from "../../model/card";
 
 export class CodenamesDatabase {
   // This class will handle the database connection and queries
@@ -18,7 +19,7 @@ export class CodenamesDatabase {
       socketId: socketId, // Socket ID from socket connection
       name: username,   // Player's name
       team: TeamType.Blue, // Team will be default Blue
-      isSpymaster: true, // Default to false
+      isSpymaster: false, // Default to false
       isInactive: false, // Default to false
     };
     return newPlayer; // Return the new player object
@@ -69,6 +70,17 @@ export class CodenamesDatabase {
     return null; // Return null if the room does not exist
   }
 
+  public startGame(socketId: string): Room | null {
+    // Find the room by ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      room.isStarted = true; // Set the room's isStarted property to true
+      room.cards = this.getRandomCardsArray(room.turn); // Initialize the cards array
+      room.remainingGuesses = 0; // Set the initial number of guesses for the starting team
+      return room; // Return the updated room
+    }
+    return null; // Return null if the room does not exist
+  }
 
   public leaveRoom(socketId: string): Room | null {
     // Find the room by socket ID
@@ -183,6 +195,50 @@ export class CodenamesDatabase {
 
   }
 
+  private getRandomCardsArray(startTeam:TeamType): Card[] {
+    const MAX_CARD_NO: number = 279; // Maximum card number
+    const cardArray: Card[] = []; // Array to hold the cards
 
+    while (cardArray.length < 8) {
+      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
+      cardArray.push({
+        id: randomCard,
+        colour: (startTeam === TeamType.Blue ? CardColour.Blue: CardColour.Red), // Randomly assign red or blue
+        isSecret: true, // Set isSecret to true
+      });
+    }
+    while (cardArray.length < 15) {
+      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
+      cardArray.push({
+        id: randomCard,
+        colour: (startTeam === TeamType.Blue ? CardColour.Red: CardColour.Blue), // Randomly assign red or blue
+        isSecret: true, // Set isSecret to true
+      });
+    }
+    {
+      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
+      cardArray.push({
+        id: randomCard,
+        colour: CardColour.Black, // Assign white
+        isSecret: true, // Set isSecret to true
+      });
+    }
+    while (cardArray.length < 20) {
+      const randomCard = Math.floor(Math.random() * (MAX_CARD_NO));
+      cardArray.push({
+        id: randomCard,
+        colour: CardColour.Grey, // Randomly assign red or blue
+        isSecret: true, // Set isSecret to true
+      });
+    }
+    
+    // Shuffle the cards
+    for (let i = cardArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cardArray[i], cardArray[j]] = [cardArray[j], cardArray[i]]; // Swap the elements
+    }
 
+    return Array.from(cardArray);
+
+  }
 }

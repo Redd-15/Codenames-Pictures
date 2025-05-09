@@ -63,6 +63,7 @@ public cookieHandler(cookie: any) {
         console.log(`Client ${this.socket.id} joined back to room (${room.roomId})`);
     }else{
         console.log(`Client ${this.socket.id} does not have an existing room`);
+
         const error : ErrorMessage = {
             errorType: ErrorType.RoomNoLongerExists, // Error type for other errors
             message: `Room with ID (${cookie.playerId}) no longer not exist.` // Error message for room not found
@@ -91,12 +92,7 @@ public createRoomHandler(username: string) {
     }
     
     if (username == ''){
-        console.log(`Client ${this.socket.id} requested to create a room without username`)
-        const error : ErrorMessage = {
-            errorType: ErrorType.NoUsername, // Error type for other errors
-            message: `Username cannot be empty.` // Error message for room not found
-        };
-        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        this.noUsernameError(); // If no username is provided, send an error message
         return;
     }
 
@@ -118,6 +114,18 @@ public joinRoomHandler(username: string, roomId: number) {
 
     let room = this.database.getRoomBySocketId(this.socket.id)
     if (room){
+
+        if (room.isStarted){
+            console.log(`Client ${this.socket.id} does not have an existing room`);
+
+            const error : ErrorMessage = {
+                errorType: ErrorType.RoomAlreadyStarted, // Error type for other errors
+                message: `Room with ID (${room.roomId}) has already started.` // Error message for room not found
+            };
+            this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+            return;
+        }
+
         const idmessage: IdMessage = {
             playerId: this.database.getPlayerId(this.socket.id), // Player ID from room ids
             roomId: room.roomId, // Room ID from the created room
@@ -131,12 +139,7 @@ public joinRoomHandler(username: string, roomId: number) {
     }
 
     if (username == ''){
-        console.log(`Client ${this.socket.id} requested to join a room without username`)
-        const error : ErrorMessage = {
-            errorType: ErrorType.NoUsername, // Error type for other errors
-            message: `Username cannot be empty.` // Error message for room not found
-        };
-        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        this.noUsernameError(); // If no username is provided, send an error message
         return;
     }
 
@@ -156,12 +159,7 @@ public joinRoomHandler(username: string, roomId: number) {
 
     }else {
 
-        const error : ErrorMessage = {
-            errorType: ErrorType.RoomNotFound, // Error type for other errors
-            message: `Room with ID ${roomId} does not exist.` // Error message for room not found
-        };
-        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
-        return;
+       this.roomWithIdNotFound(roomId); // If the room does not exist, send an error message 
 
     }
 }
@@ -175,17 +173,23 @@ public pickPositionHandler(team: TeamType, spymaster: boolean) {
         console.log(`Client switched to team ${team} and spymaster: ${spymaster}`);
 
     }else {
-        console.log(`Client ${this.socket.id} does not have an existing room`);
-        
-        const error : ErrorMessage = {
-            errorType: ErrorType.RoomNotFound, // Error type for other errors
-            message: `Room for player with socketID (${this.socket.id}) no longer not exist.` // Error message for room not found
-        };
-
-        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
-        return;
+        this.roomNotFoundError(); // If the room does not exist, send an error message
     }
 }
+
+public startGameHandler() {
+    console.log(`Client ${this.socket.id} requested to start game`);
+    const room = this.database.startGame(this.socket.id); // Start the game in the database
+
+    if (room) {
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client ${this.socket.id} started game in room with ID: ${room.roomId}`);
+
+    }else {
+        this.roomNotFoundError(); // If the room does not exist, send an error message
+    }
+}
+
 
 public leaveRoomHandler(){
     console.log(`Client ${this.socket.id} requested to leave their room`);
@@ -200,13 +204,7 @@ public leaveRoomHandler(){
         this.socket.disconnect(); // Disconnect the socket
 
     } else {
-
-        const error : ErrorMessage = {
-            errorType: ErrorType.RoomNotFound, // Error type for other errors
-            message: `Room with player (${this.socket.id}) does not exist.` // Error message for room not found
-        };
-
-        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        this.roomNotFoundError(); // If the room does not exist, send an error message
     }
 }
 
@@ -229,18 +227,48 @@ public getIdHandler() {
     console.log(`Client ${this.socket.id} received their ID`);
 }
 
+private roomNotFoundError() {
+    console.log(`Client ${this.socket.id} does not have an existing room`);
+        
+    const error : ErrorMessage = {
+        errorType: ErrorType.RoomNotFound, // Error type for other errors
+        message: `Room for player with socketID (${this.socket.id}) no longer not exist.` // Error message for room not found
+    };
+
+    this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+    return;
+}
+
+private roomWithIdNotFound(roomId: number) {
+    console.log(`Room with ID ${roomId} does not exist.`);
+    
+    const error : ErrorMessage = {
+        errorType: ErrorType.RoomNotFound, // Error type for other errors
+        message: `Room with ID ${roomId} does not exist.` // Error message for room not found
+    };
+    this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+    return;
+}
+
+private noUsernameError() {
+    console.log(`Client ${this.socket.id} requested to join a room without username`)
+        const error : ErrorMessage = {
+            errorType: ErrorType.NoUsername, // Error type for other errors
+            message: `Username cannot be empty.` // Error message for room not found
+        };
+        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        return;
+}
 
 }
 /*
-{"roomId":0000, "username":"asd2"}
 
 TestMessage = 'clientTest', ++
 CreateRoom = 'createRoom',  ++
 JoinRoom = 'joinRoom',      ++
 LeaveRoom = 'leaveRoom',    ++
 GetId = 'getId',            ++
-PickTeam = 'pickTeam',      
-PickSpymaster = 'pickSpymaster',
+PickPosition = 'pickPosition',      ++
 StartGame = 'startGame',
 GiveHint = 'giveHint',
 MakeGuess = 'makeGuess',
