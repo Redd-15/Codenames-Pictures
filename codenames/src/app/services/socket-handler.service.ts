@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
 import { ServerMessageType, ClientMessageType } from '../../../model';
 import { CookieHandlerService } from './cookie-handler.service';
-import { ChatMessage, ErrorMessage, ErrorType, Hint, IdMessage, JoinMessage, PositionPickerMessage, TeamPickerMessage, TeamType } from '../../../model/message-interfaces';
+import { ChatMessage, ErrorMessage, ErrorType, Hint, IdMessage, JoinMessage, PositionPickerMessage, TeamType } from '../../../model/message-interfaces';
 import { Room } from '../../../model/room';
 import { Store } from '@ngrx/store';
 import { selectRoomId, selectUsername } from '../state/selector/ids.selector';
@@ -138,19 +138,6 @@ export class SocketHandlerService {
       spymaster: isSpymaster
     };
     this.socket?.emit(ClientMessageType.PickPosition, content);
-  }
-   /** Pick a team for player with given id */
-   pickTeam(playerId: number, team: TeamType) {
-    let content : TeamPickerMessage = {
-      playerId: playerId,
-      team: team
-    };
-    this.socket?.emit(ClientMessageType.PickTeam, content);
-  }
-
-  /** Appoint player with given id as spymaster */
-  pickSpymaster() {
-    this.socket?.emit(ClientMessageType.PickSpymaster);
   }
 
   /** Start game */

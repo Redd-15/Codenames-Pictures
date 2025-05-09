@@ -2,8 +2,7 @@
 export enum ErrorType {
   Other = 'other',
   RoomNotFound = 'room-not-found',
-  SettingUnavailable = 'setting-unavailable',
-  WelcomeBack = 'welcome-back', //TODO: ez csak poén, de valahogy majd a user felé jelezni kéne úgyis
+  SettingUnavailable = 'setting-unavailable'
 }
 
 /** Types of teams in a game */
@@ -25,12 +24,6 @@ export enum CardColour {
 export interface JoinMessage {
   username: string,
   roomId: number
-}
-
-/** Message type for picking a team */
-export interface TeamPickerMessage {
-  playerId: number,
-  team: TeamType
 }
 
 /** Message type for picking a position */

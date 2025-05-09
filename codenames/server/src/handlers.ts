@@ -59,12 +59,6 @@ public cookieHandler(cookie: any) {
         this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
         this.socket.join(room.roomId.toString()); // Join the room in the socket
         this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
-
-        const error : ErrorMessage = {  //TODO: ez csak poén, de valahogy majd a user felé jelezni kéne úgyis
-            errorType: ErrorType.WelcomeBack, // Error type for other errors
-            message: `Connected to existing room by default, username may have changed!` // Error message for room not found
-        };
-        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
         
         console.log(`Client ${this.socket.id} joined back to room (${room.roomId})`);
     }else{
@@ -133,6 +127,27 @@ public joinRoomHandler(username: string, roomId: number) {
         this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
         return;
 
+    }
+}
+
+public pickPositionHandler(team: TeamType, spymaster: boolean) {
+    console.log(`Client ${this.socket.id} requested to pick team: ${team} and spymaster: ${spymaster}`);
+    const room = this.database.pickPosition(this.socket.id, team, spymaster); // Pick a team in the database
+
+    if (room) {
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client switched to team ${team} and spymaster: ${spymaster}`);
+
+    }else {
+        console.log(`Client ${this.socket.id} does not have an existing room`);
+        
+        const error : ErrorMessage = {
+            errorType: ErrorType.RoomNotFound, // Error type for other errors
+            message: `Room for player with socketID (${this.socket.id}) no longer not exist.` // Error message for room not found
+        };
+
+        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        return;
     }
 }
 

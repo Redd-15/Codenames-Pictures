@@ -54,6 +54,22 @@ export class CodenamesDatabase {
         }
   }
 
+  public pickPosition(socketId: string, team: TeamType, spymaster: boolean): Room | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      // Find the player by socket ID in the room
+      const player = room.players.find(player => player.socketId === socketId);
+      if (player) {
+        player.team = team; // Set the player's team to the selected team
+        player.isSpymaster = spymaster; // Set the player's isSpymaster property to true or false based on the input
+        return room; // Return the room 
+      }
+    }
+    return null; // Return null if the room does not exist
+  }
+
+
   public leaveRoom(socketId: string): Room | null {
     // Find the room by socket ID
     let room = this.roomdb.find(room => room.roomId === this.getRoomId(socketId)); // Get the room ID from the socket ID
