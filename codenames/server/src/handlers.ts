@@ -74,14 +74,33 @@ public cookieHandler(cookie: any) {
 
 public createRoomHandler(username: string) {
 
-    if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
-        const room = this.database.getRoomBySocketId(this.socket.id); // Get the room ID from the socket ID
-        if (room){
-            return room; // Return the room if it exists
-        }
+    console.log(`Client ${this.socket.id} requested to create a room with username: "${username}"`);
+
+    let room = this.database.getRoomBySocketId(this.socket.id)
+    if (room){
+        const idmessage: IdMessage = {
+            playerId: this.database.getPlayerId(this.socket.id), // Player ID from room ids
+            roomId: room.roomId, // Room ID from the created room
+        };
+    
+        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
+        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        this.socket.join(room.roomId.toString()); // Join the room in the socket
+        console.log(`Client ${this.socket.id} tried to create new room while having an already existing one (${room.roomId})`);
+        return; // Return the room if it exists
+    }
+    
+    if (username == ''){
+        console.log(`Client ${this.socket.id} requested to create a room without username`)
+        const error : ErrorMessage = {
+            errorType: ErrorType.NoUsername, // Error type for other errors
+            message: `Username cannot be empty.` // Error message for room not found
+        };
+        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        return;
     }
 
-    const room = this.database.createRoom(username, this.socket.id); // Create a new room in the database
+    room = this.database.createRoom(username, this.socket.id); // Create a new room in the database
     const idmessage: IdMessage = {
         playerId: room.players[0].id, // Player ID from room ids
         roomId: room.roomId, // Room ID from the created room
@@ -95,16 +114,33 @@ public createRoomHandler(username: string) {
 
 public joinRoomHandler(username: string, roomId: number) {
 
+    console.log(`Player ${username} requested to join room with ID: ${roomId}`);
 
-    if (this.database.getPlayerId(this.socket.id)){// Get the player ID from the database
-        const room = this.database.getRoomBySocketId(this.socket.id); // Get the room ID from the socket ID
-        if (room){
-            return room; // Return the room if it exists
-        }
+    let room = this.database.getRoomBySocketId(this.socket.id)
+    if (room){
+        const idmessage: IdMessage = {
+            playerId: this.database.getPlayerId(this.socket.id), // Player ID from room ids
+            roomId: room.roomId, // Room ID from the created room
+        };
+    
+        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
+        this.io.to(this.socket.id).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        this.socket.join(room.roomId.toString()); // Join the room in the socket
+        console.log(`Client ${this.socket.id} tried to create new room while having an already existing one (${room.roomId})`);
+        return; // Return the room if it exists
     }
 
-    console.log(`Player ${username} requested to join room with ID: ${roomId}`);
-    const room = this.database.joinRoom(username, this.socket.id, roomId); // Join the room in the database
+    if (username == ''){
+        console.log(`Client ${this.socket.id} requested to join a room without username`)
+        const error : ErrorMessage = {
+            errorType: ErrorType.NoUsername, // Error type for other errors
+            message: `Username cannot be empty.` // Error message for room not found
+        };
+        this.io.to(this.socket.id).emit(ServerMessageType.Error, error); // Send an error message back to the client
+        return;
+    }
+
+    room = this.database.joinRoom(username, this.socket.id, roomId); // Join the room in the database
     const currentPlayerId = this.database.getPlayerId(this.socket.id); // Get the player ID from the database
 
     if (room) {

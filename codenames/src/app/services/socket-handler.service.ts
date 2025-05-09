@@ -80,6 +80,11 @@ export class SocketHandlerService {
     });
     this.socket.on(ServerMessageType.Error, (error: ErrorMessage) =>{
       console.log("SOCKET ERROR: " + error.message);
+      if (error.errorType == ErrorType.NoUsername) {
+        console.log("No username set, redirecting to main page.");
+        this.cookieHandlerService.removeCookie('playerId', '/socket.io');
+        window.location.href = '/';
+      }
       //TODO: handle
     });
 

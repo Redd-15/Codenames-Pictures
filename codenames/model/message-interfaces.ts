@@ -2,7 +2,8 @@
 export enum ErrorType {
   Other = 'other',
   RoomNotFound = 'room-not-found',
-  SettingUnavailable = 'setting-unavailable'
+  SettingUnavailable = 'setting-unavailable',
+  NoUsername = 'no-username',
 }
 
 /** Types of teams in a game */
