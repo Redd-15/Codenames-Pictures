@@ -65,12 +65,12 @@
     img {
       filter: grayscale(100%);
     }
+    &.highlighted {
+      border: solid 5px var(--yellow);
+      outline: 1px solid var(--plum);
+    }
     &.non-spymaster {
       background-color: var(--team-colour);
-      &.highlighted {
-        border: solid 5px var(--beige);
-        outline: 1px solid var(--plum);
-      }
       &:hover img {
         mix-blend-mode: multiply;
       }

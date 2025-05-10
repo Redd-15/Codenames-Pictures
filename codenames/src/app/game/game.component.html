@@ -29,6 +29,7 @@
           class="btn btn-sm btn-beige badge-button"
           placement="bottom"
           [ngbTooltip]="tipContent"
+          tooltipClass="custom-tooltip"
         >
           Players&nbsp;&nbsp;<span class="material-icons">person</span
           >{{ playerNum }}
@@ -49,7 +50,7 @@
   </div>
   <div class="game-content">
     <div class="side-bar">
-      <div class="clue-container" [class.blurred]="this.currentPhase === 'clue'">
+      <div class="clue-container" [class.blurred]="this.currentPhase === 'clue'" >
         <div class="hint-word">{{ currentHint.word }}</div>
         <div class="hint-number">{{ currentHint.number }}</div>
       </div>
@@ -60,9 +61,18 @@
               <input
                 type="text"
                 class="form-control"
+                [class.is-invalid]="!clueForm.valid && clueForm.dirty"
                 formControlName="clue"
                 placeholder="Enter clue"
+                ngbTooltip="Enter a single word of maximum 50 characters."
+                placement="right"
+                container="body"
+                tooltipClass="custom-tooltip"
+
               />
+              <div class="invalid-tooltip">
+                Looks good!
+              </div>
             </div>
           </div>
           <div class="mt-1 row g-2 align-items-center">
@@ -82,8 +92,11 @@
           @for(entry of hintHistory.slice().reverse(); track $index){
           <div class="clue-entry {{ entry.team }}-team">
             <div class="clue-word">{{ entry.hint.word }}</div>
-            <div class="clue-number">{{ entry.hint.number }}</div>
+            <div class="clue-number">{{ entry.hint.number == -1 ? '?' : entry.hint.number }}</div>
           </div>
+          }
+          @if(hintHistory.length == 0) {
+            <i>There are no clues yet in the history.</i>
           }
         </div>
       </div>

@@ -5,10 +5,10 @@ import { CommonModule } from '@angular/common';
 import { MAX_CARD_NO } from '../../../model/';
 import { CardColour, Hint, TeamType } from '../../../model/message-interfaces';
 import { Store } from '@ngrx/store';
-import { selectCards, selectPlayerById, selectPlayerCount, selectRoom } from '../state/selector/room.selector';
+import { selectCards, selectPlayerCount, selectRoom } from '../state/selector/room.selector';
 import { BaseComponent } from '../base.component';
-import { map, switchMap, take, takeUntil } from 'rxjs';
-import { selectPlayerId, selectUsername } from '../state/selector/ids.selector';
+import {  takeUntil } from 'rxjs';
+import { selectPlayerId } from '../state/selector/ids.selector';
 import { HintHistoryEntry } from '../model/hint-history-entry';
 import { resetIds } from '../state/action/ids.action';
 import { resetRoom } from '../state/action/room.action';
@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { Player } from '../../../model/player';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-game',
@@ -29,6 +30,7 @@ export class GameComponent extends BaseComponent {
   private store = inject(Store);
   private socketHandlerService = inject(SocketHandlerService);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   cards: Card[] = [];
   currentTeam = TeamType.Red;
@@ -83,103 +85,12 @@ export class GameComponent extends BaseComponent {
         word: 'béka',
         number: 0
       }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'havas',
-        number: 8
-      }
     }
   ]
 
   private formBuilder = inject(FormBuilder);
   clueForm =  this.formBuilder.group({
-      clue: ['', [Validators.required]],
+      clue: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^[^\s]*$/)]],
       number: [1]
     });
   numbers: number[] = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -188,6 +99,8 @@ export class GameComponent extends BaseComponent {
     if(this.clueForm.valid && this.clueForm.value.clue && this.clueForm.value.number) {
       this.socketHandlerService.giveHint(this.clueForm.value.clue, this.clueForm.value.number);
       this.clueForm.reset();
+    } else {
+      this.toastr.error('Please enter a single word of maximum 50 characters.', 'Invalid data', { toastClass: 'ngx-toastr toast-custom' });
     }
     console.log(this.clueForm.value);
   }
@@ -200,7 +113,7 @@ export class GameComponent extends BaseComponent {
       if (room) {
         this.currentTeam = room.turn;
         this.currentPhase = room.currentHint ? 'guess' : 'clue';
-        this.currentHint = room.currentHint ?? {word: 'clue', number: 9};
+        this.currentHint = room.currentHint ?? {word: 'megszentségteleníthetetlenségeskedéseitekért', number: 9};
         this.players = room.players;
         //Get player data
         let player = room.players.find((player) => player.id === this.playerId);

@@ -70,6 +70,11 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--black);
 }
 
+.btn-beige:disabled {
+  border-color: var(--blush);
+  color: var(--black);
+}
+
 .btn-plum{
   background-color: var(--plum) !important;
   color: var(--white) !important;
