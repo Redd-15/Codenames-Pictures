@@ -219,6 +219,13 @@
   }
 }
 
+@media(max-width: 600px) {
+  .card-area {
+    grid-template-columns: repeat(4, 1fr);
+    aspect-ratio: 4 / 5;
+  }
+}
+
 @media (orientation: portrait) {
   .page-container {
     height: fit-content;
