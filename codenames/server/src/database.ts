@@ -37,6 +37,7 @@ export class CodenamesDatabase {
       turn: (Math.random() > 0.5 ? TeamType.Red : TeamType.Blue), // Default starting team
       remainingGuesses: 0,
       currentHint: null,
+      hintHistory: null,
     };
     this.roomdb.push(newRoom); // Assign the new room to the database
     return newRoom;

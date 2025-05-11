@@ -54,6 +54,11 @@ export interface Hint {
   number: number // 0 means not, -1 means any number
 }
 
+export interface hintHistory {
+  team: TeamType,
+  hint: Hint
+}
+
 /** Type of messages passed in in-game chat */
 export interface ChatMessage {
   senderId: number,
