@@ -19,7 +19,7 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--beige);
+  background-color: var(--yellow);
   border-radius: 50% 50% 0 0;
   -webkit-border-radius: 50% 50% 0 0;
   -moz-border-radius: 50% 50% 0 0;

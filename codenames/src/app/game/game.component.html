@@ -1,104 +1,42 @@
-<ng-template #tipContent>
-  @for(player of players; track $index){
-  <div class="tooltip-box {{ player.team }}-box">
-    <b>{{ player.name }}</b>
-    {{ player.isSpymaster ? "Spymaster" : "Operative" }}
-  </div>
-  }
-</ng-template>
 <div class="page-container" [class]="currentTeam + '-team'">
   <div class="game-header mt-2">
-    <div class="game-bar">
-      <div class="bar-group">
-        <button class="btn btn-sm btn-beige badge-button profile-button">
-          <span class="material-icons">account_circle</span>&nbsp;&nbsp;{{
-            username
-          }}
-        </button>
-        <button class="btn btn-sm btn-beige badge-button profile-button">
-          {{ isSpymaster ? "Spymaster" : "Operative" }}
-        </button>
-        <button
-          class="btn btn-sm btn-beige badge-button profile-button {{ team }}"
-        >
-          <span class="cap">{{ team }}</span>
-        </button>
-      </div>
-      <div class="bar-group">
-        <button
-          class="btn btn-sm btn-beige badge-button"
-          placement="bottom"
-          [ngbTooltip]="tipContent"
-          tooltipClass="custom-tooltip"
-        >
-          Players&nbsp;&nbsp;<span class="material-icons">person</span
-          >{{ playerNum }}
-        </button>
-        <button class="btn btn-sm btn-beige badge-button" (click)="leaveGame()">
-          Leave&nbsp;&nbsp;<span class="material-icons">logout</span>
-        </button>
-      </div>
-    </div>
+    <app-game-bar
+      class="inserted-component"
+      [username]="username"
+      [team]="team"
+      [isSpymaster]="isSpymaster"
+      [isEndGuessingAvailable]="currentTeam == team && currentPhase == 'guess'"
+    ></app-game-bar>
     <div class="game-prompt cap {{ currentTeam }}">
-      {{ currentTeam }} team's turn.
-      {{
-        currentPhase == "clue"
-          ? "Spymaster, give a clue."
-          : "Operatives, make your guesses."
-      }}
+      {{ currentTeam }} team's turn. @if (currentPhase == "clue") {
+      <span>Spymaster, give a clue.</span>
+      } @else {
+      <span
+        >Operatives, make your guesses. <br />
+        <i>({{ remainingGuesses }} guesses left)</i></span
+      >
+      }
     </div>
   </div>
   <div class="game-content">
     <div class="side-bar">
-      <div class="clue-container" [class.blurred]="this.currentPhase === 'clue'" >
-        <div class="hint-word">{{ currentHint.word }}</div>
-        <div class="hint-number">{{ currentHint.number }}</div>
+      <div
+        class="clue-container"
+        [class.blurred]="this.currentPhase === 'clue'"
+      >
+        <app-hint-display class="inserted-component"></app-hint-display>
       </div>
-      <div class="clue-form" *ngIf="isSpymaster" [class.blurred]="!(this.team === this.currentTeam && this.currentPhase === 'clue')">
-        <form [formGroup]="clueForm" (ngSubmit)="submitClue()">
-          <div class="row g-2 align-items-center">
-            <div class="col">
-              <input
-                type="text"
-                class="form-control"
-                [class.is-invalid]="!clueForm.valid && clueForm.dirty"
-                formControlName="clue"
-                placeholder="Enter clue"
-                ngbTooltip="Enter a single word of maximum 50 characters."
-                placement="right"
-                container="body"
-                tooltipClass="custom-tooltip"
-
-              />
-              <div class="invalid-tooltip">
-                Looks good!
-              </div>
-            </div>
-          </div>
-          <div class="mt-1 row g-2 align-items-center">
-            <div class="col">
-              <select class="form-select" formControlName="number">
-                <option *ngFor="let n of numbers" [value]="n" >
-                  {{ n === -1 ? "?" : n }}
-                </option>
-              </select>
-            </div>
-            <div class="col-auto"><button type="submit" class="btn btn-beige" [disabled]="!clueForm.valid">Send</button></div>
-          </div>
-        </form>
+      <div
+        class="clue-form"
+        *ngIf="isSpymaster"
+        [class.blurred]="
+          !(this.team === this.currentTeam && this.currentPhase === 'clue')
+        "
+      >
+        <app-hint-form class="inserted-component"></app-hint-form>
       </div>
       <div class="clue-history">
-        <div class="scrollable-panel">
-          @for(entry of hintHistory.slice().reverse(); track $index){
-          <div class="clue-entry {{ entry.team }}-team">
-            <div class="clue-word">{{ entry.hint.word }}</div>
-            <div class="clue-number">{{ entry.hint.number == -1 ? '?' : entry.hint.number }}</div>
-          </div>
-          }
-          @if(hintHistory.length == 0) {
-            <i>There are no clues yet in the history.</i>
-          }
-        </div>
+        <app-hint-history class="inserted-component"></app-hint-history>
       </div>
     </div>
     <div class="card-area">

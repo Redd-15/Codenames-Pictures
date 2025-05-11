@@ -1,0 +1,13 @@
+<div class="scrollable-panel">
+  @for(entry of hintHistory.slice().reverse(); track $index){
+  <div class="clue-entry {{ entry.team }}-team">
+    <div class="clue-word">{{ entry.hint.word }}</div>
+    <div class="clue-number">
+      {{ entry.hint.number == -1 ? "?" : entry.hint.number }}
+    </div>
+  </div>
+  }
+  @if(hintHistory.length == 0) {
+  <div class="text-center"><i>There are no clues in the history yet.</i></div>
+  }
+</div>

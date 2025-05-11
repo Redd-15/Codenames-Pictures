@@ -1,0 +1,18 @@
+.hint-word,
+.hint-number {
+  margin: 0 0.2rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  background-color: var(--team-color);
+  color: var(--team-text-colour);
+}
+
+.hint-word {
+  word-break: break-word;
+}
+
+.hint-number {
+  min-width: 3.2rem;
+}

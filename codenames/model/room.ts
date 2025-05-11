@@ -1,5 +1,5 @@
 import { Card } from "./card"
-import { TeamType, Hint, hintHistory } from "./message-interfaces"
+import { TeamType, Hint, HintHistory } from "./message-interfaces"
 import { Player } from "./player"
 
 /** Type for game room handling */
@@ -11,6 +11,6 @@ export interface Room {
   turn: TeamType,
   remainingGuesses: number,
   currentHint: Hint | null,
-  hintHistory: hintHistory[] | null,
+  hintHistory: HintHistory[] | null,
 }
 

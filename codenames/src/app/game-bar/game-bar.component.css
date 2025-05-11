@@ -1,0 +1,55 @@
+.tooltip-box {
+  padding: 0.2rem 0.4rem;
+  background-color: var(--blue);
+  color: var(--black);
+  margin: 0.15rem 0rem;
+  border-radius: 0.5rem;
+
+  &.red-box {
+    background-color: var(--lighter-red);
+  }
+}
+
+.game-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 15%;
+
+  .bar-group {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .profile-button {
+    pointer-events: none;
+
+    &.red {
+      background-color: var(--lighter-red) !important;
+    }
+
+    &.blue {
+      background-color: var(--blue) !important;
+    }
+  }
+}
+
+.badge-button {
+  border-radius: 1rem;
+  padding: 0.2rem 0.6rem;
+  font-size: max(0.8rem, 10pt);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media(max-width: 800px) {
+  .game-bar {
+    padding: 0 1rem;
+  }
+}

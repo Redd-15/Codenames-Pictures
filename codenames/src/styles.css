@@ -125,3 +125,27 @@ h1, h2, h3, h4, h5, h6 {
   border: none !important;
   box-shadow: none !important;
 }
+
+.cap::first-letter {
+  text-transform: uppercase;
+}
+
+.custom-tooltip .tooltip-inner {
+  background-color: var(--blush);
+}
+
+.custom-tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: var(--blush);
+}
+
+.custom-tooltip.bs-tooltip-start .tooltip-arrow::before {
+  border-left-color: var(--blush);
+}
+
+.custom-tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: var(--blush);
+}
+
+.custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  border-bottom-color: var(--blush);
+}

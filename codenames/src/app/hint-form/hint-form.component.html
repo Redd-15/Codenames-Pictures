@@ -1,0 +1,31 @@
+<form [formGroup]="clueForm" (ngSubmit)="submitClue()">
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        [class.is-invalid]="!clueForm.valid && clueForm.dirty"
+        formControlName="clue"
+        placeholder="Enter clue"
+        ngbTooltip="Enter a single word of maximum 50 characters."
+        placement="right"
+        container="body"
+        tooltipClass="custom-tooltip"
+      />
+    </div>
+  </div>
+  <div class="mt-1 row g-2 align-items-center">
+    <div class="col">
+      <select class="form-select" formControlName="number">
+        <option *ngFor="let n of numbers" [value]="n">
+          {{ n === -1 ? "?" : n }}
+        </option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-beige" [disabled]="!clueForm.valid">
+        Send
+      </button>
+    </div>
+  </div>
+</form>

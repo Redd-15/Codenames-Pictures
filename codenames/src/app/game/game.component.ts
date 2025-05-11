@@ -3,107 +3,39 @@ import { CardComponent } from '../card/card.component';
 import { Card } from '../model/card';
 import { CommonModule } from '@angular/common';
 import { MAX_CARD_NO } from '../../../model/';
-import { CardColour, Hint, TeamType } from '../../../model/message-interfaces';
+import { CardColour, TeamType } from '../../../model/message-interfaces';
 import { Store } from '@ngrx/store';
-import { selectCards, selectPlayerCount, selectRoom } from '../state/selector/room.selector';
+import { selectCards, selectRoom } from '../state/selector/room.selector';
 import { BaseComponent } from '../base.component';
-import {  takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { selectPlayerId } from '../state/selector/ids.selector';
-import { HintHistoryEntry } from '../model/hint-history-entry';
-import { resetIds } from '../state/action/ids.action';
-import { resetRoom } from '../state/action/room.action';
-import { SocketHandlerService } from '../services/socket-handler.service';
-import { Router } from '@angular/router';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { Player } from '../../../model/player';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import { HintFormComponent } from '../hint-form/hint-form.component';
+import { HintDisplayComponent } from '../hint-display/hint-display.component';
+import { HintHistoryComponent } from '../hint-history/hint-history.component';
+import { GameBarComponent } from '../game-bar/game-bar.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, NgbTooltipModule, FormsModule, ReactiveFormsModule, CardComponent],
+  imports: [CommonModule, CardComponent, HintFormComponent, HintDisplayComponent, HintHistoryComponent, GameBarComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
 export class GameComponent extends BaseComponent {
   private store = inject(Store);
-  private socketHandlerService = inject(SocketHandlerService);
-  private router = inject(Router);
-  private toastr = inject(ToastrService);
 
+  //Current state info
   cards: Card[] = [];
   currentTeam = TeamType.Red;
   currentPhase: 'clue' | 'guess' = 'clue';
+  remainingGuesses = 0;
 
+  //Current player info
   username = '';
   playerId = -1;
   isSpymaster = false;
   team = TeamType.Red;
 
-  players: Player[] = [];
-
-  playerNum = 0;
-
-  get playerNameList() {
-    let output = "";
-    for(let player of this.players) {
-      output += player.name+'<br>';
-    }
-    return output;
-  }
-
-  currentHint: Hint = {
-    word: 'kiskutya',
-    number: 4
-  }
-  hintHistory: HintHistoryEntry[] = [
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'alma',
-        number: 2
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'almafa',
-        number: 2
-      }
-    },
-    {
-      team: TeamType.Blue,
-      hint: {
-        word: 'megszentségteleníthetetlenségeskedéseitekért',
-        number: -1
-      }
-    },
-    {
-      team: TeamType.Red,
-      hint: {
-        word: 'béka',
-        number: 0
-      }
-    }
-  ]
-
-  private formBuilder = inject(FormBuilder);
-  clueForm =  this.formBuilder.group({
-      clue: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^[^\s]*$/)]],
-      number: [1]
-    });
-  numbers: number[] = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-  submitClue() {
-    if(this.clueForm.valid && this.clueForm.value.clue && this.clueForm.value.number) {
-      this.socketHandlerService.giveHint(this.clueForm.value.clue, this.clueForm.value.number);
-      this.clueForm.reset();
-    } else {
-      this.toastr.error('Please enter a single word of maximum 50 characters.', 'Invalid data', { toastClass: 'ngx-toastr toast-custom' });
-    }
-    console.log(this.clueForm.value);
-  }
 
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
@@ -112,20 +44,16 @@ export class GameComponent extends BaseComponent {
     this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
       if (room) {
         this.currentTeam = room.turn;
-        this.currentPhase = room.currentHint ? 'guess' : 'clue';
-        this.currentHint = room.currentHint ?? {word: 'megszentségteleníthetetlenségeskedéseitekért', number: 9};
-        this.players = room.players;
-        //Get player data
+        this.currentPhase = 'guess';
+        this.remainingGuesses = room.remainingGuesses;
+        //Get current player's info
         let player = room.players.find((player) => player.id === this.playerId);
         if (player) {
-          this.username = player.name;
+          this.username = player.name
           this.isSpymaster = player.isSpymaster;
           this.team = player.team ?? TeamType.Red;
         }
       }
-    });
-    this.store.select(selectPlayerCount).pipe(takeUntil(this.destroy$)).subscribe((playerCount) => {
-      this.playerNum = playerCount;
     });
     this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((cards) => {
       const cardObjects: Card[] = [];
@@ -134,14 +62,6 @@ export class GameComponent extends BaseComponent {
       }
       this.cards = cardObjects;
     });
-  }
-
-  leaveGame() {
-    this.store.dispatch(resetRoom());
-    this.store.dispatch(resetIds());
-    this.socketHandlerService.leaveRoom();
-    this.router.navigateByUrl("")
-    //TODO: socket communication
   }
 
   private generateRandomDeck(): Card[] {

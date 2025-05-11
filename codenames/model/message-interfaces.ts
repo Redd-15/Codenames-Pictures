@@ -54,7 +54,7 @@ export interface Hint {
   number: number // 0 means not, -1 means any number
 }
 
-export interface hintHistory {
+export interface HintHistory {
   team: TeamType,
   hint: Hint
 }

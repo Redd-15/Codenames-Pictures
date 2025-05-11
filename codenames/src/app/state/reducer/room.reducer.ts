@@ -2,7 +2,7 @@ import { createReducer } from "@ngrx/store";
 import { immerOn } from 'ngrx-immer/store';
 import { Room } from "../../../../model/room";
 import { loadHint, loadRoom, resetRoom } from "../action/room.action";
-import { CardColour, TeamType } from "../../../../model/message-interfaces";
+import { CardColour, HintHistory, TeamType } from "../../../../model/message-interfaces";
 
 export interface RoomState {
   room: Room | null;
@@ -133,7 +133,8 @@ export const initialRoomState = {
     currentHint: {
       word: 'alma',
       number: -1
-    }
+    },
+    hintHistory: [] as HintHistory[]
   } as Room | null
 }
 
