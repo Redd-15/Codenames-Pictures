@@ -23,6 +23,8 @@ export class SocketHandler {
 
   private setUp() {
     //Configure listener for socket connection
+    this.handlers = new ServerHandlers(this.io, this.database);
+
     this.io.on("connection", (socket) => {
       const cookies = socket.handshake.headers.cookie;
       const parsedCookies = this.parseCookies(cookies);
@@ -30,24 +32,21 @@ export class SocketHandler {
 
       //Send message back to client by socket id
       this.io.to(socket.id).emit(ServerMessageType.ConnectAck);
-      this.handlers = new ServerHandlers(this.io, socket, this.database); // Initialize handlers with the current socket instance
+       // Initialize handlers with the current socket instance
       
-      this.handlers?.cookieHandler(parsedCookies); // Call the cookie handler to check if player was in room already
+      this.handlers?.cookieHandler(socket, parsedCookies); // Call the cookie handler to check if player was in room already
 
       //Configure listeners for different message types and disconnection on socket
-      socket.on(ClientMessageType.TestMessage, (content) => this.handlers?.clientTestMessageHandler(content));
-      socket.on(ClientMessageType.CreateRoom, (username) => this.handlers?.createRoomHandler(username));
-      socket.on(ClientMessageType.JoinRoom, (join) => {
-        //const join : JoinMessage = JSON.parse(json); // Destructure the JSON object to get JoinMessage
-        this.handlers?.joinRoomHandler(join.username, join.roomId)
-      });
-      socket.on(ClientMessageType.LeaveRoom, (content) => this.handlers?.leaveRoomHandler());
-      socket.on(ClientMessageType.GetId, (content) => this.handlers?.getIdHandler());
-      socket.on(ClientMessageType.PickPosition, (content) => this.handlers?.pickPositionHandler(content.team, content.spymaster));
-      socket.on(ClientMessageType.StartGame, (content) => this.handlers?.startGameHandler());
+      socket.on(ClientMessageType.TestMessage, (content) => this.handlers?.clientTestMessageHandler(socket, content));
+      socket.on(ClientMessageType.CreateRoom, (username) => this.handlers?.createRoomHandler(socket, username));
+      socket.on(ClientMessageType.JoinRoom, (join) => this.handlers?.joinRoomHandler(socket, join.username, join.roomId));
+      socket.on(ClientMessageType.LeaveRoom, (content) => this.handlers?.leaveRoomHandler(socket));
+      socket.on(ClientMessageType.GetId, (content) => this.handlers?.getIdHandler(socket));
+      socket.on(ClientMessageType.PickPosition, (content) => this.handlers?.pickPositionHandler(socket, content.team, content.spymaster));
+      socket.on(ClientMessageType.StartGame, (content) => this.handlers?.startGameHandler(socket));
 
       socket.on('disconnect', () => {
-        this.handlers?.disconnectHandler(); // Call leaveRoomHandler on disconnect
+        this.handlers?.disconnectHandler(socket); // Call leaveRoomHandler on disconnect
       });
     });
   }
