@@ -44,7 +44,7 @@ export class GameComponent extends BaseComponent {
     this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
       if (room) {
         this.currentTeam = room.turn;
-        this.currentPhase = 'guess';
+        this.currentPhase = room.currentHint ? 'guess' : 'clue';
         this.remainingGuesses = room.remainingGuesses;
         //Get current player's info
         let player = room.players.find((player) => player.id === this.playerId);
