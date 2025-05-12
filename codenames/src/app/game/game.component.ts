@@ -41,7 +41,7 @@ export class GameComponent extends BaseComponent {
 
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
-      if(playerId != -1){
+      if (playerId != -1) {
         this.playerId = playerId;
       } else {
         this.socketHandlerService.getId();
@@ -61,14 +61,29 @@ export class GameComponent extends BaseComponent {
         }
       }
     });
-    this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((cards) => {
+    this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((incomingCards) => {
+      if (this.cards.length === 0) {
+        this.cards = incomingCards.map(c => new Card(c.id, c.colour, c.isSecret));
+      } else {
+        // Only update isSecret where needed => do not randomize cardbacks again
+        for (let i = 0; i < incomingCards.length; i++) {
+          const incoming = incomingCards[i];
+          const existing = this.cards[i];
+
+          if (existing && existing.isSecret !== incoming.isSecret) {
+            existing.isSecret = incoming.isSecret;
+          }
+        }
+      }
+    });
+    /*this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((cards) => {
       // TODO: modify, this won't work, will always have different images behind it
       const cardObjects: Card[] = [];
       for (let card of cards) {
         cardObjects.push(new Card(card.id, card.colour, card.isSecret));
       }
       this.cards = cardObjects;
-    });
+    });*/
   }
 
   private generateRandomDeck(): Card[] {

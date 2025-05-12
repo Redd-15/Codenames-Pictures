@@ -26,7 +26,7 @@ export class HintFormComponent {
     console.log(this.clueForm.value);
     if (this.clueForm.valid && this.clueForm.value.clue && this.clueForm.value.number) {
       this.socketHandlerService.giveHint(this.clueForm.value.clue, this.clueForm.value.number);
-      this.clueForm.reset();
+      this.clueForm.reset({ clue: '', number: 1 });
     } else {
       this.toastr.error('Please enter a single word of maximum 50 characters.', 'Invalid data', { toastClass: 'ngx-toastr toast-custom' });
     }
