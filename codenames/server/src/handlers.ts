@@ -264,9 +264,17 @@ public getIdHandler(socket: Socket) {
     console.log(`Client ${socket.id} received their ID`);
 }
 
-public gameOverHandler(socket: Socket) {
-    console.log(`Client ${socket.id} requested to end game`);
+public restartGameHandler(socket: Socket) {
+    console.log(`Client ${socket.id} requested to restart game`);
+    const room = this.database.restartGame(socket.id); // Restart the game in the database
+    if (room) {
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client ${socket.id} restarted game in room with ID: ${room.roomId}`);
     }
+    else {
+        this.roomNotFoundError(socket); // If the room does not exist, send an error message
+    }
+}
 
 private roomNotFoundError(socket: Socket) {
     console.log(`Client ${socket.id} does not have an existing room`);
@@ -304,15 +312,5 @@ private noUsernameError(socket: Socket) {
 }
 /*
 
-TestMessage = 'clientTest', ++
-CreateRoom = 'createRoom',  ++
-JoinRoom = 'joinRoom',      ++
-LeaveRoom = 'leaveRoom',    ++
-GetId = 'getId',            ++
-PickPosition = 'pickPosition',      ++
-StartGame = 'startGame',    ++
-GiveHint = 'giveHint',      ++
-MakeGuess = 'makeGuess',    ++
-EndGuessing = 'endGuessing',++
 SendTeamMessage = 'sendTeamMessage',
 SendGlobalMessage = 'sendGlobalMessage' */

@@ -47,6 +47,7 @@ export class SocketHandler {
       socket.on(ClientMessageType.GiveHint, (content) => this.handlers?.giveHintHandler(socket, content.word, content.number));
       socket.on(ClientMessageType.MakeGuess, (content) => this.handlers?.makeGuessHandler(socket, content.guess));
       socket.on(ClientMessageType.EndGuessing, (content) => this.handlers?.endGuessingHandler(socket));
+      socket.on(ClientMessageType.RestartGame, (content) => this.handlers?.restartGameHandler(socket));
 
       socket.on('disconnect', () => {
         this.handlers?.disconnectHandler(socket); // Call leaveRoomHandler on disconnect

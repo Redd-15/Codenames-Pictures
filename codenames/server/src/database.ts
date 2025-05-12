@@ -225,6 +225,23 @@ export class CodenamesDatabase {
     return null; // Placeholder for game over logic
   }
 
+  public restartGame(socketId: string): Room | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      room.cards = []; // Initialize the cards array
+      room.isStarted = false; // Set the room's isStarted property to false
+      room.winner = null; // No winner at the start
+      room.turn = (Math.random() > 0.5 ? TeamType.Red : TeamType.Blue); // Default starting team
+      room.remainingGuesses = 0; // Set the initial number of guesses for the starting team
+      room.currentHint = null; // Reset the current hint
+      room.hintHistory = null; // Reset the hint history
+
+      return room; // Return the updated room
+    }
+    return null; // Return null if the room does not exist
+  }
+
   public getRoomId(socketId: string): number | null {
     // Find the room by socket ID
     const playerId = this.getPlayerId(socketId); // Call getPlayerId to ensure the player exists

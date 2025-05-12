@@ -32,6 +32,7 @@ export enum ClientMessageType {
   GiveHint = 'giveHint',
   MakeGuess = 'makeGuess',
   EndGuessing = 'endGuessing',
+  RestartGame = 'restartGame',
   SendTeamMessage = 'sendTeamMessage',
   SendGlobalMessage = 'sendGlobalMessage'
 }
