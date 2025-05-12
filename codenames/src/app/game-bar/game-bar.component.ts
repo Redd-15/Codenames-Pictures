@@ -45,7 +45,7 @@ export class GameBarComponent extends BaseComponent {
   }
 
   endGuessing() {
-    // TODO: implement
+    this.socketHandlerService.endGuessing();
   }
 
   leaveGame() {

@@ -82,9 +82,11 @@ export class RoomMenuComponent extends BaseComponent implements OnInit {
   }
 
   clickStart() {
-    if(this.redSpymasters.length == 0 || this.blueSpymasters.length == 0 || this.redTeam.length == 0 || this.blueTeam.length == 0)
+    // TODO uncomment
+    /*if(this.redSpymasters.length == 0 || this.blueSpymasters.length == 0 || this.redTeam.length == 0 || this.blueTeam.length == 0)
       this.toastr.error('Make sure you have spymasters and operatives in both teams.', 'Error', { toastClass: 'ngx-toastr toast-custom' });
-    else this.startGame.emit();
+    else this.startGame.emit();*/
+    this.startGame.emit();
   }
 
   clickLeave() {
