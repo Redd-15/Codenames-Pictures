@@ -59,6 +59,10 @@ export interface HintHistory {
   hint: Hint
 }
 
+export interface Guess{
+  guess: number,
+}
+
 /** Type of messages passed in in-game chat */
 export interface ChatMessage {
   senderId: number,
