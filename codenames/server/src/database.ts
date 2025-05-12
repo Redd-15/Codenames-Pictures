@@ -51,11 +51,14 @@ export class CodenamesDatabase {
     if (room == undefined) { // If the room exists, create a new player and add them to the room
         return null; // Return null if the room does not exist
     }
-    else {
+    else if (!room.isStarted) { // If the room is already started, return null
         const player = this.createPlayer(username, room.roomId * 100 + room.players.length, socketId); // Create a new player 
         room.players.push(player); // Add the player to the room
         return room; // Return the updated room
         }
+    else {
+        return null; // Return null if the room does not exist
+    }
   }
 
   public pickPosition(socketId: string, team: TeamType, spymaster: boolean): Room | null {
