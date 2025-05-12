@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Card } from '../model/card';
 import { CommonModule } from '@angular/common';
 import { TeamType } from '../../../model/message-interfaces';
+import { SocketHandlerService } from '../services/socket-handler.service';
 
 @Component({
   selector: 'app-card',
@@ -10,7 +11,9 @@ import { TeamType } from '../../../model/message-interfaces';
   templateUrl: './card.component.html',
   styleUrl: './card.component.css'
 })
-export class CardComponent implements OnInit {
+export class CardComponent {
+  private socketHandlerService = inject(SocketHandlerService);
+
   @Input({ required: true })
   card !: Card;
   @Input({ required: true })
@@ -25,15 +28,8 @@ export class CardComponent implements OnInit {
   @Input({ required: true })
   phase !: 'guess' | 'clue';
 
-
-  isFlipped: boolean = false;
-
   get cardClass() {
     return (this.isSpymasterMode ? 'spymaster '+this.card.colour : 'non-spymaster ') + ' ' + (this.card.isHighlighted ? 'highlighted' : '');
-  }
-
-  ngOnInit() {
-    this.isFlipped = !this.card.isSecret;
   }
 
   highlightCard() {
@@ -43,7 +39,7 @@ export class CardComponent implements OnInit {
   flipCard() {
     if(this.turn != this.team) return;
     if(this.isSpymasterMode) return;
-    this.isFlipped = true;
-    this.card.revealColour();
+    this.socketHandlerService.makeGuess(this.index);
+    //this.card.revealColour();
   }
 }

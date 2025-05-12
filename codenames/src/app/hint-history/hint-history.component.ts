@@ -17,41 +17,43 @@ export class HintHistoryComponent extends BaseComponent {
   private store = inject(Store);
 
   hintHistory: HintHistory[] = [
-      {
-        team: TeamType.Blue,
-        hint: {
-          word: 'alma',
-          number: 2
-        }
-      },
-      {
-        team: TeamType.Red,
-        hint: {
-          word: 'almafa',
-          number: 2
-        }
-      },
-      {
-        team: TeamType.Blue,
-        hint: {
-          word: 'megszentségteleníthetetlenségeskedéseitekért',
-          number: -1
-        }
-      },
-      {
-        team: TeamType.Red,
-        hint: {
-          word: 'béka',
-          number: 0
-        }
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'alma',
+        number: 2
       }
-    ]
-
-    ngOnInit() {
-      this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
-            if (room && room.hintHistory) {
-              this.hintHistory = room.hintHistory;
-            }
-          });
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'almafa',
+        number: 2
+      }
+    },
+    {
+      team: TeamType.Blue,
+      hint: {
+        word: 'megszentségteleníthetetlenségeskedéseitekért',
+        number: -1
+      }
+    },
+    {
+      team: TeamType.Red,
+      hint: {
+        word: 'béka',
+        number: 0
+      }
     }
+  ]
+
+  ngOnInit() {
+    this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
+      if (room && room.hintHistory) {
+        this.hintHistory = room.hintHistory;
+      } else {
+        this.hintHistory = [];
+      }
+    });
+  }
 }

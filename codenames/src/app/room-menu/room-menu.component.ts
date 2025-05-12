@@ -3,7 +3,6 @@ import { Room } from '../../../model/room';
 import { CommonModule } from '@angular/common';
 import { CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Player } from '../../../model/player';
-import { ToastrService } from 'ngx-toastr';
 import { Store } from '@ngrx/store';
 import { selectPlayerId, selectRoomId } from '../state/selector/ids.selector';
 import { takeUntil } from 'rxjs';
@@ -21,7 +20,6 @@ import { TeamType } from '../../../model/message-interfaces';
 })
 export class RoomMenuComponent extends BaseComponent implements OnInit {
   private store = inject(Store);
-  private toastr = inject(ToastrService);
   private socketHandlerService = inject(SocketHandlerService);
 
   @Output() startGame = new EventEmitter<void>();
@@ -50,7 +48,11 @@ export class RoomMenuComponent extends BaseComponent implements OnInit {
     });
 
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
-      this.myId = playerId;
+      if(playerId != -1){
+        this.myId = playerId;
+      } else {
+        this.socketHandlerService.getId();
+      }
     });
 
     this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {

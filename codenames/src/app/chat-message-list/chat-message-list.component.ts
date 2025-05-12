@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../../../model/message-interfaces';
 import { CommonModule } from '@angular/common';
+import { UserMessage } from '../model/user-message';
 
 @Component({
   selector: 'app-chat-message-list',
@@ -10,9 +11,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './chat-message-list.component.css'
 })
 export class ChatMessageListComponent {
-    myId = 1;
     @Input({required: true})
-    messages: ChatMessage[] = [];
+    myId = -1;
+    @Input({required: true})
+    messages: UserMessage[] = [];
 
     @ViewChild('scrollPanel') scrollPanel!: ElementRef<HTMLDivElement>;
 

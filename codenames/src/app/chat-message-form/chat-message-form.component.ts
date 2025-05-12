@@ -1,6 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAX_MESSAGE_LENGTH } from '../../../model';
+import { SocketHandlerService } from '../services/socket-handler.service';
 
 @Component({
   selector: 'app-chat-message-form',
@@ -10,6 +11,9 @@ import { MAX_MESSAGE_LENGTH } from '../../../model';
   styleUrl: './chat-message-form.component.css'
 })
 export class ChatMessageFormComponent {
+  private socketHandlerService = inject(SocketHandlerService);
+  @Input({required: true})
+  myId = -1;
   @Input({required: true})
   type!: 'room' | 'global';
 
@@ -19,10 +23,14 @@ export class ChatMessageFormComponent {
   });
 
   sendMessage() {
-    if(this.formGroup.valid) {
-      //TODO: send throug socket depending on type
+    if(this.formGroup.valid && this.formGroup.value.message) {
       console.log(this.formGroup.value.message);
       this.formGroup.reset();
+      if( this.type == 'room') {
+        this.socketHandlerService.sendTeamMessage(this.myId, this.formGroup.value.message);
+      } else {
+        this.socketHandlerService.sendGlobalMessage(this.myId, this.formGroup.value.message)
+      }
     }
   }
 

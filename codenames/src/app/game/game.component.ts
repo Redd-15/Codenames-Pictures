@@ -13,6 +13,7 @@ import { HintFormComponent } from '../hint-form/hint-form.component';
 import { HintDisplayComponent } from '../hint-display/hint-display.component';
 import { HintHistoryComponent } from '../hint-history/hint-history.component';
 import { GameBarComponent } from '../game-bar/game-bar.component';
+import { SocketHandlerService } from '../services/socket-handler.service';
 
 @Component({
   selector: 'app-game',
@@ -23,6 +24,7 @@ import { GameBarComponent } from '../game-bar/game-bar.component';
 })
 export class GameComponent extends BaseComponent {
   private store = inject(Store);
+  private socketHandlerService = inject(SocketHandlerService);
 
   //Current state info
   cards: Card[] = [];
@@ -39,7 +41,11 @@ export class GameComponent extends BaseComponent {
 
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
-      this.playerId = playerId;
+      if(playerId != -1){
+        this.playerId = playerId;
+      } else {
+        this.socketHandlerService.getId();
+      }
     });
     this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
       if (room) {

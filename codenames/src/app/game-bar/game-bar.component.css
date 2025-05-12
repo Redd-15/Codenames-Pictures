@@ -8,6 +8,10 @@
   &.red-box {
     background-color: var(--lighter-red);
   }
+
+  &.inactive {
+    opacity: 80%;
+  }
 }
 
 .game-bar {

@@ -10,7 +10,6 @@ import { TeamType } from '../../../model/message-interfaces';
 import { Player } from '../../../model/player';
 import { BaseComponent } from '../base.component';
 import { takeUntil } from 'rxjs';
-import { selectPlayerId } from '../state/selector/ids.selector';
 import { selectRoom } from '../state/selector/room.selector';
 
 @Component({

@@ -1,6 +1,6 @@
 <ng-template #tipContent>
   @for(player of players; track $index){
-  <div class="tooltip-box {{ player.team }}-box">
+  <div class="tooltip-box {{ player.team }}-box" [class.inactive]="player.isInactive">
     <b>{{ player.name }}</b>
     {{ player.isSpymaster ? "Spymaster" : "Operative" }}
   </div>
