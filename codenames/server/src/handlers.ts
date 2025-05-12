@@ -188,6 +188,21 @@ public startGameHandler(socket: Socket) {
     }
 }
 
+public giveHintHandler(socket: Socket, word:string, number: number) {
+    console.log(`Client ${socket.id} requested to send hint: ${word} with number: ${number}`);
+    const room = this.database.giveHint(socket.id, word, number); // Send a hint in the database
+
+    if (room) {
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        //this.io.to(room.roomId.toString()).emit(ServerMessageType.SendHint, {word: word, number: number}); // Send a message back to the client
+        console.log(`Client ${socket.id} sent hint: ${word} with number: ${number}`);
+
+    }else {
+        this.roomNotFoundError(socket); // If the room does not exist, send an error message
+    }
+
+}
+
 
 public leaveRoomHandler(socket: Socket){
     console.log(`Client ${socket.id} requested to leave their room`);

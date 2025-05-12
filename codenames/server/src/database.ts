@@ -103,6 +103,16 @@ export class CodenamesDatabase {
     }
   }
 
+  public giveHint(socketId: string, word: string, number: number){
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId.toString()); // Get the room ID from the socket ID
+    if (room) {
+      room.currentHint = {word: word, number: number}; // Set the current hint
+      return room; // Return the updated room
+    }
+    return null; // Return null if the room does not exist
+  }
+
   public setPlayerInactive(socketId: string): Room | null {
     // Find the room by socket ID
     const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID

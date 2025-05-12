@@ -44,6 +44,8 @@ export class SocketHandler {
       socket.on(ClientMessageType.GetId, (content) => this.handlers?.getIdHandler(socket));
       socket.on(ClientMessageType.PickPosition, (content) => this.handlers?.pickPositionHandler(socket, content.team, content.spymaster));
       socket.on(ClientMessageType.StartGame, (content) => this.handlers?.startGameHandler(socket));
+      socket.on(ClientMessageType.GiveHint, (content) => this.handlers?.giveHintHandler(socket, content.word, content.number));
+
 
       socket.on('disconnect', () => {
         this.handlers?.disconnectHandler(socket); // Call leaveRoomHandler on disconnect
