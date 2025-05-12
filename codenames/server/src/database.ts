@@ -159,7 +159,12 @@ export class CodenamesDatabase {
         hint: room.currentHint!
       };
 
-      room.hintHistory?.push(lastHint); // Add the current hint to the hint history
+      if (room.hintHistory === null) {
+        room.hintHistory = [lastHint]; // Initialize the hint history if it is null
+      }else{
+        room.hintHistory.push(lastHint); // Add the current hint to the hint history
+      }
+      
       room.currentHint = null; // Reset the current hint
       room.turn = room.turn === TeamType.Red ? TeamType.Blue : TeamType.Red; // Switch the turn to the other team
       return room; // Return the updated room
