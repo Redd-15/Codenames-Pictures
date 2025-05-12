@@ -1,7 +1,8 @@
 import { Room } from "../../model/room"
 import { Player } from "../../model/player"
-import { CardColour, TeamType } from "../../model/message-interfaces"
+import { CardColour, HintHistory, TeamType } from "../../model/message-interfaces"
 import { Card } from "../../model/card";
+import { MAX_CARD_NO } from "../../model";
 
 export class CodenamesDatabase {
   // This class will handle the database connection and queries
@@ -34,6 +35,7 @@ export class CodenamesDatabase {
       players: [this.createPlayer(username, roomId*100 + 0, socketId)],
       cards: [], // Initialize with an empty array of cards
       isStarted: false,
+      winner: null, // No winner at the start
       turn: (Math.random() > 0.5 ? TeamType.Red : TeamType.Blue), // Default starting team
       remainingGuesses: 0,
       currentHint: null,
@@ -108,6 +110,55 @@ export class CodenamesDatabase {
     const room = this.getRoomBySocketId(socketId.toString()); // Get the room ID from the socket ID
     if (room) {
       room.currentHint = {word: word, number: number}; // Set the current hint
+      if (number > 0) {
+        room.remainingGuesses = number; // Set the number of guesses for the current team
+
+      }else {
+        room.remainingGuesses = 8; // Set the number of guesses for the current team
+
+      }
+      return room; // Return the updated room
+    }
+    return null; // Return null if the room does not exist
+  }
+
+  public makeGuess(socketId: string, guess:number): Room | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      room.cards[guess].isSecret = false; // Set the guessed card to be visible
+      
+      if(this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || room.cards[guess].colour === CardColour.Black){
+        return this.gameOver(socketId, guess);
+
+      }else{
+        if (room.remainingGuesses === 1 || room.cards[guess].colour !== (room.turn === TeamType.Red ? CardColour.Red : CardColour.Blue)) {
+          this.endGuessing(socketId); // End the guessing phase if the guess is incorrect or the last guess
+        }else{
+          room.remainingGuesses--; // Decrement the number of guesses for the current team
+        }
+
+      } 
+      //TODO: Check if the guess is correct and update the game state accordingly
+      return room; // Return the updated room
+    }
+    return null; // Return null if the room does not exist
+  }
+
+  public endGuessing(socketId: string): Room | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      room.remainingGuesses = 0; // Set the number of guesses for the current team to 0      
+      
+      const lastHint: HintHistory = {
+        team: room.turn,
+        hint: room.currentHint!
+      };
+
+      room.hintHistory?.push(lastHint); // Add the current hint to the hint history
+      room.currentHint = null; // Reset the current hint
+      room.turn = room.turn === TeamType.Red ? TeamType.Blue : TeamType.Red; // Switch the turn to the other team
       return room; // Return the updated room
     }
     return null; // Return null if the room does not exist
@@ -139,6 +190,31 @@ export class CodenamesDatabase {
       }
     }
     return null; // Return null if the room does not exist
+  }
+
+  public gameOver(socketId: string, guess: number ): Room | null {
+    
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      room.remainingGuesses = 0; // Set the number of guesses for the current team to 0
+      
+      if (room.cards[guess].colour === CardColour.Black) {
+        room.winner = room.turn === TeamType.Red ? TeamType.Blue : TeamType.Red; // Set the winner to the other team
+      
+      }else if (this.getNumberOfRemainingCards(room, CardColour.Red) === 0) {
+        room.winner = TeamType.Red; // Set the winner to Red
+      
+      }else if (this.getNumberOfRemainingCards(room, CardColour.Blue) === 0) {
+        room.winner = TeamType.Blue; // Set the winner to Blue
+      }
+
+      
+      console.log("Game Over for Room ID: " + room.roomId + " Winner: " + room.winner);
+      return this.endGuessing(socketId); // End the guessing phase and return the updated room
+      
+    }
+    return null; // Placeholder for game over logic
   }
 
   public getRoomId(socketId: string): number | null {
@@ -206,6 +282,12 @@ export class CodenamesDatabase {
 
   }
 
+  private getNumberOfRemainingCards(room: Room, colour: CardColour): number {
+    // Count the number of remaining cards of a specific colour
+    return room.cards.filter(card => card.colour === colour && card.isSecret).length;
+  }
+
+
   private getRandomCardsArray(startTeam: TeamType): Card[] {
     const totalCards = 20;
     const redCards = startTeam === TeamType.Red ? 8 : 7; // Starting team gets 1 extra card
@@ -219,7 +301,7 @@ export class CodenamesDatabase {
     const generateUniqueId = (): number => {
       let id;
       do {
-        id = Math.floor(Math.random() * 279); // Generate a random ID
+        id = Math.floor(Math.random() * MAX_CARD_NO); // Generate a random ID
       } while (usedIds.has(id));
       usedIds.add(id);
       return id;

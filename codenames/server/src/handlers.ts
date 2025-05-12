@@ -200,9 +200,33 @@ public giveHintHandler(socket: Socket, word:string, number: number) {
     }else {
         this.roomNotFoundError(socket); // If the room does not exist, send an error message
     }
+}
+
+public makeGuessHandler(socket: Socket, guess: number) {
+    console.log(`Client ${socket.id} requested to make guess: ${guess}`);
+    const room = this.database.makeGuess(socket.id, guess); // Make a guess in the database
+
+    if (room) {
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client ${socket.id} made guess: ${guess}`);
+
+    }else {
+        this.roomNotFoundError(socket); // If the room does not exist, send an error message
+    }
 
 }
 
+public endGuessingHandler(socket: Socket) {
+    console.log(`Client ${socket.id} requested to end guessing`);
+    const room = this.database.endGuessing(socket.id); // End guessing in the database
+    if (room) {
+        this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
+        console.log(`Client ${socket.id} ended guessing`);
+    }
+    else {
+        this.roomNotFoundError(socket); // If the room does not exist, send an error message
+    }
+}
 
 public leaveRoomHandler(socket: Socket){
     console.log(`Client ${socket.id} requested to leave their room`);
@@ -239,6 +263,10 @@ public getIdHandler(socket: Socket) {
     this.io.to(socket.id).emit(ServerMessageType.ReceiveId, idmessage ); // Send the socket ID back to the client
     console.log(`Client ${socket.id} received their ID`);
 }
+
+public gameOverHandler(socket: Socket) {
+    console.log(`Client ${socket.id} requested to end game`);
+    }
 
 private roomNotFoundError(socket: Socket) {
     console.log(`Client ${socket.id} does not have an existing room`);
@@ -282,9 +310,9 @@ JoinRoom = 'joinRoom',      ++
 LeaveRoom = 'leaveRoom',    ++
 GetId = 'getId',            ++
 PickPosition = 'pickPosition',      ++
-StartGame = 'startGame',
-GiveHint = 'giveHint',
-MakeGuess = 'makeGuess',
-EndGuessing = 'endGuessing',
+StartGame = 'startGame',    ++
+GiveHint = 'giveHint',      ++
+MakeGuess = 'makeGuess',    ++
+EndGuessing = 'endGuessing',++
 SendTeamMessage = 'sendTeamMessage',
 SendGlobalMessage = 'sendGlobalMessage' */

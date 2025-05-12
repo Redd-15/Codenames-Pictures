@@ -8,6 +8,7 @@ export interface Room {
   players: Player[],
   cards: Card[],
   isStarted: boolean,
+  winner: TeamType | null,
   turn: TeamType,
   remainingGuesses: number,
   currentHint: Hint | null,
