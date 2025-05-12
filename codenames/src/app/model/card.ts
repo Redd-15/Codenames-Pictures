@@ -15,11 +15,11 @@ export class Card {
   cardPath : string
   agentCardPath ?: string
 
-  constructor(id: number, colour: CardColour = CardColour.Grey) {
+  constructor(id: number, colour: CardColour = CardColour.Grey, isSecret: boolean = true) {
     if (id >= 0 && id <= MAX_CARD_NO){
-      this.id = id
-      this.colour = colour
-      this.isSecret = true
+      this.id = id;
+      this.colour = colour;
+      this.isSecret = isSecret;
       this.isHighlighted = false;
 
       //Determine the corresponding card and agent card paths

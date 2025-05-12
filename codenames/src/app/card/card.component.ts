@@ -40,6 +40,7 @@ export class CardComponent {
     if(this.turn != this.team) return;
     if(this.isSpymasterMode) return;
     this.socketHandlerService.makeGuess(this.index);
+    console.log('Guess', this.index);
     //this.card.revealColour();
   }
 }

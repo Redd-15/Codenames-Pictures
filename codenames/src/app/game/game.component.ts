@@ -62,9 +62,10 @@ export class GameComponent extends BaseComponent {
       }
     });
     this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((cards) => {
+      // TODO: modify, this won't work, will always have different images behind it
       const cardObjects: Card[] = [];
       for (let card of cards) {
-        cardObjects.push(new Card(card.id, card.colour));
+        cardObjects.push(new Card(card.id, card.colour, card.isSecret));
       }
       this.cards = cardObjects;
     });

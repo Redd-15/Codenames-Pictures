@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
 import { ServerMessageType, ClientMessageType } from '../../../model';
 import { CookieHandlerService } from './cookie-handler.service';
-import { ChatMessage, ErrorMessage, ErrorType, Hint, IdMessage, JoinMessage, PositionPickerMessage, TeamType } from '../../../model/message-interfaces';
+import { ChatMessage, ErrorMessage, ErrorType, Guess, Hint, IdMessage, JoinMessage, PositionPickerMessage, TeamType } from '../../../model/message-interfaces';
 import { Room } from '../../../model/room';
 import { Store } from '@ngrx/store';
 import { selectRoomId, selectUsername } from '../state/selector/ids.selector';
@@ -160,7 +160,10 @@ export class SocketHandlerService {
 
   /** Make a guess by card index */
   makeGuess(index: number) {
-    this.socket?.emit(ClientMessageType.MakeGuess, index);
+    let content: Guess = {
+      guess: index
+    }
+    this.socket?.emit(ClientMessageType.MakeGuess, content);
   }
 
   /** End guessing for the current turn */
