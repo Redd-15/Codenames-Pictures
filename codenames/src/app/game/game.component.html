@@ -5,7 +5,7 @@
       [username]="username"
       [team]="team"
       [isSpymaster]="isSpymaster"
-      [isEndGuessingAvailable]="currentTeam == team && currentPhase == 'guess'"
+      [isEndGuessingAvailable]="currentTeam == team && currentPhase == 'guess' && !isSpymaster"
     ></app-game-bar>
     <div class="game-prompt cap {{ currentTeam }}">
       {{ currentTeam }} team's turn. @if (currentPhase == "clue") {
