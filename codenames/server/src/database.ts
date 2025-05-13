@@ -29,7 +29,7 @@ export class CodenamesDatabase {
   // Method to create a new room
   public createRoom(username: string, socketId: string): Room {
     // Create a new room and add the player to it
-    const roomId = this.getUniqueRoomId(); // Generate a unique room ID
+    const roomId = this.generateUniqueRoomId(); // Generate a unique room ID
     const newRoom: Room = {
       roomId: roomId, // Random room ID for now
       players: [this.createPlayer(username, roomId*10000 + 0, socketId)],
@@ -60,23 +60,6 @@ export class CodenamesDatabase {
     else {
         return null; // Return null if the room does not exist
     }
-  }
-
-  private generateUniquePlayerId(room: Room): number {
-
-    // Extract used suffixes from current players
-    const usedSuffixes = new Set(room.players.map(player => player.id % 10000));
-
-    if (usedSuffixes.size >= 10000) {
-      //TODO: handle
-    }
-
-    let suffix: number;
-    do {
-      suffix = Math.floor(Math.random() * 10000); // random number between 0–99
-    } while (usedSuffixes.has(suffix));
-
-    return room.roomId * 10000 + suffix;
   }
 
   public pickPosition(socketId: string, team: TeamType, spymaster: boolean): Room | null {
@@ -149,7 +132,7 @@ export class CodenamesDatabase {
     if (room) {
       room.cards[guess].isSecret = false; // Set the guessed card to be visible
 
-      if(this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || room.cards[guess].colour === CardColour.Black){
+      if(this.getNumberOfRemainingCards(room, CardColour.Red) === 0 || this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || room.cards[guess].colour === CardColour.Black){
         return this.gameOver(socketId, guess);
 
       }else{
@@ -310,13 +293,26 @@ export class CodenamesDatabase {
     return null; // Return null if the room does not exist
   }
 
-  private getUniqueRoomId(): number {
+  private generateUniqueRoomId(): number {
     // Generate a unique room ID
+    const usedRoomIds = new Set(this.roomdb.map(room => room.roomId));
     let roomId: number;
     do {
-      roomId = Math.floor(Math.random() * 9000) + 999; // Random room ID for now
-    } while (this.roomdb.some(room => room.roomId === roomId)); // Check if the room ID already exists
+      roomId = Math.floor(Math.random() * 9000) + 999; // random number between 999 and 9999
+    } while (usedRoomIds.has(roomId)); // Check if the room ID already exists
     return roomId;
+  }
+
+  private generateUniquePlayerId(room: Room): number {
+
+    // Extract used suffixes from current players
+    const usedPlayerIds = new Set(room.players.map(player => player.id % 10000));
+    let suffix: number;
+    do {
+      suffix = Math.floor(Math.random() * 10000); // random number between 0–9999
+    } while (usedPlayerIds.has(suffix));
+
+    return room.roomId * 10000 + suffix;
   }
 
   private getRoomIdFromPlayerId(playerId: number): number {
