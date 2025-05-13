@@ -134,7 +134,11 @@
   justify-content: start;
   align-items: end;
   transition: all 1s ease;
-  z-index: 3;
+  pointer-events: none;
+
+  * {
+    pointer-events: auto;
+  }
 
   &.open {
     transform: none;
