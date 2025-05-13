@@ -28,6 +28,10 @@
 }
 .player {
   width: fit-content;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   margin: 0.2rem;

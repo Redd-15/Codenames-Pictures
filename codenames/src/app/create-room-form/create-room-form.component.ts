@@ -28,6 +28,7 @@ export class CreateRoomFormComponent implements ModalContent {
       [
         Validators.required,
         Validators.minLength(3),
+        Validators.maxLength(20),
         Validators.pattern('^[a-zA-Z0-9]+$') // Alphanumeric only
       ]
     ]
@@ -51,7 +52,7 @@ export class CreateRoomFormComponent implements ModalContent {
       return true;
     } else {
       console.log('Form invalid');
-      this.toastr.error('Please specify a valid username of minimum 3 alphanumeric characters.', 'Invalid data', { toastClass: 'ngx-toastr toast-custom' });
+      this.toastr.error('Please specify a valid username of 3-20 alphanumeric characters.', 'Invalid data', { toastClass: 'ngx-toastr toast-custom' });
       return false;
     }
   };
