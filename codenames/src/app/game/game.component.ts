@@ -62,6 +62,8 @@ export class GameComponent extends BaseComponent {
       }
     });
     this.store.select(selectCards).pipe(takeUntil(this.destroy$)).subscribe((incomingCards) => {
+      // If new game is being started, so [] is sent, clear card array
+      if (incomingCards.length == 0) this.cards = [];
       if (this.cards.length === 0) {
         this.cards = incomingCards.map(c => new Card(c.id, c.colour, c.isSecret));
       } else {

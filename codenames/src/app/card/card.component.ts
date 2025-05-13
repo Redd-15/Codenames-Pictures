@@ -14,6 +14,9 @@ import { SocketHandlerService } from '../services/socket-handler.service';
 export class CardComponent {
   private socketHandlerService = inject(SocketHandlerService);
 
+  @Input()
+  isHighlightingAllowed = true;
+
   @Input({ required: true })
   card !: Card;
   @Input({ required: true })
@@ -33,6 +36,7 @@ export class CardComponent {
   }
 
   highlightCard() {
+    if(!this.isHighlightingAllowed) return;
     this.card.toggleHighlight();
   }
 

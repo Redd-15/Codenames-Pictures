@@ -1,0 +1,14 @@
+<div class="board-summary">
+  <div *ngFor="let card of cards; let i = index" class="card-container">
+    <app-card
+      [card]="card"
+      [index]="i"
+      [team]="team"
+      [turn]="currentTeam"
+      [phase]="currentPhase"
+      [isHighlightingAllowed]="false"
+      [isSpymasterMode]="isSpymaster"
+      class="inserted-component"
+    ></app-card>
+  </div>
+</div>

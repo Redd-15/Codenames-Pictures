@@ -19,7 +19,8 @@ export const initialRoomState = {
     turn: TeamType.Red,
     remainingGuesses: 0,
     currentHint: null,
-    hintHistory: [] as HintHistory[]
+    hintHistory: [] as HintHistory[],
+    winner: null
   } as Room | null
 }
 

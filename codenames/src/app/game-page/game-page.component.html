@@ -17,3 +17,9 @@
     <app-room-menu class="inserted-component" (startGame)="startGame()" (leaveGame)="leaveGame()"></app-room-menu>
   </div>
 </div>
+<div class="overlay" [class.hidden]="!winner">
+  <div class="shader"></div>
+  <div class="centred">
+    <app-game-summary class="inserted-component" [winner]="winner" (restartGame)="restartGame()" (leaveGame)="leaveGame()"></app-game-summary>
+  </div>
+</div>

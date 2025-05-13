@@ -10,6 +10,7 @@ import { BaseComponent } from '../base.component';
 import { selectBlueOperatives, selectBlueSpymasters, selectRedOperatives, selectRedSpymasters, selectRoom } from '../state/selector/room.selector';
 import { SocketHandlerService } from '../services/socket-handler.service';
 import { TeamType } from '../../../model/message-interfaces';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-room-menu',
@@ -21,6 +22,7 @@ import { TeamType } from '../../../model/message-interfaces';
 export class RoomMenuComponent extends BaseComponent implements OnInit {
   private store = inject(Store);
   private socketHandlerService = inject(SocketHandlerService);
+  private toastr = inject(ToastrService);
 
   @Output() startGame = new EventEmitter<void>();
   @Output() leaveGame = new EventEmitter<void>();
@@ -84,11 +86,9 @@ export class RoomMenuComponent extends BaseComponent implements OnInit {
   }
 
   clickStart() {
-    // TODO uncomment
-    /*if(this.redSpymasters.length == 0 || this.blueSpymasters.length == 0 || this.redTeam.length == 0 || this.blueTeam.length == 0)
+    if(this.redSpymasters.length == 0 || this.blueSpymasters.length == 0 || this.redTeam.length == 0 || this.blueTeam.length == 0)
       this.toastr.error('Make sure you have spymasters and operatives in both teams.', 'Error', { toastClass: 'ngx-toastr toast-custom' });
-    else this.startGame.emit();*/
-    this.startGame.emit();
+    else this.startGame.emit();
   }
 
   clickLeave() {
@@ -99,7 +99,6 @@ export class RoomMenuComponent extends BaseComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      //TODO: send move player socket message
       let movedPlayer: Player = event.previousContainer.data[event.previousIndex];
        // Determine target container ID
       const containerId = event.container.id;

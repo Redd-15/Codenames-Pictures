@@ -21,6 +21,16 @@ export class HintFormComponent {
     number: [1]
   });
   numbers: number[] = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  tooltipPlacement = 'right';
+
+  ngOnInit() {
+    this.setTooltipPlacement();
+    window.addEventListener('resize', this.setTooltipPlacement.bind(this));
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.setTooltipPlacement.bind(this));
+  }
 
   submitClue() {
     console.log(this.clueForm.value);
@@ -30,5 +40,10 @@ export class HintFormComponent {
     } else {
       this.toastr.error('Please enter a single word of maximum 50 characters.', 'Invalid data', { toastClass: 'ngx-toastr toast-custom' });
     }
+  }
+
+  setTooltipPlacement() {
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+    this.tooltipPlacement = isPortrait ? 'bottom' : 'right';
   }
 }

@@ -1,0 +1,15 @@
+<div class="card text-center game-summary" *ngIf="winner">
+  <div class="card-body">
+    <h3 class="card-title pt-2 skyfall-font">Game over</h3>
+    <hr />
+    <div class="card-contents">
+      <div class="cap win-text mt-1"><span>The winner is </span><span class="team-name skyfall-font {{winner}}">team&nbsp;{{ winner }}</span><span>. Congratulations!</span></div>
+      <div class="board mt-4"><app-board-summary class="inserted-component"></app-board-summary></div>
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-center">
+    <button type="button" class="btn btn-custom m-1" (click)="leaveRoom()">Leave room</button>
+    <button type="button" class="btn btn-plum m-1" (click)="startNewGame()">New game</button>
+  </div>
+</div>
+

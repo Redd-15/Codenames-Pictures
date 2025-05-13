@@ -171,6 +171,10 @@ export class SocketHandlerService {
     this.socket?.emit(ClientMessageType.EndGuessing);
   }
 
+  startNewGame() {
+    this.socket?.emit(ClientMessageType.RestartGame);
+  }
+
   /** Send message to team chat */
   sendTeamMessage(playerId: number, message: string) {
     let content : ChatMessage = {
