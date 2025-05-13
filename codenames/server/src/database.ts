@@ -145,19 +145,15 @@ export class CodenamesDatabase {
     const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
     if (room) {
       room.cards[guess].isSecret = false; // Set the guessed card to be visible
+      room.remainingGuesses--;
 
       if(this.getNumberOfRemainingCards(room, CardColour.Red) === 0 || this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || room.cards[guess].colour === CardColour.Black){
         return this.gameOver(socketId, guess);
 
-      }else{
-        if (room.remainingGuesses === 1 || room.cards[guess].colour !== (room.turn === TeamType.Red ? CardColour.Red : CardColour.Blue)) {
+      }else if (room.remainingGuesses === 0 || room.cards[guess].colour !== (room.turn === TeamType.Red ? CardColour.Red : CardColour.Blue)) {
           this.endGuessing(socketId); // End the guessing phase if the guess is incorrect or the last guess
-        }else{
-          room.remainingGuesses--; // Decrement the number of guesses for the current team
-        }
-
+        
       }
-      //TODO: Check if the guess is correct and update the game state accordingly
       return room; // Return the updated room
     }
     return null; // Return null if the room does not exist
