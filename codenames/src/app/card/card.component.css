@@ -73,11 +73,13 @@
       background-color: var(--team-colour);
       &:hover img {
         mix-blend-mode: multiply;
+        transform: translate3d(0,0,0);
       }
     }
     &.spymaster {
       img {
         mix-blend-mode: multiply;
+        transform: translate3d(0,0,0);
       }
       &.blue {
         background-color: var(--blue);
@@ -98,6 +100,7 @@
     &.spymaster:hover {
       img {
         mix-blend-mode: normal;
+        transform: translate3d(0,0,0);
       }
       &.black img {
         filter: grayscale(100%);
@@ -113,6 +116,7 @@
   transform: rotateY(180deg);
   .front.non-spymaster:hover img {
     mix-blend-mode: normal; /*do not activate hover effect during flipping*/
+    transform: translate3d(0,0,0);
   }
 }
 

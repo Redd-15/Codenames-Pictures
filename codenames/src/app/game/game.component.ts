@@ -38,6 +38,12 @@ export class GameComponent extends BaseComponent {
   isSpymaster = false;
   team = TeamType.Red;
 
+  isHistoryOpen = false;
+
+  toggleHistory() {
+    this.isHistoryOpen = !this.isHistoryOpen;
+  }
+
 
   ngOnInit() {
     this.store.select(selectPlayerId).pipe(takeUntil(this.destroy$)).subscribe((playerId) => {
