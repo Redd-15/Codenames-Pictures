@@ -48,6 +48,8 @@ export class SocketHandler {
       socket.on(ClientMessageType.MakeGuess, (content) => this.handlers?.makeGuessHandler(socket, content.guess));
       socket.on(ClientMessageType.EndGuessing, (content) => this.handlers?.endGuessingHandler(socket));
       socket.on(ClientMessageType.RestartGame, (content) => this.handlers?.restartGameHandler(socket));
+      socket.on(ClientMessageType.SendTeamMessage, (content) => this.handlers?.sendTeamMessageHandler(socket, content));
+      socket.on(ClientMessageType.SendGlobalMessage, (content) => this.handlers?.sendGlobalMessageHandler(socket, content));
 
       socket.on('disconnect', () => {
         this.handlers?.disconnectHandler(socket); // Call leaveRoomHandler on disconnect

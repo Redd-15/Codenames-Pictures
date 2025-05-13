@@ -68,3 +68,10 @@ export interface ChatMessage {
   senderId: number,
   message: string
 }
+
+export interface Chat{
+  roomId: number,
+  redTeamChat: ChatMessage[],
+  blueTeamChat: ChatMessage[],
+  globalChat: ChatMessage[],
+}

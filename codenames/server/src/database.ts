@@ -1,6 +1,6 @@
 import { Room } from "../../model/room"
 import { Player } from "../../model/player"
-import { CardColour, HintHistory, TeamType } from "../../model/message-interfaces"
+import { CardColour, Chat, ChatMessage, HintHistory, TeamType } from "../../model/message-interfaces"
 import { Card } from "../../model/card";
 import { MAX_CARD_NO } from "../../model";
 
@@ -8,9 +8,11 @@ export class CodenamesDatabase {
   // This class will handle the database connection and queries
   // For now, we will use a mock database
   private roomdb: Room[];
+  private chatdb: Chat[];
 
   constructor() {
     this.roomdb = []; // Initialize as null, can be assigned a Room object later
+    this.chatdb = []; // Initialize as null, can be assigned a Chat object later
   }
 
   public createPlayer(username: string, id: number, socketId: string): Player {
@@ -42,6 +44,16 @@ export class CodenamesDatabase {
       hintHistory: null,
     };
     this.roomdb.push(newRoom); // Assign the new room to the database
+    console.log("Rooms open: " + this.roomdb.length);
+
+    const newChat: Chat = {
+      roomId: roomId,
+      redTeamChat: [],
+      blueTeamChat: [],
+      globalChat: []
+    };
+
+    this.chatdb.push(newChat); // Assign the new chat to the database
     return newRoom;
   }
 
@@ -100,6 +112,8 @@ export class CodenamesDatabase {
       if (room.players.length === 0) {
         // If no players left, remove the room from the database
         this.roomdb = this.roomdb.filter(r => r.roomId !== room.roomId);
+        this.chatdb = this.chatdb.filter(c => c.roomId !== room.roomId); // Remove the chat as well
+        console.log("Rooms open: " + this.roomdb.length);
       }
 
       return room; // Return the updated room
@@ -289,6 +303,38 @@ export class CodenamesDatabase {
     const room = this.roomdb.find(room => room.players.some(player => player.socketId === socketId));
     if (room) {
       return room; // Return the room if found
+    }
+    return null; // Return null if the room does not exist
+  }
+
+  public sendTeamMessage(socketId: string, message: ChatMessage): Chat | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    const player = room?.players.find(player => player.socketId === socketId); // Find the player by socket ID in the room
+    if (room && player) {
+      const chat = this.chatdb.find(chat => chat.roomId === room.roomId);
+      if (chat) {
+        if (player.team === TeamType.Red) {
+          chat.redTeamChat.push(message);
+        }else{
+          chat.blueTeamChat.push(message);
+        }
+        return chat; // Return the updated room
+      }
+    }
+    return null; // Return null if the room does not exist
+  }
+
+  public sendGlobalMessage(socketId: string, message: ChatMessage): Chat | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    const player = room?.players.find(player => player.socketId === socketId); // Find the player by socket ID in the room
+    if (room && player) {
+      const chat = this.chatdb.find(chat => chat.roomId === room.roomId);
+      if (chat) {
+        chat.globalChat.push(message); // Add the message to the global chat
+        return chat; // Return the updated room
+      }
     }
     return null; // Return null if the room does not exist
   }

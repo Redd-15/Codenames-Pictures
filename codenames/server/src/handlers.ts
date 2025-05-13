@@ -3,7 +3,8 @@
 import { Socket, Server } from "socket.io";
 import { CodenamesDatabase } from "./database";
 import { ServerMessageType } from "../../model";
-import { ErrorMessage, ErrorType, IdMessage, TeamType } from "../../model/message-interfaces";
+import { ChatMessage, ErrorMessage, ErrorType, IdMessage, TeamType } from "../../model/message-interfaces";
+import e from "cors";
 
 
 // Import necessary types from the model
@@ -276,6 +277,30 @@ public restartGameHandler(socket: Socket) {
     }
 }
 
+public sendTeamMessageHandler(socket: Socket, message: ChatMessage) {
+    console.log(`Client ${socket.id} requested to send team message: ${message}`);
+    const chat = this.database.sendTeamMessage(socket.id, message); // Send a team message in the database
+    if (chat) { 
+        this.io.to(chat.roomId.toString()).emit(ServerMessageType.ReceiveTeamMessage, chat); // Send a message back to the client
+        console.log(`Client ${socket.id} sent team message: ${message}`);
+        
+    }else {
+        this.roomNotFoundError(socket); // If the room does not exist, send an error message
+    }
+}
+
+public sendGlobalMessageHandler(socket: Socket, message: ChatMessage) {
+    console.log(`Client ${socket.id} requested to send team message: ${message}`);
+    const chat = this.database.sendGlobalMessage(socket.id, message); // Send a team message in the database
+    if (chat) { 
+        this.io.to(chat.roomId.toString()).emit(ServerMessageType.ReceiveTeamMessage, chat); // Send a message back to the client
+        console.log(`Client ${socket.id} sent team message: ${message}`);
+
+    }else {
+        this.roomNotFoundError(socket); // If the room does not exist, send an error message
+    }
+}
+
 private roomNotFoundError(socket: Socket) {
     console.log(`Client ${socket.id} does not have an existing room`);
 
@@ -310,7 +335,3 @@ private noUsernameError(socket: Socket) {
 }
 
 }
-/*
-
-SendTeamMessage = 'sendTeamMessage',
-SendGlobalMessage = 'sendGlobalMessage' */
