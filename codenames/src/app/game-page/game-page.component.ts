@@ -39,6 +39,11 @@ export class GamePageComponent extends BaseComponent {
     });
   }
 
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this.socketHandlerService.disconnect();
+  }
+
   toggleGlobalChat() {
     this.isGlobalChatOpen = !this.isGlobalChatOpen;
   }

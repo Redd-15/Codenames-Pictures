@@ -10,7 +10,19 @@
   }
 
   &.inactive {
-    opacity: 80%;
+    opacity: 50%;
+  }
+
+  .tooltip-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    .material-icons {
+      font-size: 1rem;
+      line-height: 1rem;
+    }
   }
 }
 
