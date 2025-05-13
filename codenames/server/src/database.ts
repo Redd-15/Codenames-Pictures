@@ -7,7 +7,7 @@ import { MAX_CARD_NO } from "../../model";
 export class CodenamesDatabase {
   // This class will handle the database connection and queries
   // For now, we will use a mock database
-  private roomdb: Room[]; 
+  private roomdb: Room[];
 
   constructor() {
     this.roomdb = []; // Initialize as null, can be assigned a Room object later
@@ -52,13 +52,31 @@ export class CodenamesDatabase {
         return null; // Return null if the room does not exist
     }
     else if (!room.isStarted) { // If the room is already started, return null
-        const player = this.createPlayer(username, room.roomId * 100 + room.players.length, socketId); // Create a new player 
+        const playerId = this.generateUniquePlayerId(room);
+        const player = this.createPlayer(username, playerId, socketId); // Create a new player
         room.players.push(player); // Add the player to the room
         return room; // Return the updated room
         }
     else {
         return null; // Return null if the room does not exist
     }
+  }
+
+  private generateUniquePlayerId(room: Room): number {
+
+    // Extract used suffixes from current players
+    const usedSuffixes = new Set(room.players.map(player => player.id % 100));
+
+    if (usedSuffixes.size >= 100) {
+      //TODO: handle
+    }
+
+    let suffix: number;
+    do {
+      suffix = Math.floor(Math.random() * 100); // random number between 0–99
+    } while (usedSuffixes.has(suffix));
+
+    return room.roomId * 100 + suffix;
   }
 
   public pickPosition(socketId: string, team: TeamType, spymaster: boolean): Room | null {
@@ -70,7 +88,7 @@ export class CodenamesDatabase {
       if (player) {
         player.team = team; // Set the player's team to the selected team
         player.isSpymaster = spymaster; // Set the player's isSpymaster property to true or false based on the input
-        return room; // Return the room 
+        return room; // Return the room
       }
     }
     return null; // Return null if the room does not exist
@@ -91,11 +109,11 @@ export class CodenamesDatabase {
   public leaveRoom(socketId: string): Room | null {
     // Find the room by socket ID
     let room = this.roomdb.find(room => room.roomId === this.getRoomId(socketId)); // Get the room ID from the socket ID
-    if (room) { 
+    if (room) {
 
       // Remove the player from the room
       room.players = room.players.filter(player => player.socketId !== socketId);
-      
+
       if (room.players.length === 0) {
         // If no players left, remove the room from the database
         this.roomdb = this.roomdb.filter(r => r.roomId !== room.roomId);
@@ -130,7 +148,7 @@ export class CodenamesDatabase {
     const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
     if (room) {
       room.cards[guess].isSecret = false; // Set the guessed card to be visible
-      
+
       if(this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || this.getNumberOfRemainingCards(room, CardColour.Blue) === 0 || room.cards[guess].colour === CardColour.Black){
         return this.gameOver(socketId, guess);
 
@@ -141,7 +159,7 @@ export class CodenamesDatabase {
           room.remainingGuesses--; // Decrement the number of guesses for the current team
         }
 
-      } 
+      }
       //TODO: Check if the guess is correct and update the game state accordingly
       return room; // Return the updated room
     }
@@ -152,8 +170,8 @@ export class CodenamesDatabase {
     // Find the room by socket ID
     const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
     if (room) {
-      room.remainingGuesses = 0; // Set the number of guesses for the current team to 0      
-      
+      room.remainingGuesses = 0; // Set the number of guesses for the current team to 0
+
       const lastHint: HintHistory = {
         team: room.turn,
         hint: room.currentHint!
@@ -164,7 +182,7 @@ export class CodenamesDatabase {
       }else{
         room.hintHistory.push(lastHint); // Add the current hint to the hint history
       }
-      
+
       room.currentHint = null; // Reset the current hint
       room.turn = room.turn === TeamType.Red ? TeamType.Blue : TeamType.Red; // Switch the turn to the other team
       return room; // Return the updated room
@@ -180,7 +198,7 @@ export class CodenamesDatabase {
       const player = room.players.find(player => player.socketId === socketId);
       if (player) {
         player.isInactive = true; // Set the player's isInactive property to true
-        return room; // Return the room 
+        return room; // Return the room
       }
     }
     return null; // Return null if the room does not exist
@@ -194,33 +212,33 @@ export class CodenamesDatabase {
       const player = room.players.find(player => player.socketId === socketId);
       if (player) {
         player.isInactive = false; // Set the player's isInactive property to true
-        return room; // Return the room 
+        return room; // Return the room
       }
     }
     return null; // Return null if the room does not exist
   }
 
   public gameOver(socketId: string, guess: number ): Room | null {
-    
+
     // Find the room by socket ID
     const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
     if (room) {
       room.remainingGuesses = 0; // Set the number of guesses for the current team to 0
-      
+
       if (room.cards[guess].colour === CardColour.Black) {
         room.winner = room.turn === TeamType.Red ? TeamType.Blue : TeamType.Red; // Set the winner to the other team
-      
+
       }else if (this.getNumberOfRemainingCards(room, CardColour.Red) === 0) {
         room.winner = TeamType.Red; // Set the winner to Red
-      
+
       }else if (this.getNumberOfRemainingCards(room, CardColour.Blue) === 0) {
         room.winner = TeamType.Blue; // Set the winner to Blue
       }
 
-      
+
       console.log("Game Over for Room ID: " + room.roomId + " Winner: " + room.winner);
       return this.endGuessing(socketId); // End the guessing phase and return the updated room
-      
+
     }
     return null; // Placeholder for game over logic
   }
@@ -266,15 +284,15 @@ export class CodenamesDatabase {
 
   public getPlayerRoomById(playerId: number, newSocketId: string): Room | null {
     // Find the room by player ID
-    const room = this.roomdb.find(room => room.roomId === this.getRoomIdFromPlayerId(playerId)); 
-    
+    const room = this.roomdb.find(room => room.roomId === this.getRoomIdFromPlayerId(playerId));
+
     if (room) {
       // Find the player by ID in the room
-      const player = room.players.find(player => player.id === playerId); 
+      const player = room.players.find(player => player.id === playerId);
 
       if (player){
         player.socketId = newSocketId; // Update the player's socket ID
-        return room; // Return the room 
+        return room; // Return the room
       }
       else{
         return null
