@@ -32,7 +32,7 @@ export class CodenamesDatabase {
     const roomId = this.getUniqueRoomId(); // Generate a unique room ID
     const newRoom: Room = {
       roomId: roomId, // Random room ID for now
-      players: [this.createPlayer(username, roomId*100 + 0, socketId)],
+      players: [this.createPlayer(username, roomId*10000 + 0, socketId)],
       cards: [], // Initialize with an empty array of cards
       isStarted: false,
       winner: null, // No winner at the start
@@ -65,18 +65,18 @@ export class CodenamesDatabase {
   private generateUniquePlayerId(room: Room): number {
 
     // Extract used suffixes from current players
-    const usedSuffixes = new Set(room.players.map(player => player.id % 100));
+    const usedSuffixes = new Set(room.players.map(player => player.id % 10000));
 
-    if (usedSuffixes.size >= 100) {
+    if (usedSuffixes.size >= 10000) {
       //TODO: handle
     }
 
     let suffix: number;
     do {
-      suffix = Math.floor(Math.random() * 100); // random number between 0–99
+      suffix = Math.floor(Math.random() * 10000); // random number between 0–99
     } while (usedSuffixes.has(suffix));
 
-    return room.roomId * 100 + suffix;
+    return room.roomId * 10000 + suffix;
   }
 
   public pickPosition(socketId: string, team: TeamType, spymaster: boolean): Room | null {
@@ -266,7 +266,7 @@ export class CodenamesDatabase {
     if (playerId === null) {
       return null; // Return null if the player does not exist
     }else{
-      return Math.floor(playerId / 100)
+      return Math.floor(playerId / 10000)
     }
   }
 
@@ -321,7 +321,7 @@ export class CodenamesDatabase {
 
   private getRoomIdFromPlayerId(playerId: number): number {
 
-    return Math.floor(playerId / 100); // Get the room ID from the player ID
+    return Math.floor(playerId / 10000); // Get the room ID from the player ID
 
   }
 
