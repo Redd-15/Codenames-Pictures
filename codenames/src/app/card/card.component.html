@@ -11,4 +11,34 @@
     <span class="material-icons">task_alt</span>
   </div>
 </div>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="redMultiply">
+    <!-- Flood the overlay color -->
+    <feFlood result="flood" flood-color="var(--red)" flood-opacity="1"/>
+    <!-- Apply it over the image -->
+    <feComposite in="flood" in2="SourceGraphic" operator="in" result="overlay"/>
+    <!-- Blend the original image with the overlay -->
+    <feBlend mode="multiply" in="SourceGraphic" in2="overlay"/>
+  </filter>
+</svg>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="blueMultiply">
+    <!-- Flood the overlay color -->
+    <feFlood result="flood" flood-color="var(--blue)" flood-opacity="1"/>
+    <!-- Apply it over the image -->
+    <feComposite in="flood" in2="SourceGraphic" operator="in" result="overlay"/>
+    <!-- Blend the original image with the overlay -->
+    <feBlend mode="multiply" in="SourceGraphic" in2="overlay"/>
+  </filter>
+</svg>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="greyMultiply">
+    <!-- Flood the overlay color -->
+    <feFlood result="flood" flood-color="var(--grey)" flood-opacity="1"/>
+    <!-- Apply it over the image -->
+    <feComposite in="flood" in2="SourceGraphic" operator="in" result="overlay"/>
+    <!-- Blend the original image with the overlay -->
+    <feBlend mode="multiply" in="SourceGraphic" in2="overlay"/>
+  </filter>
+</svg>
 
