@@ -145,6 +145,7 @@
   transform: rotateY(180deg);
   .front.non-spymaster:hover img {
     mix-blend-mode: normal; /*do not activate hover effect during flipping*/
+    filter: grayscale(100%);
     transform: translate3d(0,0,0);
   }
 }
