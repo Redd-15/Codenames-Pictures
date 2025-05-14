@@ -15,7 +15,8 @@ export enum ServerMessageType {
   GameOver = 'gameOver',
   Error = 'error',
   ReceiveTeamMessage = 'receiveTeamMessage',
-  ReceiveGlobalMessage = 'receiveGlobalMessage'
+  ReceiveGlobalMessage = 'receiveGlobalMessage',
+  ReconnectAck = 'reconnectAck'
 }
 
 /** Enum for message types FROM CLIENT */
