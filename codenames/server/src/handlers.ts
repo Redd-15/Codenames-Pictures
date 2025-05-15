@@ -291,7 +291,7 @@ public sendTeamMessageHandler(socket: Socket, message: ChatMessage) {
 }
 
 public sendGlobalMessageHandler(socket: Socket, message: ChatMessage) {
-    console.log(`Client ${socket.id} requested to send team message: ${message}`);
+    console.log(`Client ${socket.id} requested to send global message: ${message}`);
     const chat = this.database.sendGlobalMessage(socket.id, message); // Send a team message in the database
     if (chat) { 
         this.io.to(chat.roomId.toString()).emit(ServerMessageType.ReceiveTeamMessage, chat); // Send a message back to the client
