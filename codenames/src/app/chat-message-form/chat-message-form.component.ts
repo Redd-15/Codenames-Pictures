@@ -15,7 +15,7 @@ export class ChatMessageFormComponent {
   @Input({required: true})
   myId = -1;
   @Input({required: true})
-  type!: 'room' | 'global';
+  type!: 'team' | 'global';
 
   private formBuilder = inject(FormBuilder);
   formGroup = this.formBuilder.group({
@@ -25,12 +25,12 @@ export class ChatMessageFormComponent {
   sendMessage() {
     if(this.formGroup.valid && this.formGroup.value.message) {
       console.log(this.formGroup.value.message);
-      this.formGroup.reset();
-      if( this.type == 'room') {
+      if( this.type == 'team') {
         this.socketHandlerService.sendTeamMessage(this.myId, this.formGroup.value.message);
       } else {
         this.socketHandlerService.sendGlobalMessage(this.myId, this.formGroup.value.message)
       }
+      this.formGroup.reset();
     }
   }
 
