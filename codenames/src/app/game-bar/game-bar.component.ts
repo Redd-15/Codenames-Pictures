@@ -11,6 +11,7 @@ import { Player } from '../../../model/player';
 import { BaseComponent } from '../base.component';
 import { takeUntil } from 'rxjs';
 import { selectRoom } from '../state/selector/room.selector';
+import { resetMessages } from '../state/action/chat.action';
 
 @Component({
   selector: 'app-game-bar',
@@ -49,6 +50,7 @@ export class GameBarComponent extends BaseComponent {
 
   leaveGame() {
     this.store.dispatch(resetRoom());
+    this.store.dispatch(resetMessages());
     this.store.dispatch(resetIds());
     this.socketHandlerService.leaveRoom();
     this.router.navigateByUrl("")

@@ -1,30 +1,20 @@
 import { createReducer } from "@ngrx/store";
 import { ChatMessage } from "../../../../model/message-interfaces";
 import { immerOn } from "ngrx-immer/store";
-import { loadGlobalMessages, loadTeamMessages, resetMessages } from "../action/chat.action";
+import { loadGlobalMessages, loadTeamMessages, resetMessages, setNewGlobalMessageFlag, setNewTeamMessageFlag } from "../action/chat.action";
 
 export interface ChatState {
   teamMessages: ChatMessage[],
   globalMessages: ChatMessage[],
+  isTeamNew: boolean,
+  isGlobalNew: boolean
 }
 
 export const initialChatState = {
-  teamMessages: [{ senderId: 1, message: "This is a message, cute." },
-    { senderId: 1, message: "This is a message, cute. This is a message, cute. This is a message, cute. This is a message, cute." },
-    { senderId: 2, message: "This is a message, cute." },
-    { senderId: 1, message: "OK." },
-    { senderId: 3, message: "This is a message, cute." },
-    { senderId: 1, message: "This is a message, cute." },
-    { senderId: 1, message: "This is a message, cute. This is a message, cute. This is a message, cute. This is a message, cute." },
-    { senderId: 2, message: "This is a message, cute." },
-    { senderId: 1, message: "OK." },
-    { senderId: 3, message: "This is a message, cute." },
-    { senderId: 1, message: "This is a message, cute." },
-    { senderId: 1, message: "This is a message, cute. This is a message, cute. This is a message, cute. This is a message, cute." },
-    { senderId: 2, message: "This is a message, cute." },
-    { senderId: 1, message: "OK." },
-    { senderId: 3, message: "This is a message, cute." },] as ChatMessage[],
+  teamMessages: [] as ChatMessage[],
   globalMessages: [] as ChatMessage[],
+  isTeamNew: false,
+  isGlobalNew: false,
 }
 
 export const ChatReducer = createReducer(
@@ -35,8 +25,16 @@ export const ChatReducer = createReducer(
   immerOn(loadGlobalMessages, (state, action)=> {
     state.globalMessages = action.messages;
   }),
+  immerOn(setNewTeamMessageFlag, (state, action)=> {
+    state.isTeamNew = action.isNew;
+  }),
+  immerOn(setNewGlobalMessageFlag, (state, action)=> {
+    state.isGlobalNew = action.isNew;
+  }),
   immerOn(resetMessages, (state)=> {
     state.teamMessages = [];
     state.globalMessages = [];
+    state.isGlobalNew = false;
+    state.isTeamNew = false;
   })
 )

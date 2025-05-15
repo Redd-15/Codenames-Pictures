@@ -31,9 +31,9 @@
   position: fixed;
   top: 0;
   left: 100%;
-  transform: translateX(-2.9rem);
+  transform: translateX(-2.75rem);
   height: 100%;
-  width: min(500px, calc(100% - 2.9rem));
+  width: min(500px, calc(100% - 2.75rem));
   display: flex;
   justify-content: start;
   align-items: end;
@@ -47,6 +47,7 @@
     z-index: 2;
   }
   .chat-handle, .team-chat-handle {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,6 +56,15 @@
     .btn {
       line-height: 1rem;
       border-radius: 1rem 0 0 1rem;
+    }
+    .notification-icon {
+      position: absolute;
+      width: 0.8rem;
+      height: 0.8rem;
+      background-color: var(--yellow);
+      border-radius: 50%;
+      top: 0;
+      left: 0;
     }
   }
   .chat-handle {

@@ -9,7 +9,7 @@ import { selectRoomId, selectUsername } from '../state/selector/ids.selector';
 import { forkJoin, take } from 'rxjs';
 import { loadPlayerId, loadRoomId, loadUsername } from '../state/action/ids.action';
 import { loadHint, loadRoom } from '../state/action/room.action';
-import { loadGlobalMessages, loadTeamMessages } from '../state/action/chat.action';
+import { loadGlobalMessages, loadTeamMessages, setNewGlobalMessageFlag, setNewTeamMessageFlag } from '../state/action/chat.action';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ErrorHandlerService } from './error-handler.service';
@@ -94,10 +94,12 @@ export class SocketHandlerService {
     this.socket.on(ServerMessageType.ReceiveTeamMessage, (chat: ChatMessage[]) =>{
       console.log("Received room chat", chat);
       this.store.dispatch(loadTeamMessages({messages: chat}));
+      if(chat.length > 0) this.store.dispatch(setNewTeamMessageFlag({isNew: true}));
     });
     this.socket.on(ServerMessageType.ReceiveGlobalMessage, (chat: ChatMessage[]) =>{
       console.log("Received global chat", chat);
       this.store.dispatch(loadGlobalMessages({messages: chat}));
+      if(chat.length > 0) this.store.dispatch(setNewGlobalMessageFlag({isNew: true}));
     });
 
     this.socket.on('disconnect', () => {

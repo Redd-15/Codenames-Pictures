@@ -11,6 +11,16 @@ export const loadGlobalMessages = createAction(
   props<{messages: ChatMessage[]}>()
 )
 
+export const setNewTeamMessageFlag = createAction(
+  '[Chat] SetNewTeamMessageFlag',
+  props<{isNew: boolean}>()
+)
+
+export const setNewGlobalMessageFlag = createAction(
+  '[Chat] SetNewGlobalMessageFlag',
+  props<{isNew: boolean}>()
+)
+
 export const resetMessages = createAction(
   '[Chat] ResetMessages'
 )

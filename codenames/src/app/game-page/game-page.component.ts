@@ -12,11 +12,14 @@ import { takeUntil } from 'rxjs';
 import { BaseComponent } from '../base.component';
 import { GameSummaryComponent } from '../game-summary/game-summary.component';
 import { TeamType } from '../../../model/message-interfaces';
+import { selectNewGlobalMessageFlag, selectNewTeamMessageFlag } from '../state/selector/chat.selector';
+import { CommonModule } from '@angular/common';
+import { resetMessages, setNewGlobalMessageFlag, setNewTeamMessageFlag } from '../state/action/chat.action';
 
 @Component({
   selector: 'app-game-page',
   standalone: true,
-  imports: [GameComponent, RoomMenuComponent, ChatComponent, GameSummaryComponent],
+  imports: [CommonModule, GameComponent, RoomMenuComponent, ChatComponent, GameSummaryComponent],
   templateUrl: './game-page.component.html',
   styleUrl: './game-page.component.css'
 })
@@ -27,6 +30,8 @@ export class GamePageComponent extends BaseComponent {
   isRoomWindowVisible = true;
   isGlobalChatOpen = false;
   isTeamChatOpen = false;
+  isTeamChatNew = true;
+  isGlobalChatNew = true;
   winner: TeamType | null = null;
 
   ngOnInit() {
@@ -37,6 +42,16 @@ export class GamePageComponent extends BaseComponent {
     this.store.select(selectRoom).pipe(takeUntil(this.destroy$)).subscribe((room) => {
       if(room) this.winner = room.winner;
     });
+    this.store.select(selectNewGlobalMessageFlag).pipe(takeUntil(this.destroy$)).subscribe((isNew) => {
+      //If the chat is already open, do not signal
+      if(isNew && this.isGlobalChatOpen) return;
+      this.isGlobalChatNew = isNew;
+    });
+    this.store.select(selectNewTeamMessageFlag).pipe(takeUntil(this.destroy$)).subscribe((isNew) => {
+      //If the chat is already open, do not signal
+       if(isNew && this.isTeamChatOpen) return;
+      this.isTeamChatNew = isNew;
+    });
   }
 
   override ngOnDestroy() {
@@ -46,10 +61,12 @@ export class GamePageComponent extends BaseComponent {
 
   toggleGlobalChat() {
     this.isGlobalChatOpen = !this.isGlobalChatOpen;
+    if(this.isGlobalChatOpen) this.store.dispatch(setNewGlobalMessageFlag({isNew: false}));
   }
 
   toggleTeamChat() {
     this.isTeamChatOpen = !this.isTeamChatOpen;
+    if(this.isTeamChatOpen) this.store.dispatch(setNewTeamMessageFlag({isNew: false}));
   }
 
   startGame(){
@@ -63,6 +80,7 @@ export class GamePageComponent extends BaseComponent {
   }
 
   leaveGame(){
+    this.store.dispatch(resetMessages());
     this.store.dispatch(resetRoom());
     this.store.dispatch(resetIds());
     this.socketHandlerService.leaveRoom();

@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { loadRoomId, loadUsername, resetIds } from '../state/action/ids.action';
 import { resetRoom } from '../state/action/room.action';
 import { SocketHandlerService } from '../services/socket-handler.service';
+import { resetMessages } from '../state/action/chat.action';
 
 @Component({
   selector: 'app-join-room-form',
@@ -53,6 +54,7 @@ export class JoinRoomFormComponent implements ModalContent {
       if(this.form.value.roomId && this.form.value.username){
         this.store.dispatch(resetIds());
         this.store.dispatch(resetRoom());
+        this.store.dispatch(resetMessages());
         this.store.dispatch(loadUsername({username: this.form.value.username}));
         this.store.dispatch(loadRoomId({roomId: parseInt(this.form.value.roomId)}));
       }
