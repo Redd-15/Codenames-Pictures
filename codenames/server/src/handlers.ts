@@ -4,7 +4,6 @@ import { Socket, Server } from "socket.io";
 import { CodenamesDatabase } from "./database";
 import { ServerMessageType } from "../../model";
 import { ChatMessage, ErrorMessage, ErrorType, IdMessage, TeamType } from "../../model/message-interfaces";
-import e from "cors";
 
 
 // Import necessary types from the model
