@@ -55,6 +55,9 @@ export class SocketHandlerService {
         }
       });
     });
+    this.socket.on(ServerMessageType.ReconnectAck, () =>{
+      console.log('Received reconnect ACK.');
+    });
     this.socket.on(ServerMessageType.ReceiveId, (ids: IdMessage) =>{
       console.log("Received ids", ids.playerId, ids.roomId);
       this.isOwnIdKnown = true;

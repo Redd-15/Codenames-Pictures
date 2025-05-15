@@ -5,9 +5,11 @@
   cursor: pointer;
   &.team-blue {
     --team-colour: var(--blue);
+    --team-filter: url(#blueMultiply);
   }
   &.team-red {
     --team-colour: var(--lighter-red);
+    --team-filter: url(#redMultiply);
   }
 }
 
@@ -28,11 +30,27 @@
   }
 }
 
+@media (max-width: 600px) {
+  .flip-btn {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top: -10%;
+    left: -10%;
+    transform: none;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .image-flip {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-
   transform-style: preserve-3d;
   transition: transform 1s cubic-bezier(0, 0, 0.58, 1);
 
@@ -72,32 +90,46 @@
     &.non-spymaster {
       background-color: var(--team-colour);
       &:hover img {
-        mix-blend-mode: multiply;
+        /*mix-blend-mode: multiply;*/
+        transform: translate3d(0,0,0);
+        filter: grayscale(100%) var(--team-filter);
       }
     }
     &.spymaster {
       img {
-        mix-blend-mode: multiply;
+        /*mix-blend-mode: multiply;*/
+        transform: translate3d(0,0,0);
       }
       &.blue {
         background-color: var(--blue);
+        img {
+          filter: grayscale(100%) url(#blueMultiply);
+        }
       }
       &.grey {
         background-color: var(--grey);
+        img {
+          filter: grayscale(100%) url(#greyMultiply);
+        }
       }
       &.red {
         background-color: var(--red);
+        img {
+          filter: grayscale(100%) url(#redMultiply);
+        }
       }
       &.black {
         background-color: white;
         img {
-          filter: invert(1);
+          filter: grayscale(100%) invert(1);
         }
       }
     }
     &.spymaster:hover {
       img {
         mix-blend-mode: normal;
+        filter: grayscale(100%);
+        transform: translate3d(0,0,0);
       }
       &.black img {
         filter: grayscale(100%);
@@ -113,6 +145,8 @@
   transform: rotateY(180deg);
   .front.non-spymaster:hover img {
     mix-blend-mode: normal; /*do not activate hover effect during flipping*/
+    filter: grayscale(100%);
+    transform: translate3d(0,0,0);
   }
 }
 

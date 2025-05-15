@@ -32,6 +32,12 @@ export class ErrorHandlerService {
       this.toastr.error('The room you have selected does not exist anymore.', 'Error', { toastClass: 'ngx-toastr toast-custom' }); //TODO: If it redirects the error should appear on the main page
       this.router.navigateByUrl('/');
     }
+    else if (error.errorType == ErrorType.RoomAlreadyStarted) {
+      console.log("There is already an ongoing game in the given room, redirecting to main page.");
+      this.cookieHandlerService.removeCookie('playerId', '/socket.io');
+      this.toastr.error('You cannot join an ongoing game.', 'Error', { toastClass: 'ngx-toastr toast-custom' }); //TODO: If it redirects the error should appear on the main page
+      this.router.navigateByUrl('/');
+    }
     else {
       console.log(error.message);
       this.toastr.error(error.message, 'Error', { toastClass: 'ngx-toastr toast-custom' });

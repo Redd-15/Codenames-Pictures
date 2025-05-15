@@ -1,40 +1,256 @@
 <div class="card mt-3">
   <div class="card-body">
-    <h4 class="card-title text-center pt-2">How to play?</h4>
-    <hr>
     <div class="card-text ps-3 pe-3">
-      <div>Section to be filled.</div>
-      <div class="text-justify">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porta
-        erat a odio fringilla, et pulvinar quam condimentum. Duis lorem magna,
-        blandit ac ipsum sed, tempus gravida odio. Vivamus non orci venenatis,
-        lobortis nunc quis, tempus turpis. Quisque ac ipsum nisi. Praesent rhoncus
-        turpis ac purus luctus consequat. Vivamus semper et orci eget sodales.
-        Aenean scelerisque lacus ut metus euismod, in aliquam dolor interdum. Aenean
-        fringilla leo eget semper viverra. Praesent accumsan at nisl nec sagittis.
-        Phasellus gravida sagittis maximus. Etiam fringilla tortor sed urna semper
-        interdum. Donec in tellus malesuada, sodales orci vel, vulputate lectus.
-        Nunc non sapien et nisi ullamcorper luctus. Donec molestie sit amet sapien
-        accumsan pulvinar. Nullam mauris odio, ultrices vitae enim ac, hendrerit
-        interdum arcu. Phasellus quis dolor auctor, vehicula odio vel, auctor justo.
-        Suspendisse viverra erat orci, in convallis nisi blandit ac. Phasellus
-        mollis, lectus a lobortis blandit, enim massa vulputate quam, et eleifend
-        lectus velit non enim. Phasellus posuere, lectus nec tempus mattis, nisi ex
-        mollis neque, nec congue dui sapien eget tortor. Fusce fringilla ligula et
-        magna condimentum molestie. Duis non fringilla arcu, eget gravida diam.
-        Fusce mattis nisl eu tellus posuere, quis posuere elit bibendum. Morbi non
-        volutpat mauris. Nunc consectetur tincidunt massa id commodo. Ut in diam
-        mollis mi aliquet suscipit. Interdum et malesuada fames ac ante ipsum primis
-        in faucibus. Morbi vitae faucibus turpis. Nullam rutrum, diam in mattis
-        molestie, dolor libero vehicula tortor, ac egestas sapien ligula vitae
-        felis. Morbi quam felis, bibendum a dui vitae, pharetra euismod urna.
-        Quisque vel pharetra ipsum. Class aptent taciti sociosqu ad litora torquent
-        per conubia nostra, per inceptos himenaeos. Vestibulum et consectetur diam.
-        Fusce gravida quam et tortor imperdiet imperdiet. In non dui nec lacus
-        mattis placerat. Integer et nibh pellentesque, sodales dolor eu, consectetur
-        neque. Phasellus sollicitudin commodo eleifend. Sed dictum scelerisque
-        hendrerit.
+      <div class="text-justify rules-container">
+        <div class="section-container">
+          <div class="section-title skyfall-font">Narrative</div>
+          <div class="section-content">
+            <p>
+              What are these strange symbols on the map? Codes for locations
+              where spies must contact secret agents!
+            </p>
+            Two rival spymasters know the agent in each location. They deliver
+            coded messages telling their field operatives where to go for
+            clandestine meetings. Operatives must be clever. A decoding mistake
+            could lead to an unpleasant encounter with an enemy agent - or
+            worse, with the assassin! Both teams race to contact all their
+            agents, but only one team can win.
+          </div>
+        </div>
+        <div class="section-container">
+          <div class="section-title skyfall-font">Rooms</div>
+          <div class="section-content">
+            <p>
+              In the menu, pick the <i>Create room</i> option. Specify your
+              username (3-20 characters) for the game and click <i>Create</i>.
+              In the subsequent waiting room window, the room ID will appear.
+              Share this ID with whoever you want to play with.
+            </p>
+            <p>
+              If you received an active room ID from a friend, pick the
+              <i>Join room</i> option. Type the room ID and your username and
+              click <i>Join</i>. While waiting for others to join the room, you
+              will be prompted to pick a team and a role.
+            </p>
+            <div class="info">
+              Theoretically, up to 9999 players can join the same room, but for
+              a seamless experience, player count per room should not exceed 100
+              players.
+            </div>
+          </div>
+        </div>
+        <div class="section-container">
+          <div class="section-title skyfall-font">Setup</div>
+          <div class="section-content">
+            <p>
+              Once in a room, split up into two teams - red and blue - of
+              similar size and skill. You need at least four players (two teams
+              of two) for a standard game.
+            </p>
+            <p>
+              Each team chooses one or more players to be their spymaster. The
+              other players are field operatives.
+            </p>
+            <p>Once all players are ready, you can start the game.</p>
+            <div class="info">
+              You can verify your selected username, role and team colour any
+              time during the game on the very top of your screen. You can also
+              check out all players in the room, along with their role and
+              status by hovering over the <i>Players</i> button in the top right
+              corner. Inactive players are not currently connected but may
+              return to the game.
+            </div>
+          </div>
+        </div>
+        <div class="section-container">
+          <div class="section-title skyfall-font">Board</div>
+          <div class="section-content">
+            <p>
+              Once in the game, operatives will see a grid of 4&nbsp;x&nbsp;5
+              symbols (5&nbsp;x&nbsp;4 on small screens). These represent
+              locations where the field operatives can meet agents.
+            </p>
+            Spymasters will also see the same symbols with colour coding that
+            shows who can be found in each location.
+            <ul>
+              <li>
+                Blue corresponds to pictures that Blue Team must guess
+                (locations with blue agents).
+              </li>
+              <li>
+                Red corresponds to pictures that Red Team must guess (locations
+                with red agents).
+              </li>
+              <li>Pale squares have innocent bystanders.</li>
+              <li>The black square hides an assassin.</li>
+            </ul>
+            <div class="example">
+              <div class="cards">
+                <div class="card card-blue"><img src="cards/card-0.jpg"></div>
+                <div class="card card-red"><img src="cards/card-0.jpg"></div>
+                <div class="card card-grey"><img src="cards/card-0.jpg"></div>
+                <div class="card card-black"><img src="cards/card-0.jpg"></div>
+              </div>
+            </div>
+            The starting team has 8 pictures to guess, the other team has 7. The
+            prompt on top of the grid will indicate whose turn it is to give a
+            clue.
+            <div class="info">
+              If you accidentally navigate away from the game window, keep your
+              cool! Nothing has been lost yet. Just navigate back to the home
+              page and select the option <i>Rejoin previous room</i> in the
+              menu.
+            </div>
+            <div class="warning">
+              Beware! If you leave the game by clicking any of the
+              <i>Leave</i> buttons, you will not be able to rejoin!
+            </div>
+          </div>
+        </div>
+        <div class="section-container">
+          <div class="section-title skyfall-font">Game play</div>
+          <div class="section-content">
+            <p>
+              Spymasters take turns giving one-word clues. The word relates to
+              one or more pictures in the grid. The field operatives try to
+              guess which pictures their spymaster meant.
+            </p>
+            <p>
+              When a field operative touches a picture, a guess button appears.
+              When this button is clicked, a guess is made, and it is revealed
+              who is in that location. If it is one of their team's agents, the
+              operatives may keep guessing locations related to that one-word
+              clue. Otherwise, it is the other team's turn.
+            </p>
+            The first team to contact all their agents wins the game.
+
+            <div class="subtitle">Taking turns</div>
+            Teams take turns, beginning with the starting team. On your team's
+            turn, a spymaster gives <b>one clue</b>, and the field operatives
+            may make <b>multiple guesses</b>.
+            <div class="subtitle">Giving a clue</div>
+            If you are a spymaster, your job is to think up a clue that relates
+            to some of the pictures your team is trying to guess. Your clue
+            consists of one word that relates to those pictures and one number
+            that tells how many of your pictures relate to that word. You are
+            allowed to give a clue for only one picture but it's fun to try for
+            two or more. Getting four pictures with one clue is a big
+            accomplishment.
+            <div class="example">
+              <div>For instance, <b>steam: 3</b> is a good clue for the cards below.</div>
+              <div class="cards">
+                <div class="card"><img src="cards/card-269.jpg"></div>
+                <div class="card"><img src="cards/card-21.jpg"></div>
+                <div class="card"><img src="cards/card-3.jpg"></div>
+              </div>
+            </div>
+            <div class="subtitle">Making contact</div>
+            When the spymaster gives a clue, his or her field operatives try to
+            figure out what it means. The operatives indicate their official
+            guess when one of them clicks the guess button on one of the
+            pictures. The colour of the selected card is revealed.
+            <ul>
+              <li>
+                If the field operative selects a picture belonging to his or her
+                team, the operatives may continue making guesses (but they do
+                not get another clue).
+              </li>
+              <li>
+                If the field operative touches the location with the assassin,
+                this ends the game. The team that contacted the assassin loses.
+              </li>
+              <li>Otherwise, the turn ends here.</li>
+            </ul>
+            <div class="subtitle">Ending the turn</div>
+            Your team's turn always has exactly one clue and one or more
+            guesses. If the operatives' first guess is one of their team's
+            pictures, they may make a second guess. If that's correct, they may
+            make another guess, and so on. The turn ends
+            <ul>
+              <li>if they guess a picture that's not theirs,</li>
+              <li>
+                if they choose to not guess anymore by pressing the
+                <i>End guessing</i> button,
+              </li>
+              <li>
+                or if they have already made as many guesses as the number
+                specified by the clue (the number of remaining guesses is
+                displayed in the game prompt).
+              </li>
+            </ul>
+            <div class="info">
+              You might have received several clues for which you did not get
+              all the pictures. You can guess these pictures instead of or in
+              addition to those related to the current clue.
+            </div>
+          </div>
+        </div>
+        <div class="section-container">
+          <div class="section-title skyfall-font">Game over</div>
+          <div class="section-content">
+            <p>
+              The game ends when one team has all their pictures covered. That
+              team wins.
+            </p>
+            <p>
+              It is possible to win on the other team's turn if they guess your
+              last picture. The game can end early if a field operative touches
+              the location with the assassin. That operative's team loses.
+            </p>
+            <div class="info">
+              On the game summary screen, the symbols of locations are displayed
+              using colour coding corresponding to the agents found there. You
+              can leave the room or start a new game.
+            </div>
+          </div>
+        </div>
+        <div class="section-container">
+          <div class="section-title skyfall-font">Valid clues</div>
+          <div class="section-content">
+            <p>
+              Your clue should be one word, no spaces. It must be about the
+              pictures, not about the patterns that cards make on the table or
+              the letters in certain words.
+            </p>
+            <p>
+              You can allow your operatives to guess as many pictures as they
+              want by selecting <b>?</b> instead of a number. This is especially
+              helpful if you have given clues for multiple pictures that your
+              team has not guessed yet. The disadvantage is that the field
+              operatives don't know how many pictures relate to the newest clue.
+              The advantage is that they may guess as many pictures as they
+              want.
+            </p>
+            <p>
+              You are allowed to use <b>0</b> as the number part of your clue.
+              This means that none of your team's agents relate to that clue. If
+              the spymaster gives 0 as the number, the usual limit on guesses
+              does not apply.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="redMultiply">
+    <feFlood result="flood" flood-color="var(--red)" flood-opacity="1"/>
+    <feComposite in="flood" in2="SourceGraphic" operator="in" result="overlay"/>
+    <feBlend mode="multiply" in="SourceGraphic" in2="overlay"/>
+  </filter>
+</svg>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="blueMultiply">
+    <feFlood result="flood" flood-color="var(--blue)" flood-opacity="1"/>
+    <feComposite in="flood" in2="SourceGraphic" operator="in" result="overlay"/>
+    <feBlend mode="multiply" in="SourceGraphic" in2="overlay"/>
+  </filter>
+</svg>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="greyMultiply">
+    <feFlood result="flood" flood-color="var(--grey)" flood-opacity="1"/>
+    <feComposite in="flood" in2="SourceGraphic" operator="in" result="overlay"/>
+    <feBlend mode="multiply" in="SourceGraphic" in2="overlay"/>
+  </filter>
+</svg>

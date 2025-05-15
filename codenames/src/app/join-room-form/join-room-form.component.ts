@@ -28,6 +28,7 @@ export class JoinRoomFormComponent implements ModalContent {
       [
         Validators.required,
         Validators.minLength(3),
+        Validators.maxLength(20),
         Validators.pattern('^[a-zA-Z0-9]+$') // Alphanumeric only
       ]
     ],
@@ -61,7 +62,7 @@ export class JoinRoomFormComponent implements ModalContent {
       return true;
     } else {
       console.log('Form invalid');
-      let message = this.roomId?.invalid ? 'Please specify a valid numeric room ID.' : 'Please specify a valid username of minimum 3 alphanumeric characters.';
+      let message = this.roomId?.invalid ? 'Please specify a valid numeric room ID.' : 'Please specify a valid username of 3-20 alphanumeric characters.';
       this.toastr.error(message, 'Invalid data', {toastClass: 'ngx-toastr toast-custom'});
       return false;
     }

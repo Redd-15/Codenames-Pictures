@@ -54,3 +54,13 @@
     </div>
   </div>
 </div>
+<div class="mobile-history-container" [class.open]="isHistoryOpen">
+  <div class="mobile-history">
+    <div class="scrollable-panel">
+      <app-hint-history class="inserted-component"></app-hint-history>
+    </div>
+  </div>
+  <div class="history-handle">
+    <button class="btn btn-beige" (click)="toggleHistory()"><span class="material-icons">history</span></button>
+  </div>
+</div>

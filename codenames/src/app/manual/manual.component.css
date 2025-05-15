@@ -1,0 +1,111 @@
+.section-container {
+  border: 1px solid grey;
+  border-radius: 1rem;
+  padding: 1rem 1.2rem;
+  margin: 2rem 0;
+
+  .section-title {
+    font-size: 1.5rem;
+    position: absolute;
+    transform: translateY(-100%);
+    background-color: var(--white);
+  }
+
+  .section-content p,
+  .section-content ul {
+    margin-top: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-content ul {
+    margin-top: 0.5rem;
+  }
+
+  .section-content {
+
+    .info,
+    .warning,
+    .addition {
+      margin: 0.5rem 0;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .info {
+      background-color: var(--plum);
+      color: var(--white);
+    }
+
+    .addition {
+      background-color: var(--beige);
+      color: var(--black);
+    }
+
+    .warning {
+      background-color: var(--vibrant-orange);
+      color: var(--white);
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      margin-top: 0.7rem;
+      margin-bottom: 0.4rem;
+      text-align: center;
+      border-bottom: 1px solid grey;
+    }
+
+    .blue, .red, .grey, .black {
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.5rem;
+    }
+
+    .example {
+      margin-top: 0.5rem;
+      text-align: center;
+      color: var(--plum);
+
+      .cards {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.3rem 0.5rem;
+        margin-bottom: 1rem;
+
+        .card {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 0.9rem;
+          -webkit-border-radius: 0.9rem;
+          -moz-border-radius: 0.9rem;
+          overflow: hidden;
+          box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+          width: 100%;
+          aspect-ratio: 1;
+          &.card-blue img {
+            filter: grayscale(100%) url(#blueMultiply);
+          }
+          &.card-red img {
+            filter: grayscale(100%) url(#redMultiply);
+          }
+          &.card-grey img {
+            filter: grayscale(100%) url(#greyMultiply);
+          }
+          &.card-black img {
+            filter: grayscale(100%) invert(1);
+          }
+          img {
+            filter: grayscale(100%);
+            /* Clip borders */
+            width: calc(100% + 5px);
+            aspect-ratio: 1;
+            object-fit: cover;
+            clip-path: view-box;
+          }
+        }
+      }
+    }
+  }
+}

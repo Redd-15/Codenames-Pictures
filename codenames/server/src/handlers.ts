@@ -60,6 +60,7 @@ public cookieHandler(socket: Socket, cookie: any) {
         this.io.to(room.roomId.toString()).emit(ServerMessageType.ReceiveRoom, room); // Send a message back to the client
 
         console.log(`Client ${socket.id} joined back to room (${room.roomId})`);
+        return true;
     }else{
         console.log(`Client ${socket.id} does not have an existing room`);
 

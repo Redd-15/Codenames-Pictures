@@ -25,6 +25,7 @@
 }
 
 .game-prompt {
+  margin: 0 0.5rem;
   padding: 0.5rem 1rem;
   text-align: center;
   width: fit-content;
@@ -122,6 +123,59 @@
   background-color: transparent;
 }
 
+.mobile-history-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(calc(-100% + 2.9rem));
+  height: 100%;
+  width: min(300px, calc(100% - 2.9rem));
+  justify-content: start;
+  align-items: end;
+  transition: all 1s ease;
+  pointer-events: none;
+
+  * {
+    pointer-events: auto;
+  }
+
+  &.open {
+    transform: none;
+  }
+
+  .mobile-history {
+    background-color: var(--white);
+    width: min(300px, calc(100% - 2.9rem));
+    margin-bottom: 0.5rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    max-height: calc(100% - 1rem);
+    padding: 0 0.2rem;
+    overflow: auto;
+    direction: rtl;
+    text-align: left;
+
+    .scrollable-panel {
+      direction: ltr;
+      overflow-y: scroll;
+    }
+  }
+
+  .history-handle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.5rem;
+
+    .btn {
+      line-height: 1rem;
+      border-radius: 0 1rem 1rem 0;
+    }
+  }
+}
+
 @media(max-width: 600px) {
   .card-area {
     grid-template-columns: repeat(4, 1fr);
@@ -133,11 +187,13 @@
   .page-container {
     height: fit-content;
   }
+
   .game-content {
     height: fit-content;
     flex-wrap: wrap;
     overflow: auto;
   }
+
   .card-area {
     margin: 1rem;
     width: 100%;
@@ -147,9 +203,14 @@
   .side-bar {
     width: fit-content;
     max-width: none;
+
     .clue-history {
       display: none;
     }
+  }
+
+  .mobile-history-container {
+    display: flex;
   }
 }
 

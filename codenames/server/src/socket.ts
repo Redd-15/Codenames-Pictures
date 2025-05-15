@@ -30,11 +30,11 @@ export class SocketHandler {
       const parsedCookies = this.parseCookies(cookies);
       console.log("Parsed Cookies:", parsedCookies);
 
-      //Send message back to client by socket id
-      this.io.to(socket.id).emit(ServerMessageType.ConnectAck);
-       // Initialize handlers with the current socket instance
-      
-      this.handlers?.cookieHandler(socket, parsedCookies); // Call the cookie handler to check if player was in room already
+      const isRejoin = this.handlers?.cookieHandler(socket, parsedCookies); // Call the cookie handler to check if player was in room already
+
+      //Send ACK to client by socket id
+      if(isRejoin) this.io.to(socket.id).emit(ServerMessageType.ReconnectAck);
+      else  this.io.to(socket.id).emit(ServerMessageType.ConnectAck);
 
       //Configure listeners for different message types and disconnection on socket
       socket.on(ClientMessageType.TestMessage, (content) => this.handlers?.clientTestMessageHandler(socket, content));
