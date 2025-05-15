@@ -6,6 +6,7 @@ export enum ErrorType {
   RoomAlreadyStarted = 'room-already-started',
   SettingUnavailable = 'setting-unavailable',
   NoUsername = 'no-username',
+  ChatError = 'chat-error',
 }
 
 /** Types of teams in a game */

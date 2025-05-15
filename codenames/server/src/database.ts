@@ -103,7 +103,7 @@ export class CodenamesDatabase {
 
   public leaveRoom(socketId: string): Room | null {
     // Find the room by socket ID
-    let room = this.roomdb.find(room => room.roomId === this.getRoomId(socketId)); // Get the room ID from the socket ID
+    let room = this.roomdb.find(room => room.roomId === this.getRoomIdBySocketId(socketId)); // Get the room ID from the socket ID
     if (room) {
 
       // Remove the player from the room
@@ -253,9 +253,9 @@ export class CodenamesDatabase {
     return null; // Return null if the room does not exist
   }
 
-  public getRoomId(socketId: string): number | null {
+  public getRoomIdBySocketId(socketId: string): number | null {
     // Find the room by socket ID
-    const playerId = this.getPlayerId(socketId); // Call getPlayerId to ensure the player exists
+    const playerId = this.getPlayerIdBySocketId(socketId); // Call getPlayerIdBySocketId to ensure the player exists
     if (playerId === null) {
       return null; // Return null if the player does not exist
     }else{
@@ -263,7 +263,7 @@ export class CodenamesDatabase {
     }
   }
 
-  public getPlayerId(socketId: string): number | null {
+  public getPlayerIdBySocketId(socketId: string): number | null {
     // Find the room by socket ID
     const room = this.roomdb.find(room => room.players.some(player => player.socketId === socketId));
     if (room) {
@@ -275,9 +275,9 @@ export class CodenamesDatabase {
     return null; // Return null if the player does not exist
   }
 
-  public getPlayerRoomById(playerId: number, newSocketId: string): Room | null {
+  public updateSocketIdInPlayerRoom(playerId: number, newSocketId: string): Room | null {
     // Find the room by player ID
-    const room = this.roomdb.find(room => room.roomId === this.getRoomIdFromPlayerId(playerId));
+    const room = this.roomdb.find(room => room.roomId === this.getRoomIdBySocketIdFromPlayerId(playerId));
 
     if (room) {
       // Find the player by ID in the room
@@ -335,6 +335,31 @@ export class CodenamesDatabase {
     return null; // Return null if the room does not exist
   }
 
+  public getChatBySocketId(socketId: string): Chat | null {
+    // Find the room by socket ID
+    const room = this.getRoomBySocketId(socketId); // Get the room ID from the socket ID
+    if (room) {
+      const chat = this.chatdb.find(chat => chat.roomId === room.roomId);
+      if (chat) {
+        return chat; // Return the chat if found
+      }
+    }
+    return null; // Return null if the room does not exist
+  }
+
+  public getPlayerById(playerId: number): Player | null {
+    // Find the room by player ID
+    const room = this.roomdb.find(room => room.roomId === this.getRoomIdBySocketIdFromPlayerId(playerId)); // Get the room ID from the player ID
+    if (room) {
+      // Find the player by ID in the room
+      const player = room.players.find(player => player.id === playerId);
+      if (player) {
+        return player; // Return the player if found
+      }
+    }
+    return null; // Return null if the player does not exist
+  }
+
   private generateUniqueRoomId(): number {
     // Generate a unique room ID
     const usedRoomIds = new Set(this.roomdb.map(room => room.roomId));
@@ -357,7 +382,7 @@ export class CodenamesDatabase {
     return room.roomId * 10000 + suffix;
   }
 
-  private getRoomIdFromPlayerId(playerId: number): number {
+  private getRoomIdBySocketIdFromPlayerId(playerId: number): number {
 
     return Math.floor(playerId / 10000); // Get the room ID from the player ID
 
